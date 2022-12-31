@@ -1,15 +1,14 @@
 import { Button } from "@mui/material";
 import React from "react";
+import { BrowserRouter } from "react-router-dom";
 import logo from "./logo.svg";
+import RoutesProvider from "./routes";
 
 function App() {
   return (
-    <div className="App">
-      <Button>
-        Limestone
-        App
-      </Button>
-    </div>
+    <BrowserRouter>
+      <RoutesProvider></RoutesProvider>
+    </BrowserRouter>
   );
 }
 
