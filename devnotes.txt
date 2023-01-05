@@ -24,3 +24,5 @@ users: {
     deactivateUser()
   }
 }
+
+// todo: state selectors
