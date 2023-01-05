@@ -3,13 +3,15 @@ Store:
 boards: {
   state: {
     boards: [],
-    currentBoard: {}
   },
   actions: {
+    /* No such thing like "currentBoard" */
     loadBoardsList(),
     loadBoardData(),
     createBoard(),
+    boardsAdded(),
     updateBoard(),
+    boardUpdated()
     // todo: sub-store for cards and comments
   }
 }
@@ -19,6 +21,7 @@ users: {
   },
   actions: {
     addUser(),
+    usersAdded(),
     loadUsers(),
     updateUser(),
     deactivateUser()
