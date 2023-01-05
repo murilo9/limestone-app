@@ -26,3 +26,10 @@ users: {
 }
 
 // todo: state selectors
+
+possible fetching statuses:
+- not started at all
+- in progress
+- success
+- failed
+- success, but in a situation we might want to refetch ("needs refetch")
