@@ -1,0 +1,26 @@
+Store:
+
+boards: {
+  state: {
+    boards: [],
+    currentBoard: {}
+  },
+  actions: {
+    loadBoardsList(),
+    loadBoardData(),
+    createBoard(),
+    updateBoard(),
+    // todo: sub-store for cards and comments
+  }
+}
+users: {
+  state: {
+    users: []
+  },
+  actions: {
+    addUser(),
+    loadUsers(),
+    updateUser(),
+    deactivateUser()
+  }
+}
