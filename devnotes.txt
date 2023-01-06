@@ -2,29 +2,31 @@ Store:
 
 boards: {
   state: {
-    boards: [],
+    boards: {},
   },
   actions: {
     /* No such thing like "currentBoard" */
-    loadBoardsList(),
-    loadBoardData(),
-    createBoard(),
+    loadAllBoards(),  // Thunk (calls boardsAdded)
+    createBoard(),  // Thunk (calls boardsAdded)
     boardsAdded(),
-    updateBoard(),
-    boardUpdated()
-    // todo: sub-store for cards and comments
+    updateBoard(),  // Thunk (calls boardUpdated)
+    boardUpdated(),
+    loadSomeBoardColumnCards()  // Thunk (calls boardUpdated)
+    loadCardData(),   // Thunk (calls loadSomeCardComments)
+    loadSomeCardComments()  // Thunk (calls boardUpdated)
   }
 }
 users: {
   state: {
-    users: []
+    users: {}
   },
   actions: {
-    addUser(),
+    addUser(),  // Thunk (calls usersAdded)
     usersAdded(),
-    loadUsers(),
+    loadUsers(),  // Thunk (calls usersAdded)
     updateUser(),
-    deactivateUser()
+    clearUsers(),
+    deactivateUser()  // Thunk (calls clearUsers)
   }
 }
 
