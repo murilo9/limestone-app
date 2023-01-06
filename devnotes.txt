@@ -2,7 +2,7 @@ Store:
 
 boards: {
   state: {
-    boards: {},
+    entities: {},
   },
   actions: {
     /* No such thing like "currentBoard" */
@@ -14,19 +14,24 @@ boards: {
     loadSomeBoardColumnCards()  // Thunk (calls boardUpdated)
     loadCardData(),   // Thunk (calls loadSomeCardComments)
     loadSomeCardComments()  // Thunk (calls boardUpdated)
+    addCard(),  // Thunk (calls boardUpdated)
+    updateCard(), // Thunk (calls boardUpdated)
+    addComment(), // Thunk (calls boardUpdated)
+    updateComment(), // Thunk (calls boardUpdated)
   }
 }
 users: {
   state: {
-    users: {}
+    entities: {}
   },
   actions: {
     addUser(),  // Thunk (calls usersAdded)
     usersAdded(),
     loadUsers(),  // Thunk (calls usersAdded)
-    updateUser(),
+    updateUser(), // Thunk (calls userUpdated)
+    userUpdated(),
     clearUsers(),
-    deactivateUser()  // Thunk (calls clearUsers)
+    deactivateUser()  // Thunk (calls clearUsers and usersAdded)
   }
 }
 
