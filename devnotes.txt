@@ -6,14 +6,14 @@ boards: {
   },
   actions: {
     /* No such thing like "currentBoard" */
-    loadAllBoards(),  // Thunk (calls boardsAdded)
+    fetchAllBoards(),  // Thunk (calls boardsAdded)
     createBoard(),  // Thunk (calls boardsAdded)
     boardsAdded(),
     updateBoard(),  // Thunk (calls boardUpdated)
     boardUpdated(),
-    loadSomeBoardColumnCards()  // Thunk (calls boardUpdated)
-    loadCardData(),   // Thunk (calls loadSomeCardComments)
-    loadSomeCardComments()  // Thunk (calls boardUpdated)
+    fetchSomeBoardColumnCards()  // Thunk (calls boardUpdated)
+    lfetchCardData(),   // Thunk (calls loadSomeCardComments)
+    fetchSomeCardComments()  // Thunk (calls boardUpdated)
     addCard(),  // Thunk (calls boardUpdated)
     updateCard(), // Thunk (calls boardUpdated)
     addComment(), // Thunk (calls boardUpdated)
@@ -27,7 +27,7 @@ users: {
   actions: {
     addUser(),  // Thunk (calls usersAdded)
     usersAdded(),
-    loadUsers(),  // Thunk (calls usersAdded)
+    fetchUsers(),  // Thunk (calls usersAdded)
     updateUser(), // Thunk (calls userUpdated)
     userUpdated(),
     clearUsers(),
@@ -43,3 +43,5 @@ possible fetching statuses:
 - success
 - failed
 - success, but in a situation we might want to refetch ("needs refetch")
+
+IMPORTANT: slices.extraReducers offers a way to handle thunks' pending/fullfilled/rejected actions, as if they were new actions
