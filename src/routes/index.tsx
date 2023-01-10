@@ -4,7 +4,7 @@ import PrivateRoutes from "./private";
 import PublicRoutes from "./public";
 
 export default function RoutesProvider() {
-  const auth = useAuth;
+  const auth = useAuth();
 
   return (
     <>

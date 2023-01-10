@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
 import boardsSlice from "./features/boards/boardsSlice";
+import commonSlice from "./features/common/commonSlice";
 import usersSlice from "./features/users/usersSlice";
 
 const store = configureStore({
   reducer: {
+    common: commonSlice,
     boards: boardsSlice,
     users: usersSlice,
   },
