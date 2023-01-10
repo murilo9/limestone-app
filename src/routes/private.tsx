@@ -1,3 +1,4 @@
+import { Typography, Button } from "@mui/material";
 import React, { useEffect, useLayoutEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { fetchCurrentUser } from "../features/common/commonSlice";
@@ -10,7 +11,6 @@ export default function PrivateRoutes() {
   const dispatch = useAppDispatch();
 
   useLayoutEffect(() => {
-    console.log("useEffect", currentUser);
     if (!currentUser) {
       dispatch(fetchCurrentUser());
     }
@@ -24,13 +24,14 @@ export default function PrivateRoutes() {
             path="/"
             element={
               <>
-                <h1>Private Routes</h1>
-                <button
-                  type="button"
+                <Typography variant="h3">Private Routes</Typography>
+                <Button
+                  disableElevation
+                  variant="contained"
                   onClick={signOut}
                 >
                   Sign Out
-                </button>
+                </Button>
               </>
             }
           />

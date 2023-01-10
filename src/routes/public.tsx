@@ -1,3 +1,4 @@
+import { Button, Typography } from "@mui/material";
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { useAuth } from "../features/common/hooks/useAuth";
@@ -12,9 +13,10 @@ export default function PublicRoutes() {
           path="/"
           element={
             <>
-              <h1>Public Routes</h1>
-              <button
-                type="button"
+              <Typography variant="h3">Public Routes</Typography>
+              <Button
+                disableElevation
+                variant="contained"
                 onClick={() =>
                   signIn({
                     email: "murilohenriquematias@gmail.com",
@@ -23,7 +25,7 @@ export default function PublicRoutes() {
                 }
               >
                 Sign In
-              </button>
+              </Button>
             </>
           }
         />
