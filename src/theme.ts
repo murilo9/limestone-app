@@ -29,7 +29,7 @@ export const limestoneTheme = createTheme({
       },
       styleOverrides: {
         root: {
-          fontWeight: "normal",
+          fontWeight: 500,
           textTransform: "none",
         },
       },
