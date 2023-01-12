@@ -28,6 +28,7 @@ export default function LandingHeader() {
           justifyContent: "center",
           aligItems: "center",
           backdropFilter: "blur(14px)",
+          zIndex: 1,
         }}
       >
         <Grid
