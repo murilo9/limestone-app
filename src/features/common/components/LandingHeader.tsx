@@ -27,6 +27,7 @@ export default function LandingHeader() {
           display: "flex",
           justifyContent: "center",
           aligItems: "center",
+          backdropFilter: "blur(14px)",
         }}
       >
         <Grid
