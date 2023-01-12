@@ -22,6 +22,15 @@ export const limestoneTheme = createTheme({
       primary: "#5A7E90",
     },
   },
+  typography: {
+    fontFamily: [
+      "Poppins",
+      "Roboto",
+      "Helvetica Neue",
+      "Arial",
+      "sans-serif",
+    ].join(","),
+  },
   components: {
     MuiButton: {
       defaultProps: {
@@ -31,6 +40,10 @@ export const limestoneTheme = createTheme({
         root: {
           fontWeight: 500,
           textTransform: "none",
+          fontFamily: "Poppins",
+        },
+        sizeMedium: {
+          height: "40px",
         },
       },
     },
