@@ -47,5 +47,12 @@ export const limestoneTheme = createTheme({
         },
       },
     },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          color: "#5A7E90",
+        },
+      },
+    },
   },
 });
