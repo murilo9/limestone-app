@@ -1,6 +1,7 @@
 import { Typography, Button } from "@mui/material";
 import React, { useEffect, useLayoutEffect } from "react";
 import { Route, Routes } from "react-router-dom";
+import { fetchMe } from "../features/common/api/fetchMe";
 import { fetchCurrentUser } from "../features/common/commonSlice";
 import { useAuth } from "../features/common/hooks/useAuth";
 import { useAppDispatch, useAppSelector } from "../store";
@@ -32,6 +33,16 @@ export default function PrivateRoutes() {
                 >
                   Sign Out
                 </Button>
+                <Button
+                  disableElevation
+                  variant="contained"
+                  onClick={() => fetchMe()}
+                >
+                  Fetch
+                </Button>
+                {Object.keys(currentUser).map((key) => (
+                  <p>{`${key}: ${(currentUser as any)[key]}`}</p>
+                ))}
               </>
             }
           />

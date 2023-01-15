@@ -1,5 +1,14 @@
 Store:
 
+common: {
+  state: {
+    currentUser: null | User
+  }
+  actions: {
+    fetchMe(),   // Thunk (sets currentUser
+    clearCurrentUser()
+  }
+}
 boards: {
   state: {
     entities: {},

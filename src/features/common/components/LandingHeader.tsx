@@ -1,8 +1,8 @@
 import { Language } from "@mui/icons-material";
 import { Box, Button, Container, Grid, MenuItem, Select } from "@mui/material";
 import React, { useState } from "react";
-import { signIn } from "../api/signIn";
 import Logo from "../assets/logo.svg";
+import { useAuth } from "../hooks/useAuth";
 
 const localeDictionary: { [key: string]: string } = {
   en: "English",
@@ -11,6 +11,7 @@ const localeDictionary: { [key: string]: string } = {
 
 export default function LandingHeader() {
   const [locale, setLocale] = useState("en");
+  const { signIn } = useAuth();
 
   return (
     <>
@@ -93,7 +94,7 @@ export default function LandingHeader() {
               onClick={() =>
                 signIn({
                   email: "murilohenriquematias@gmail.com",
-                  password: "Murilo#321",
+                  password: "",
                 })
               }
             >

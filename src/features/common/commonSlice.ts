@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "../users/types/User";
+import { fetchMe } from "./api/fetchMe";
 
 interface CommonState {
   currentUser: User | null;
@@ -14,7 +15,9 @@ const initialState: CommonState = {
 export const fetchCurrentUser = createAsyncThunk(
   "common/fetchCurrentUser",
   async () => {
-    return {} as User;
+    const currentUserRes = await fetchMe();
+    const user = currentUserRes.data;
+    return user;
   }
 );
 
@@ -23,7 +26,11 @@ export const fetchCurrentUser = createAsyncThunk(
 const commonSlice = createSlice({
   name: "common",
   initialState,
-  reducers: {},
+  reducers: {
+    clearCurrentUser(state, action) {
+      state.currentUser = null;
+    },
+  },
   extraReducers: (builder) =>
     builder.addCase(fetchCurrentUser.fulfilled, (state, action) => {
       console.log("action reduxer", action);
