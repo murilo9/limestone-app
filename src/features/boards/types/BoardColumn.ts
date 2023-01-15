@@ -5,5 +5,5 @@ export interface BoardColumn
   extends Omit<PersistentEntity, "created" | "updated"> {
   title: string;
   cardCount: number;
-  cards: Card[];
+  cards: { [id: string]: Card };
 }

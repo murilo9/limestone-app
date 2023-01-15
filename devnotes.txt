@@ -15,18 +15,18 @@ boards: {
   },
   actions: {
     /* No such thing like "currentBoard" */
-    fetchAllBoards(),  // Thunk (calls boardsAdded)
-    createBoard(),  // Thunk (calls boardsAdded)
-    boardsAdded(),
-    updateBoard(),  // Thunk (calls boardUpdated)
-    boardUpdated(),
-    fetchSomeBoardColumnCards()  // Thunk (calls boardUpdated)
-    lfetchCardData(),   // Thunk (calls loadSomeCardComments)
-    fetchSomeCardComments()  // Thunk (calls boardUpdated)
-    addCard(),  // Thunk (calls boardUpdated)
-    updateCard(), // Thunk (calls boardUpdated)
-    addComment(), // Thunk (calls boardUpdated)
-    updateComment(), // Thunk (calls boardUpdated)
+    loadAllBoards(),  // Thunk
+    onCreateBoard(),  // Thunk
+    upsertBoards(),
+    onUpdateBoard(),  // Thunk
+    onDeleteBoard(),  // Thunk
+    fetchSomeBoardColumnCards()  // Thunk
+    fetchCardData(),   // Thunk
+    fetchSomeCardComments()  // Thunk
+    addCard(),  // Thunk
+    updateCard(), // Thunk
+    addComment(), // Thunk
+    updateComment(), // Thunk
   }
 }
 users: {

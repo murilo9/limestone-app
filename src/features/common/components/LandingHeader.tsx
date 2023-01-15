@@ -94,7 +94,7 @@ export default function LandingHeader() {
               onClick={() =>
                 signIn({
                   email: "murilohenriquematias@gmail.com",
-                  password: "",
+                  password: "Murilo#321",
                 })
               }
             >

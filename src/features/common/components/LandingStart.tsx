@@ -23,7 +23,7 @@ export default function LandingStart() {
           sx={{ fontSize: "44px", mb: 8 }}
         >
           Because the <b style={{ fontWeight: 600 }}>complex</b> can be managed{" "}
-          <b style={{ fontWeight: 600 }}>smiply</b> :{")"}
+          <b style={{ fontWeight: 600 }}>simply</b> :{")"}
         </Typography>
         <Box>
           <Button
@@ -88,7 +88,7 @@ export default function LandingStart() {
           sx={{ fontSize: "38px", mb: 6 }}
         >
           Because the <b style={{ fontWeight: 600 }}>complex</b> can be managed{" "}
-          <b style={{ fontWeight: 600 }}>smiply</b> :{")"}
+          <b style={{ fontWeight: 600 }}>simply</b> :{")"}
         </Typography>
         <Box
           sx={{
