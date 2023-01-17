@@ -9,9 +9,9 @@ export const limestoneTheme = createTheme({
       contrastText: "#FFFFFF",
     },
     secondary: {
-      light: "#B2CBCE",
-      main: "#9FB5B8",
-      dark: "#899C9E",
+      light: "#F5F8F7",
+      main: "#F5F8F7",
+      dark: "#EFEFEF",
       contrastText: "#5A7E90",
     },
     error: {
@@ -59,6 +59,15 @@ export const limestoneTheme = createTheme({
         root: {
           textTransform: "none",
           color: "#5A7E90",
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          ".MuiInputBase-root": {
+            height: "40px",
+          },
         },
       },
     },
