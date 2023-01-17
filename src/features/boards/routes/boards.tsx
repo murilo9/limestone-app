@@ -22,6 +22,7 @@ export default function BoardsPage() {
   return (
     <>
       <Grid
+        className="lim-boards-page"
         container
         maxWidth="xl"
         sx={{ px: "0 !important", margin: "auto", py: 5 }}

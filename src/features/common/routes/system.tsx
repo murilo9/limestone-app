@@ -48,12 +48,13 @@ export default function SystemPage() {
         onTabChange={handleTabChange}
       />
       <Box
+        className="lim-system-container"
         sx={{
           position: "relative",
           boxSizing: "border-box",
           height: "100vh",
           width: "100vw",
-          overflowY: "auto",
+          overflowY: "hidden",
           overflowX: "hidden",
           px: { xs: 3, md: 8 },
           pt: SYSTEM_HEADER_HEIGHTS,

@@ -7,7 +7,12 @@ import Logo from "../assets/logo.svg";
 import LogoIcon from "../assets/logo-icon.svg";
 import { useLocation, useParams } from "react-router-dom";
 
+/**
+ * This component is a view-width Box with the following heights
+ * and paddings, and a maxWidth="xl" container inside.
+ */
 export const SYSTEM_HEADER_HEIGHTS = { xs: "56px", sm: "80px", md: "80px" };
+export const SYSTEM_HEADER_PADDINGS = { xs: 3, md: 8 };
 
 type SystemHeaderProps = {
   selectedTab: string;
@@ -28,7 +33,7 @@ export default function SystemHeader(props: SystemHeaderProps) {
           width: "100vw",
           height: SYSTEM_HEADER_HEIGHTS,
           borderBottom: "1px solid rgba(0,0,0,0.2)",
-          px: { xs: 3, md: 8 },
+          px: SYSTEM_HEADER_PADDINGS,
           boxSizing: "border-box",
           display: "flex",
           justifyContent: "center",

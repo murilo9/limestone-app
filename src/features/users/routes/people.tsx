@@ -5,6 +5,7 @@ export default function PeoplePage() {
   return (
     <>
       <Grid
+        className="lim-people-page"
         container
         maxWidth="xl"
         sx={{
