@@ -9,10 +9,10 @@ import { useLocation, useParams } from "react-router-dom";
 
 /**
  * This component is a view-width Box with the following heights
- * and paddings, and a maxWidth="xl" container inside.
+ * and and a maxWidth="xl" container inside with the following paddings.
  */
 export const SYSTEM_HEADER_HEIGHTS = { xs: "56px", sm: "80px", md: "80px" };
-export const SYSTEM_HEADER_PADDINGS = { xs: 3, md: 8 };
+export const SYSTEM_HEADER_PADDINGS = { xs: 3, md: 0 };
 
 type SystemHeaderProps = {
   selectedTab: string;
@@ -33,7 +33,6 @@ export default function SystemHeader(props: SystemHeaderProps) {
           width: "100vw",
           height: SYSTEM_HEADER_HEIGHTS,
           borderBottom: "1px solid rgba(0,0,0,0.2)",
-          px: SYSTEM_HEADER_PADDINGS,
           boxSizing: "border-box",
           display: "flex",
           justifyContent: "center",
@@ -45,6 +44,9 @@ export default function SystemHeader(props: SystemHeaderProps) {
         <Grid
           container
           maxWidth="xl"
+          sx={{
+            px: SYSTEM_HEADER_PADDINGS,
+          }}
         >
           {/* TABLET/DESKTOP LOGO */}
           <Grid
