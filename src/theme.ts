@@ -54,5 +54,13 @@ export const limestoneTheme = createTheme({
         },
       },
     },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+          color: "#5A7E90",
+        },
+      },
+    },
   },
 });

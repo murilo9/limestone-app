@@ -28,30 +28,10 @@ export default function PrivateRoutes() {
             element={<SystemPage />}
           >
             <Route
-              index
-              element={<Navigate to="/boards" />}
-            />
-            <Route
-              path="/boards"
-              element={<BoardsPage />}
-            />
-            <Route
-              path="/boards/:boardId"
-              element={<BoardsPage />}
-            />
-            <Route
-              path="/boards/:boardId/:cardId"
-              element={<BoardsPage />}
-            />
-            <Route
-              path="/people"
-              element={<PeoplePage />}
-            />
-            <Route
               path="*"
               element={
                 <Navigate
-                  to="/boards"
+                  to="/"
                   replace={true}
                 />
               }

@@ -1,35 +1,93 @@
-import { Box, Button } from "@mui/material";
+import { Avatar, Box, Button, Grid, Tab, Tabs } from "@mui/material";
 import React from "react";
 import { useAppSelector } from "../../../store";
 import { fetchMe } from "../api/fetchMe";
 import { useAuth } from "../hooks/useAuth";
+import Logo from "../assets/logo.svg";
+import { useLocation, useParams } from "react-router-dom";
 
-export default function SystemHeader() {
+export const SYSTEM_HEADER_HEIGHTS = { xs: "56px", sm: "80px", md: "80px" };
+
+type SystemHeaderProps = {
+  selectedTab: string;
+  onTabChange: (value: string) => void;
+};
+
+export default function SystemHeader(props: SystemHeaderProps) {
   const { signOut } = useAuth();
   const currentUser = useAppSelector((state) => state.common.currentUser);
 
   return (
     <>
-      <Box>
-        <Button
-          disableElevation
-          variant="contained"
-          onClick={signOut}
+      <Box
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: SYSTEM_HEADER_HEIGHTS,
+          borderBottom: "1px solid rgba(0,0,0,0.2)",
+          px: { xs: 3, md: 8 },
+          boxSizing: "border-box",
+          display: "flex",
+          justifyContent: "center",
+          aligItems: "center",
+          backdropFilter: "blur(14px)",
+          zIndex: 1,
+        }}
+      >
+        <Grid
+          container
+          maxWidth="xl"
         >
-          Sign Out
-        </Button>
-        <Button
-          disableElevation
-          variant="contained"
-          onClick={() => fetchMe()}
-        >
-          Fetch
-        </Button>
-        {currentUser
-          ? Object.keys(currentUser).map((key) => (
-              <p>{`${key}: ${(currentUser as any)[key]}`}</p>
-            ))
-          : null}
+          <Grid
+            item
+            xs={4}
+            md={6}
+            lg={7}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-start",
+            }}
+          >
+            <img
+              src={Logo}
+              alt="Limestone"
+            />
+          </Grid>
+          <Grid
+            item
+            xs={8}
+            md={6}
+            lg={5}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Tabs
+              value={props.selectedTab}
+              sx={{
+                height: "100%",
+                mr: 2,
+                ".MuiTabs-scroller": { display: "flex", alignItems: "center" },
+              }}
+              onChange={(event, newValue) => props.onTabChange(newValue)}
+            >
+              <Tab
+                label="Boards"
+                value="boards"
+              />
+              <Tab
+                label="People"
+                value="people"
+              />
+            </Tabs>
+            <Avatar>MH</Avatar>
+          </Grid>
+        </Grid>
       </Box>
     </>
   );
