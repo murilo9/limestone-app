@@ -4,6 +4,7 @@ import { useAppSelector } from "../../../store";
 import { fetchMe } from "../api/fetchMe";
 import { useAuth } from "../hooks/useAuth";
 import Logo from "../assets/logo.svg";
+import LogoIcon from "../assets/logo-icon.svg";
 import { useLocation, useParams } from "react-router-dom";
 
 export const SYSTEM_HEADER_HEIGHTS = { xs: "56px", sm: "80px", md: "80px" };
@@ -40,13 +41,14 @@ export default function SystemHeader(props: SystemHeaderProps) {
           container
           maxWidth="xl"
         >
+          {/* TABLET/DESKTOP LOGO */}
           <Grid
             item
             xs={4}
             md={6}
             lg={7}
             sx={{
-              display: "flex",
+              display: { xs: "none", sm: "flex" },
               alignItems: "center",
               justifyContent: "flex-start",
             }}
@@ -56,6 +58,26 @@ export default function SystemHeader(props: SystemHeaderProps) {
               alt="Limestone"
             />
           </Grid>
+          {/* END TABLET/DESKTOP LOGO */}
+          {/* PHONE LOGO */}
+          <Grid
+            item
+            xs={4}
+            md={6}
+            lg={7}
+            sx={{
+              display: { xs: "flex", sm: "none" },
+              alignItems: "center",
+              justifyContent: "flex-start",
+            }}
+          >
+            <img
+              src={LogoIcon}
+              alt="Limestone"
+              style={{ width: "32px" }}
+            />
+          </Grid>
+          {/* END PHONE LOGO */}
           <Grid
             item
             xs={8}
