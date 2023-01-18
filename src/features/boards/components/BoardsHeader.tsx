@@ -11,13 +11,22 @@ import {
 import React from "react";
 import { SYSTEM_HEADER_PADDINGS } from "../../common/components/SystemHeader";
 
+export const BOARDS_HEADER_HEIGHTS = { xs: "120px", md: "56px" };
+
 export default function BoardsHeader() {
   const theme = useTheme();
 
   return (
     <>
       <Box
-        sx={{ width: "100%", position: "absolute", top: 0, left: 0, right: 0 }}
+        sx={{
+          width: "100%",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          backdropFilter: "blur(14px)",
+        }}
       >
         <Grid
           container
