@@ -56,7 +56,6 @@ export default function SystemPage() {
           width: "100vw",
           overflowY: "hidden",
           overflowX: "hidden",
-          px: { xs: 3, md: 8 },
           pt: SYSTEM_HEADER_HEIGHTS,
         }}
       >

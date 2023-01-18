@@ -12,7 +12,7 @@ import { useLocation, useParams } from "react-router-dom";
  * and and a maxWidth="xl" container inside with the following paddings.
  */
 export const SYSTEM_HEADER_HEIGHTS = { xs: "56px", sm: "80px", md: "80px" };
-export const SYSTEM_HEADER_PADDINGS = { xs: 3, md: 0 };
+export const SYSTEM_HEADER_PADDINGS = { xs: 3, xl: 0 };
 
 type SystemHeaderProps = {
   selectedTab: string;

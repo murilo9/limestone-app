@@ -5,6 +5,7 @@ import {
   Search,
 } from "@mui/icons-material";
 import {
+  Box,
   Button,
   Container,
   Grid,
@@ -21,14 +22,17 @@ export default function BoardsPage() {
 
   return (
     <>
-      <Grid
+      <Box
         className="lim-boards-page"
-        container
-        maxWidth="xl"
-        sx={{ px: "0 !important", margin: "auto", py: 5 }}
+        sx={{
+          px: "0 !important",
+          margin: "auto",
+          position: "relative",
+          width: "100%",
+        }}
       >
         <BoardsHeader />
-      </Grid>
+      </Box>
     </>
   );
 }
