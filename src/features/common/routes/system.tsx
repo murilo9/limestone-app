@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import BoardsPage from "../../boards/routes/boards";
 import PeoplePage from "../../users/routes/people";

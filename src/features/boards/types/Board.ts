@@ -5,7 +5,7 @@ export interface Board extends PersistentEntity {
   title: string;
   admin: string;
   owner: string;
-  columns: { [id: string]: BoardColumn };
+  columns: BoardColumn[];
   users: { [id: string]: string };
   archived: boolean;
 }

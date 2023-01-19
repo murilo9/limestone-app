@@ -14,13 +14,27 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../../store";
+import { onLoadAllBoards } from "../boardsSlice";
+import BoardCard from "../components/BoardCard";
 import BoardsHeader, {
   BOARDS_HEADER_HEIGHTS,
 } from "../components/BoardsHeader";
 
 export default function BoardsPage() {
-  const theme = useTheme();
+  const dispatch = useAppDispatch();
+  const boards = useAppSelector((state) => state.boards.entities);
+  const [loadingBoards, setLoadingBoards] = useState(false);
+
+  useEffect(() => {
+    if (!Object.entries(boards).length) {
+      setLoadingBoards(true);
+      dispatch(onLoadAllBoards()).then(() => {
+        setLoadingBoards(false);
+      });
+    }
+  }, []);
 
   return (
     <>
@@ -45,8 +59,21 @@ export default function BoardsPage() {
             pt: BOARDS_HEADER_HEIGHTS,
           }}
         >
-          <Typography variant="h1">Boards</Typography>
-          <Box sx={{ height: "1000px" }}></Box>
+          <Grid
+            container
+            maxWidth="xl"
+            sx={{ px: { xs: 3, xl: 0 }, margin: "auto", py: 6 }}
+          >
+            {Object.entries(boards).map(([boardId, board]) => (
+              <Grid
+                item
+                xs={12}
+                key={boardId}
+              >
+                <BoardCard board={board} />
+              </Grid>
+            ))}
+          </Grid>
         </Box>
       </Box>
     </>

@@ -1,5 +1,7 @@
+import { StringDate } from "./StringDate";
+
 export interface PersistentEntity {
   _id: string;
-  created: Date;
-  updated: Date;
+  created: StringDate;
+  updated: StringDate;
 }
