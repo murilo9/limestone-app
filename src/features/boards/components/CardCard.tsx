@@ -1,5 +1,5 @@
-import { Comment } from "@mui/icons-material";
-import { Avatar, Box, Grid, Skeleton, Typography } from "@mui/material";
+import { Circle, Comment } from "@mui/icons-material";
+import { Avatar, Box, Grid, Rating, Skeleton, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import { onFetchCardCommentsCount } from "../boardsSlice";
@@ -11,6 +11,8 @@ type CardCardProps = {
   boardId: string;
   columnId: string;
 };
+
+const priorityColor = ["#0085FF", "#00DC16", "#FF9900", "#FF0000"];
 
 export default function CardCard({ card, boardId, columnId }: CardCardProps) {
   const users = useAppSelector((state) => state.users.entities);
@@ -85,7 +87,30 @@ export default function CardCard({ card, boardId, columnId }: CardCardProps) {
           <Grid
             item
             xs={6}
-          ></Grid>
+            sx={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Rating
+              readOnly
+              defaultValue={card.priority}
+              max={4}
+              sx={{ transform: "rotate(180deg)" }}
+              icon={
+                <Circle
+                  sx={{
+                    color: priorityColor[card.priority - 1],
+                    fontSize: "10px",
+                  }}
+                />
+              }
+              emptyIcon={
+                <Circle sx={{ color: "rgba(0,0,0,0.2)", fontSize: "10px" }} />
+              }
+            />
+          </Grid>
         </Grid>
       </Box>
     </>
