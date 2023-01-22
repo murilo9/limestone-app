@@ -312,7 +312,6 @@ const boardsSlice = createSlice({
         const columnIndex = state.entities[boardId].columns.findIndex(
           (column) => column._id === columnId
         );
-        console.log("columnIndex", columnIndex);
         cards.forEach((card) => {
           const column = state.entities[boardId].columns[columnIndex];
           if (!column.cards) {
