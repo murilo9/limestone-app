@@ -23,10 +23,12 @@ export default function CardsColumn({
   const cards = Object.values(column.cards || {});
 
   useLayoutEffect(() => {
-    setLoadingCards(true);
-    dispatch(onLoadBoardColumnCards({ boardId, columnId: column._id }))
-      .then(() => {})
-      .finally(() => setLoadingCards(false));
+    if (!cards.length) {
+      setLoadingCards(true);
+      dispatch(onLoadBoardColumnCards({ boardId, columnId: column._id }))
+        .then(() => {})
+        .finally(() => setLoadingCards(false));
+    }
   }, []);
 
   return (
