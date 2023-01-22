@@ -8,6 +8,7 @@ import { deleteCardComment } from "./api/deleteCardComment";
 import { fetchAllBoards } from "./api/fetchAllBoards";
 import { fetchCard } from "./api/fetchCard";
 import { fetchCardComments } from "./api/fetchCardComments";
+import { fetchCardCommentsCount } from "./api/fetchCardCommentsCount";
 import { fetchBoardCards } from "./api/fetchColumnCards";
 import { updateBoard } from "./api/updateBoard";
 import { updateCard } from "./api/updateCard";
@@ -253,6 +254,27 @@ export const onDeleteCardComment = createAsyncThunk(
   }
 );
 
+export const onFetchCardCommentsCount = createAsyncThunk(
+  "boards/onFetchCardCommentsCount",
+  async ({
+    boardId,
+    columnId,
+    cardId,
+  }: {
+    boardId: string;
+    columnId: string;
+    cardId: string;
+  }) => {
+    const fetchCardCommentsCountRes = await fetchCardCommentsCount(
+      boardId,
+      columnId,
+      cardId
+    );
+    const count = fetchCardCommentsCountRes.data;
+    return { boardId, columnId, cardId, count };
+  }
+);
+
 /* Slice declaration */
 
 const boardsSlice = createSlice({
@@ -366,6 +388,16 @@ const boardsSlice = createSlice({
         let cards = state.entities[boardId].columns[columnIndex].cards;
         cards = cards || {};
         delete cards[cardId].comments[commentId];
+      })
+      .addCase(onFetchCardCommentsCount.fulfilled, (state, action) => {
+        const { boardId, columnId, cardId, count } = action.payload;
+        const columnIndex = state.entities[boardId].columns.findIndex(
+          (column) => column._id === columnId
+        );
+        const cards = state.entities[boardId].columns[columnIndex].cards;
+        if (cards) {
+          cards[cardId].commentsCount = count;
+        }
       }),
 });
 

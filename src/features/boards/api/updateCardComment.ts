@@ -9,6 +9,6 @@ export const updateCardComment = (
   card: CreateCardCommentDto
 ) =>
   put<CardComment>(
-    `/boards${boardId}/cards/${cardId}/comments/${commentId}`,
+    `/boards/${boardId}/cards/${cardId}/comments/${commentId}`,
     card
   );

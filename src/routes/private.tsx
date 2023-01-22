@@ -7,6 +7,7 @@ import { fetchCurrentUser } from "../features/common/commonSlice";
 import { useAuth } from "../features/common/hooks/useAuth";
 import SystemPage from "../features/common/routes/system";
 import PeoplePage from "../features/users/routes/people";
+import { onFetchUsers } from "../features/users/usersSlice";
 import { useAppDispatch, useAppSelector } from "../store";
 
 export default function PrivateRoutes() {
@@ -14,9 +15,13 @@ export default function PrivateRoutes() {
   const dispatch = useAppDispatch();
 
   useLayoutEffect(() => {
-    if (!currentUser) {
-      dispatch(fetchCurrentUser());
-    }
+    const init = async () => {
+      if (!currentUser) {
+        await dispatch(fetchCurrentUser());
+        await dispatch(onFetchUsers());
+      }
+    };
+    init();
   }, [currentUser]);
 
   return (

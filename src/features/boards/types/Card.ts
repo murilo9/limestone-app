@@ -6,4 +6,5 @@ export interface Card extends PersistentEntity {
   assignee: string | null;
   priority: number;
   comments: { [id: string]: CardComment };
+  commentsCount?: number;
 }

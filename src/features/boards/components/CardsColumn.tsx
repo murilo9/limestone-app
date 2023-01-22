@@ -56,7 +56,13 @@ export default function CardsColumn({
         {loadingCards ? (
           "loading..."
         ) : cards.length ? (
-          cards.map((card) => <CardCard card={card} />)
+          cards.map((card) => (
+            <CardCard
+              card={card}
+              columnId={column._id}
+              boardId={boardId}
+            />
+          ))
         ) : (
           <Typography
             variant="body1"
