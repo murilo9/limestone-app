@@ -4,6 +4,5 @@ import { Card } from "./Card";
 export interface BoardColumn
   extends Omit<PersistentEntity, "created" | "updated"> {
   title: string;
-  cardCount: number;
-  cards?: { [id: string]: Card };
+  cards: Card[];
 }

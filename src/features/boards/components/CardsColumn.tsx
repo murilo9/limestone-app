@@ -2,7 +2,6 @@ import { Add } from "@mui/icons-material";
 import { Box, IconButton, Typography } from "@mui/material";
 import React, { useLayoutEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store";
-import { onLoadBoardColumnCards } from "../boardsSlice";
 import { BoardColumn } from "../types/BoardColumn";
 import CardCard from "./CardCard";
 import { Droppable, Draggable } from "react-beautiful-dnd";
@@ -16,21 +15,11 @@ export default function CardsColumn({
   boardId,
   columnIndex,
 }: BoardColumnProps) {
-  const [loadingCards, setLoadingCards] = useState(false);
   const column = useAppSelector(
     (state) => state.boards.entities[boardId].columns[columnIndex]
   );
   const dispatch = useAppDispatch();
-  const cards = Object.values(column.cards || {});
-
-  useLayoutEffect(() => {
-    if (!cards.length) {
-      setLoadingCards(true);
-      dispatch(onLoadBoardColumnCards({ boardId, columnId: column._id }))
-        .then(() => {})
-        .finally(() => setLoadingCards(false));
-    }
-  }, []);
+  const { cards } = column;
 
   return (
     <>
@@ -60,9 +49,7 @@ export default function CardsColumn({
                 <Add />
               </IconButton>
             </Box>
-            {loadingCards ? (
-              "loading..."
-            ) : cards.length ? (
+            {cards.length ? (
               cards.map((card, cardIndex) => (
                 <CardCard
                   card={card}

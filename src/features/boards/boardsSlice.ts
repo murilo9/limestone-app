@@ -1,17 +1,12 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createBoard } from "./api/createBoard";
-import { createCard } from "./api/createCard";
 import { createCardComment } from "./api/createCardComment";
 import { deleteBoard } from "./api/deleteBoard";
-import { deleteCard } from "./api/deleteCard";
 import { deleteCardComment } from "./api/deleteCardComment";
 import { fetchAllBoards } from "./api/fetchAllBoards";
-import { fetchCard } from "./api/fetchCard";
 import { fetchCardComments } from "./api/fetchCardComments";
 import { fetchCardCommentsCount } from "./api/fetchCardCommentsCount";
-import { fetchBoardCards } from "./api/fetchColumnCards";
 import { updateBoard } from "./api/updateBoard";
-import { updateCard } from "./api/updateCard";
 import { updateCardComment } from "./api/updateCardComment";
 import { Board } from "./types/Board";
 import { CreateBoardDto } from "./types/dto/CreateBoardDto";
@@ -67,30 +62,6 @@ const onDeleteBoard = createAsyncThunk(
     return boardId;
   }
 );
-export const onLoadBoardColumnCards = createAsyncThunk(
-  "boards/onLoadBoardColumnCards",
-  async ({ boardId, columnId }: { boardId: string; columnId: string }) => {
-    const columnCardsRes = await fetchBoardCards(boardId, columnId);
-    const columnCards = columnCardsRes.data;
-    return { boardId, columnId, cards: columnCards };
-  }
-);
-export const fetchCardData = createAsyncThunk(
-  "boards/fetchCardData",
-  async ({
-    boardId,
-    columnId,
-    cardId,
-  }: {
-    boardId: string;
-    columnId: string;
-    cardId: string;
-  }) => {
-    const fetchCardRes = await fetchCard(boardId, columnId, cardId);
-    const card = fetchCardRes.data;
-    return card;
-  }
-);
 export const onFetchCardComments = createAsyncThunk(
   "boards/onFetchCardComments",
   async ({
@@ -105,71 +76,6 @@ export const onFetchCardComments = createAsyncThunk(
     const fetchCardCommentsRes = await fetchCardComments(boardId, cardId);
     const comments = fetchCardCommentsRes.data;
     return { boardId, columnId, cardId, comments };
-  }
-);
-export const onCreateCard = createAsyncThunk(
-  "boards/onCreateCard",
-  async ({
-    boardId,
-    columnId,
-    createCardForm,
-  }: {
-    boardId: string;
-    columnId: string;
-    createCardForm: CreateCardDto;
-  }) => {
-    const createCardRes = await createCard(boardId, columnId, createCardForm);
-    const createdCard = createCardRes.data;
-    return { boardId, columnId, createdCard };
-  }
-);
-export const onUpdateCard = createAsyncThunk(
-  "boards/onUpdateCard",
-  async ({
-    boardId,
-    columnId,
-    cardId,
-    updateCardForm,
-  }: {
-    boardId: string;
-    columnId: string;
-    cardId: string;
-    updateCardForm: UpdateCardDto;
-  }) => {
-    const updateCardRes = await updateCard(
-      boardId,
-      columnId,
-      cardId,
-      updateCardForm
-    );
-    const updatedCard = updateCardRes.data;
-    return {
-      boardId,
-      columnId,
-      cardId,
-      updatedCard,
-    };
-  }
-);
-export const onDeleteCard = createAsyncThunk(
-  "boards/onDeleteCard",
-  async ({
-    boardId,
-    columnId,
-    cardId,
-    updateCardForm,
-  }: {
-    boardId: string;
-    columnId: string;
-    cardId: string;
-    updateCardForm: UpdateCardDto;
-  }) => {
-    await deleteCard(boardId, columnId, cardId);
-    return {
-      boardId,
-      columnId,
-      cardId,
-    };
   }
 );
 export const onCreateCardComment = createAsyncThunk(
@@ -307,57 +213,19 @@ const boardsSlice = createSlice({
         const boardId = action.payload;
         delete state.entities[boardId];
       })
-      .addCase(onLoadBoardColumnCards.fulfilled, (state, action) => {
-        const { boardId, columnId, cards } = action.payload;
-        const columnIndex = state.entities[boardId].columns.findIndex(
-          (column) => column._id === columnId
-        );
-        cards.forEach((card) => {
-          const column = state.entities[boardId].columns[columnIndex];
-          if (!column.cards) {
-            column.cards = {};
-          }
-          column.cards[card._id] = card;
-        });
-      })
-      .addCase(onCreateCard.fulfilled, (state, action) => {
-        const { boardId, columnId, createdCard } = action.payload;
-        const columnIndex = state.entities[boardId].columns.findIndex(
-          (column) => column._id === columnId
-        );
-        let cards = state.entities[boardId].columns[columnIndex].cards;
-        cards = cards || {};
-        cards[createdCard._id] = createdCard;
-      })
-      .addCase(onUpdateCard.fulfilled, (state, action) => {
-        const { boardId, columnId, updatedCard } = action.payload;
-        const columnIndex = state.entities[boardId].columns.findIndex(
-          (column) => column._id === columnId
-        );
-        let cards = state.entities[boardId].columns[columnIndex].cards;
-        cards = cards || {};
-        cards[updatedCard._id] = updatedCard;
-      })
-      .addCase(onDeleteCard.fulfilled, (state, action) => {
-        const { boardId, columnId, cardId } = action.payload;
-        const columnIndex = state.entities[boardId].columns.findIndex(
-          (column) => column._id === columnId
-        );
-        let cards = state.entities[boardId].columns[columnIndex].cards;
-        cards = cards || {};
-        delete cards[cardId];
-      })
       .addCase(onFetchCardComments.fulfilled, (state, action) => {
         const { boardId, columnId, cardId, comments } = action.payload;
         const columnIndex = state.entities[boardId].columns.findIndex(
           (column) => column._id === columnId
         );
-        comments.forEach((comment) => {
-          let cards = state.entities[boardId].columns[columnIndex].cards;
-          cards = cards || {};
-          const card = cards[cardId];
-          card.comments[comment._id] = comment;
-        });
+        let cards = state.entities[boardId].columns[columnIndex].cards;
+        cards = cards || [];
+        const card = cards.find((someCard) => someCard._id === cardId);
+        if (card) {
+          comments.forEach((comment) => {
+            card.comments[comment._id] = comment;
+          });
+        }
       })
       .addCase(onCreateCardComment.fulfilled, (state, action) => {
         const { boardId, columnId, cardId, createdCardComment } =
@@ -367,7 +235,11 @@ const boardsSlice = createSlice({
         );
         let cards = state.entities[boardId].columns[columnIndex].cards;
         cards = cards || {};
-        cards[cardId].comments[createdCardComment._id] = createdCardComment;
+        cards = cards || [];
+        const card = cards.find((someCard) => someCard._id === cardId);
+        if (card) {
+          card.comments[createdCardComment._id] = createdCardComment;
+        }
       })
       .addCase(onUpdateCardComment.fulfilled, (state, action) => {
         const { boardId, columnId, cardId, updatedCardComment } =
@@ -377,7 +249,10 @@ const boardsSlice = createSlice({
         );
         let cards = state.entities[boardId].columns[columnIndex].cards;
         cards = cards || {};
-        cards[cardId].comments[updatedCardComment._id] = updatedCardComment;
+        const card = cards.find((someCard) => someCard._id === cardId);
+        if (card) {
+          card.comments[updatedCardComment._id] = updatedCardComment;
+        }
       })
       .addCase(onDeleteCardComment.fulfilled, (state, action) => {
         const { boardId, columnId, cardId, commentId } = action.payload;
@@ -386,7 +261,10 @@ const boardsSlice = createSlice({
         );
         let cards = state.entities[boardId].columns[columnIndex].cards;
         cards = cards || {};
-        delete cards[cardId].comments[commentId];
+        const card = cards.find((someCard) => someCard._id === cardId);
+        if (card) {
+          delete card.comments[commentId];
+        }
       })
       .addCase(onFetchCardCommentsCount.fulfilled, (state, action) => {
         const { boardId, columnId, cardId, count } = action.payload;
@@ -394,8 +272,9 @@ const boardsSlice = createSlice({
           (column) => column._id === columnId
         );
         const cards = state.entities[boardId].columns[columnIndex].cards;
-        if (cards) {
-          cards[cardId].commentsCount = count;
+        const card = cards.find((someCard) => someCard._id === cardId);
+        if (card) {
+          card.commentsCount = count;
         }
       }),
 });

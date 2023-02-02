@@ -52,6 +52,7 @@ export default function BoardCard({ board }: BoardCardProps) {
           sx={{
             border: `1px solid rgba(90, 126, 144, 0.2)`,
             bgcolor: "rgba(0,0,0,0.01)",
+            mb: 4,
           }}
         >
           <CardHeader
@@ -91,7 +92,7 @@ export default function BoardCard({ board }: BoardCardProps) {
                       variant="h6"
                       textAlign="right"
                     >
-                      {column.cardCount}
+                      {column.cards.length}
                     </Typography>
                     <Typography
                       variant="subtitle1"
