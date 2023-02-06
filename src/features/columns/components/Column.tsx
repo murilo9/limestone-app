@@ -1,25 +1,26 @@
 import { Add } from "@mui/icons-material";
 import { Box, IconButton, Typography } from "@mui/material";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useContext, useLayoutEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store";
-import { BoardColumn } from "../types/BoardColumn";
-import CardCard from "./CardCard";
+import { ColumnEntity } from "../types/ColumnEntity";
+import CardCard from "../../cards/components/Card";
 import { Droppable, Draggable } from "react-beautiful-dnd";
+import { BoardsContext } from "../../boards/providers/BoardsProvider";
 
 type BoardColumnProps = {
   boardId: string;
-  columnIndex: number;
+  columnId: string;
 };
 
-export default function CardsColumn({
-  boardId,
-  columnIndex,
-}: BoardColumnProps) {
-  const column = useAppSelector(
-    (state) => state.boards.entities[boardId].columns[columnIndex]
+export default function CardsColumn({ boardId, columnId }: BoardColumnProps) {
+  const column = useAppSelector((state) => state.columns.entities[columnId]);
+  const cards = useAppSelector((state) =>
+    Object.values(state.cards.entities).filter(
+      (card) => card.columnId === column._id
+    )
   );
-  const dispatch = useAppDispatch();
-  const { cards } = column;
+
+  const { onOpenCreateCardModal } = useContext(BoardsContext);
 
   return (
     <>
@@ -45,7 +46,10 @@ export default function CardsColumn({
               }}
             >
               <Typography variant="subtitle2">{column.title}</Typography>
-              <IconButton color="primary">
+              <IconButton
+                color="primary"
+                onClick={() => onOpenCreateCardModal(boardId, columnId)}
+              >
                 <Add />
               </IconButton>
             </Box>

@@ -1,3 +1,3 @@
-import { DELETE } from "../../common/utils/http";
+import { delette } from "../../common/utils/http";
 
-export const deleteUser = (userId: string) => DELETE(`/users/${userId}`);
+export const deleteUser = (userId: string) => delette(`/users/${userId}`);

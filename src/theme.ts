@@ -62,12 +62,18 @@ export const limestoneTheme = createTheme({
         },
       },
     },
-    MuiTextField: {
+    MuiDialogTitle: {
       styleOverrides: {
         root: {
-          ".MuiInputBase-root": {
-            height: "40px",
-          },
+          borderBottom: `1px solid rgba(0,0,0,0.15)`,
+        },
+      },
+    },
+    MuiDialogActions: {
+      styleOverrides: {
+        root: {
+          borderTop: `1px solid rgba(0,0,0,0.15)`,
+          padding: "16px",
         },
       },
     },

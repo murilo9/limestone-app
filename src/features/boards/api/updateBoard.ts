@@ -1,6 +1,6 @@
 import { put } from "../../common/utils/http";
-import { Board } from "../types/Board";
+import { BoardEntity } from "../types/BoardEntity";
 import { UpdateBoardDto } from "../types/dto/UpdateBoardDto";
 
-export const updateBoard = (boardId: string, updateBoardForm: UpdateBoardDto) =>
-  put<Board>(`/boards/${boardId}`, updateBoardForm);
+export const updateBoard = (boardId: string, updateBoardForm: BoardEntity) =>
+  put<BoardEntity>(`/boards/${boardId}`, updateBoardForm);

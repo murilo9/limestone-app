@@ -3,12 +3,12 @@ import { Avatar, Box, Grid, Rating, Skeleton, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { useAppDispatch, useAppSelector } from "../../../store";
-import { onFetchCardCommentsCount } from "../boardsSlice";
-import { Card } from "../types/Card";
-import { CardComment } from "../types/CardComment";
+import { onFetchCardCommentsCount } from "../../boards/boardsSlice";
+import { CardEntity } from "../types/CardEntity";
+import { CardComment } from "../../boards/types/CardComment";
 
 type CardCardProps = {
-  card: Card;
+  card: CardEntity;
   cardIndex: number;
   boardId: string;
   columnId: string;
@@ -16,7 +16,7 @@ type CardCardProps = {
 
 const priorityColor = ["#0085FF", "#00DC16", "#FF9900", "#FF0000"];
 
-export default function CardCard({
+export default function Card({
   card,
   boardId,
   columnId,
@@ -24,15 +24,6 @@ export default function CardCard({
 }: CardCardProps) {
   const users = useAppSelector((state) => state.users.entities);
   const cardAssignee = card.assignee ? users[card.assignee] : null;
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (card.commentsCount === undefined) {
-      dispatch(
-        onFetchCardCommentsCount({ boardId, columnId, cardId: card._id })
-      );
-    }
-  }, []);
 
   return (
     <>
@@ -84,10 +75,10 @@ export default function CardCard({
                   fontSize="small"
                   sx={{ mr: 0.5 }}
                   color={
-                    Number(card.commentsCount) > 0 ? "primary" : "disabled"
+                    Number("todo-comments-count") > 0 ? "primary" : "disabled"
                   }
                 />
-                {card.commentsCount === undefined ? (
+                {Number("todo-comments-count") === undefined ? (
                   <Skeleton
                     variant="text"
                     width="1em"
@@ -97,10 +88,10 @@ export default function CardCard({
                     variant="body2"
                     fontWeight={500}
                     color={
-                      Number(card.commentsCount) > 0 ? "primary" : "disabled"
+                      Number("todo-comments-count") > 0 ? "primary" : "disabled"
                     }
                   >
-                    {card.commentsCount}
+                    {"0" /* todo-comments-count */}
                   </Typography>
                 )}
               </Grid>

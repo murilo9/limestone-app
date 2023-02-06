@@ -1,6 +1,6 @@
 import { post } from "../../common/utils/http";
-import { Board } from "../types/Board";
+import { BoardEntity } from "../types/BoardEntity";
 import { CreateBoardDto } from "../types/dto/CreateBoardDto";
 
 export const createBoard = (createBoardForm: CreateBoardDto) =>
-  post<Board>("/boards", createBoardForm);
+  post<BoardEntity>("/boards", createBoardForm);

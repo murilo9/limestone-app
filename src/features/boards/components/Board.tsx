@@ -8,21 +8,26 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Grid,
   IconButton,
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { Board } from "../types/Board";
-import CardsColumn from "./CardsColumn";
+import { BoardEntity } from "../types/BoardEntity";
+import CardsColumn from "../../columns/components/Column";
 import { DragDropContext } from "react-beautiful-dnd";
+import { useAppSelector } from "../../../store";
 
-type BoardCardProps = {
-  board: Board;
+type BoardProps = {
+  board: BoardEntity;
 };
 
-export default function BoardCard({ board }: BoardCardProps) {
+export default function Board({ board }: BoardProps) {
   const [showDetails, setShowDetails] = useState(false);
+  const columns = useAppSelector((state) =>
+    Object.values(state.columns.entities)
+      .filter((column) => column.boardId === board._id)
+      .sort((columnA, columnB) => columnA.index - columnB.index)
+  );
 
   const renderBoardDetails = () => (
     <Box
@@ -34,11 +39,11 @@ export default function BoardCard({ board }: BoardCardProps) {
         overflowX: "auto",
       }}
     >
-      {board.columns.map((column, index) => (
+      {columns.map((column) => (
         <CardsColumn
           key={column._id}
           boardId={board._id}
-          columnIndex={index}
+          columnId={column._id}
         />
       ))}
     </Box>
@@ -80,7 +85,7 @@ export default function BoardCard({ board }: BoardCardProps) {
           <CardContent sx={{ pt: 0 }}>
             {showDetails
               ? renderBoardDetails()
-              : board.columns.map((column) => (
+              : columns.map((column) => (
                   <Box
                     sx={{
                       display: "inline-block",
@@ -92,7 +97,7 @@ export default function BoardCard({ board }: BoardCardProps) {
                       variant="h6"
                       textAlign="right"
                     >
-                      {column.cards.length}
+                      todo-cards-length
                     </Typography>
                     <Typography
                       variant="subtitle1"

@@ -1,7 +1,7 @@
 import { Avatar, Box, Typography } from "@mui/material";
 import React from "react";
 import { useAppSelector } from "../../../store";
-import { Board } from "../../boards/types/Board";
+import { BoardEntity } from "../../boards/types/BoardEntity";
 import { User } from "../types/User";
 
 type UserCardProps = {

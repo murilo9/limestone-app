@@ -1,3 +1,3 @@
-import { DELETE } from "../../common/utils/http";
+import { delette } from "../../common/utils/http";
 
-export const deleteBoard = (boardId: string) => DELETE(`/boards/${boardId}`);
+export const deleteBoard = (boardId: string) => delette(`/boards/${boardId}`);
