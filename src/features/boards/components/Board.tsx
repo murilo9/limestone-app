@@ -1,52 +1,123 @@
 import {
+  Add,
   KeyboardArrowDown,
   KeyboardArrowUp,
   MoreHoriz,
 } from "@mui/icons-material";
 import {
   Box,
+  Button,
   Card,
   CardContent,
   CardHeader,
   IconButton,
+  Switch,
   Typography,
+  useTheme,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { BoardEntity } from "../types/BoardEntity";
-import CardsColumn from "../../columns/components/Column";
+import Column from "../../columns/components/Column";
 import { DragDropContext } from "react-beautiful-dnd";
-import { useAppSelector } from "../../../store";
+import { useAppDispatch, useAppSelector } from "../../../store";
+import {
+  onCreateColumn,
+  onDeleteColumn,
+  onFetchColumns,
+} from "../../columns/columnsSlice";
+import NewColumnForm from "../../columns/components/NewColumnForm";
 
 type BoardProps = {
   board: BoardEntity;
 };
 
 export default function Board({ board }: BoardProps) {
-  const [showDetails, setShowDetails] = useState(false);
+  const [showDetails, setShowDetails] = useState(true);
+  const [loadingColumns, setLoadingColumns] = useState(false);
+  const [addingNewColumn, setAddingNewColumn] = useState(false);
+  const [editColumnsMode, setEditColumnsMode] = useState(false);
+  const dispatch = useAppDispatch();
   const columns = useAppSelector((state) =>
     Object.values(state.columns.entities)
       .filter((column) => column.boardId === board._id)
       .sort((columnA, columnB) => columnA.index - columnB.index)
   );
 
+  // Loads this board's columns on start
+  useLayoutEffect(() => {
+    setLoadingColumns(true);
+    dispatch(onFetchColumns(board._id)).then(() => {});
+  }, []);
+
+  const createColumn = (columnTitle: string) => {
+    setShowDetails(false);
+    setAddingNewColumn(true);
+    dispatch(
+      onCreateColumn({
+        boardId: board._id,
+        title: columnTitle,
+        index: columns.length,
+      })
+    )
+      .catch((error) => console.log(error))
+      .finally(() => {
+        setAddingNewColumn(false);
+      });
+  };
+
+  const deleteColumn = (columnId: string) => {
+    dispatch(onDeleteColumn({ boardId: board._id, columnId }));
+  };
+
   const renderBoardDetails = () => (
-    <Box
-      className="lim-detailed-columns-list"
-      sx={{
-        width: "100%",
-        whiteSpace: "nowrap",
-        display: "flex",
-        overflowX: "auto",
-      }}
-    >
-      {columns.map((column) => (
-        <CardsColumn
-          key={column._id}
-          boardId={board._id}
-          columnId={column._id}
-        />
-      ))}
-    </Box>
+    <>
+      <Box
+        className="lim-column-toolbar"
+        sx={{ mb: 2 }}
+      >
+        <Box>
+          <Switch
+            size="small"
+            value={editColumnsMode}
+            onChange={(event) => setEditColumnsMode(event.target.checked)}
+          />
+          <Typography
+            variant="body2"
+            sx={{ display: "inline-block" }}
+          >
+            Edit columns
+          </Typography>
+        </Box>
+      </Box>
+      <Box
+        className="lim-detailed-columns-list"
+        sx={{
+          width: "100%",
+          whiteSpace: "nowrap",
+          display: "flex",
+          overflowX: "auto",
+        }}
+      >
+        {loadingColumns ? (
+          <>
+            {columns.map((column) => (
+              <Column
+                key={column._id}
+                boardId={board._id}
+                columnId={column._id}
+                showAddCardsButton={false}
+                editMode={editColumnsMode}
+                onDelete={() => deleteColumn(column._id)}
+              />
+            ))}
+            {addingNewColumn ? "Adding..." : null}
+            {editColumnsMode ? <NewColumnForm onSubmit={createColumn} /> : null}
+          </>
+        ) : (
+          "loading..."
+        )}
+      </Box>
+    </>
   );
 
   return (

@@ -53,7 +53,9 @@ export const onDeleteBoard = createAsyncThunk(
     return boardId;
   }
 );
+
 // TODO: mover esta parte pro slice de card comments
+
 export const onFetchCardComments = createAsyncThunk(
   "boards/onFetchCardComments",
   async ({

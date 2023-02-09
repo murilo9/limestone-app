@@ -75,7 +75,7 @@ export function delette<T = any>(
   }
 ): AxiosPromise<T> {
   return axios({
-    method: "delette",
+    method: "delete",
     url: (options?.customBaseUrl || baseUrl) + route,
     params: options?.params || {},
     headers: {
