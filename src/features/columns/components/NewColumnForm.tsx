@@ -42,7 +42,7 @@ export default function NewColumnForm({ onSubmit }: NewColumnFormProps) {
             variant="contained"
             color="secondary"
             size="small"
-            sx={{ pr: 2, fontStyle: "italic" }}
+            sx={{ pr: 2, fontStyle: "italic", height: '34px' }}
             onClick={() => setShowInput(true)}
             fullWidth
           >

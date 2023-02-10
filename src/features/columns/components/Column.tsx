@@ -5,13 +5,19 @@ import {
   DragHandle,
   DragIndicator,
 } from "@mui/icons-material";
-import { Box, IconButton, Typography } from "@mui/material";
-import React, { useContext, useLayoutEffect, useState } from "react";
+import { Box, IconButton, TextField, Typography } from "@mui/material";
+import React, {
+  KeyboardEventHandler,
+  useContext,
+  useLayoutEffect,
+  useState,
+} from "react";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import { ColumnEntity } from "../types/ColumnEntity";
 import CardCard from "../../cards/components/Card";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { BoardsContext } from "../../boards/providers/BoardsProvider";
+import { UpdateColumnDto } from "../types/dto/UpdateColumnDto";
 
 const COLUMN_FIXED_HEIGHT = "34px";
 
@@ -21,6 +27,7 @@ type BoardColumnProps = {
   showAddCardsButton: boolean;
   editMode: boolean;
   onDelete: () => void;
+  onUpdate: (updateColumnDto: UpdateColumnDto) => void;
 };
 
 export default function CardsColumn({
@@ -29,6 +36,7 @@ export default function CardsColumn({
   showAddCardsButton,
   editMode,
   onDelete,
+  onUpdate,
 }: BoardColumnProps) {
   const column = useAppSelector((state) => state.columns.entities[columnId]);
   const cards = useAppSelector((state) =>
@@ -36,8 +44,29 @@ export default function CardsColumn({
       (card) => card.columnId === column._id
     )
   );
+  const [showTitleInput, setShowTitleInput] = useState(false);
+  const [editableColumnTitle, setEditableColumnTitle] = useState(column.title);
+  const [showUpdatedColumnTitle, setShowUpdatedColumnTitle] = useState(false);
 
   const { onOpenCreateCardModal } = useContext(BoardsContext);
+
+  const handleColumnTitleInputBlur = () => {
+    setEditableColumnTitle(column.title);
+    setShowTitleInput(false);
+  };
+
+  const handleColumnTitleInputKeyPress: KeyboardEventHandler<HTMLDivElement> = (
+    event
+  ) => {
+    if (event.key === "Enter") {
+      onUpdate({
+        title: editableColumnTitle,
+        index: column.index,
+      });
+      setShowTitleInput(false);
+      setShowUpdatedColumnTitle(true);
+    }
+  };
 
   return (
     <>
@@ -63,7 +92,34 @@ export default function CardsColumn({
                 height: COLUMN_FIXED_HEIGHT,
               }}
             >
-              <Typography variant="subtitle2">{column.title}</Typography>
+              {showTitleInput ? (
+                <TextField
+                  size="small"
+                  variant="standard"
+                  autoFocus
+                  value={editableColumnTitle}
+                  onChange={(event) =>
+                    setEditableColumnTitle(event.target.value)
+                  }
+                  onBlur={handleColumnTitleInputBlur}
+                  onKeyUp={handleColumnTitleInputKeyPress}
+                  InputProps={{
+                    sx: { fontSize: "14px", fontWeight: 500 },
+                  }}
+                />
+              ) : (
+                <Typography
+                  variant="subtitle2"
+                  onClick={() => setShowTitleInput(editMode)}
+                  sx={{
+                    flex: "1 1",
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
+                  }}
+                >
+                  {showUpdatedColumnTitle ? editableColumnTitle : column.title}
+                </Typography>
+              )}
               {editMode ? (
                 <>
                   <Box sx={{ display: "flex", alignItems: "center" }}>

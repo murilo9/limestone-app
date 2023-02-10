@@ -24,8 +24,10 @@ import {
   onCreateColumn,
   onDeleteColumn,
   onFetchColumns,
+  onUpdateColumn,
 } from "../../columns/columnsSlice";
 import NewColumnForm from "../../columns/components/NewColumnForm";
+import { UpdateColumnDto } from "../../columns/types/dto/UpdateColumnDto";
 
 type BoardProps = {
   board: BoardEntity;
@@ -69,6 +71,10 @@ export default function Board({ board }: BoardProps) {
     dispatch(onDeleteColumn({ boardId: board._id, columnId }));
   };
 
+  const updateColumn = (updateColumnDto: UpdateColumnDto, columnId: string) => {
+    dispatch(onUpdateColumn({ boardId: board._id, columnId, updateColumnDto }));
+  };
+
   const renderBoardDetails = () => (
     <>
       <Box
@@ -108,6 +114,9 @@ export default function Board({ board }: BoardProps) {
                 showAddCardsButton={false}
                 editMode={editColumnsMode}
                 onDelete={() => deleteColumn(column._id)}
+                onUpdate={(updateColumnDto) =>
+                  updateColumn(updateColumnDto, column._id)
+                }
               />
             ))}
             {addingNewColumn ? "Adding..." : null}
