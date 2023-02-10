@@ -15,7 +15,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { BoardEntity } from "../types/BoardEntity";
 import Column from "../../columns/components/Column";
 import { DragDropContext } from "react-beautiful-dnd";
@@ -28,6 +28,7 @@ import {
 } from "../../columns/columnsSlice";
 import NewColumnForm from "../../columns/components/NewColumnForm";
 import { UpdateColumnDto } from "../../columns/types/dto/UpdateColumnDto";
+import { ConfirmationDialogContext } from "../../common/providers/ConfirmationDialogProvider";
 
 type BoardProps = {
   board: BoardEntity;
@@ -44,6 +45,7 @@ export default function Board({ board }: BoardProps) {
       .filter((column) => column.boardId === board._id)
       .sort((columnA, columnB) => columnA.index - columnB.index)
   );
+  const confirmationDialog = useContext(ConfirmationDialogContext);
 
   // Loads this board's columns on start
   useLayoutEffect(() => {
@@ -68,7 +70,19 @@ export default function Board({ board }: BoardProps) {
   };
 
   const deleteColumn = (columnId: string) => {
-    dispatch(onDeleteColumn({ boardId: board._id, columnId }));
+    confirmationDialog.open({
+      title: "Delete Column",
+      message: "Are you sure you want to delete this column?",
+      actions: [
+        {
+          title: "Delete",
+          type: "error",
+          onClick: () => {
+            dispatch(onDeleteColumn({ boardId: board._id, columnId }));
+          },
+        },
+      ],
+    });
   };
 
   const updateColumn = (updateColumnDto: UpdateColumnDto, columnId: string) => {
@@ -111,7 +125,7 @@ export default function Board({ board }: BoardProps) {
                 key={column._id}
                 boardId={board._id}
                 columnId={column._id}
-                showAddCardsButton={false}
+                showAddCardsButton={true}
                 editMode={editColumnsMode}
                 onDelete={() => deleteColumn(column._id)}
                 onUpdate={(updateColumnDto) =>

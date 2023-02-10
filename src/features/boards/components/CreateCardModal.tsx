@@ -65,7 +65,9 @@ export default function CreateCardModal() {
           },
         }}
       >
-        <DialogTitle>New Card</DialogTitle>
+        <DialogTitle sx={{ borderBottom: `1px solid rgba(0,0,0,0.15)` }}>
+          New Card
+        </DialogTitle>
         <DialogContent>
           <Typography
             variant="subtitle2"
@@ -109,7 +111,7 @@ export default function CreateCardModal() {
             onChange={setCardPriority}
           />
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ p: 2, borderTop: `1px solid rgba(0,0,0,0.15)` }}>
           <Button
             variant="contained"
             disableElevation

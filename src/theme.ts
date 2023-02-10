@@ -62,20 +62,5 @@ export const limestoneTheme = createTheme({
         },
       },
     },
-    MuiDialogTitle: {
-      styleOverrides: {
-        root: {
-          borderBottom: `1px solid rgba(0,0,0,0.15)`,
-        },
-      },
-    },
-    MuiDialogActions: {
-      styleOverrides: {
-        root: {
-          borderTop: `1px solid rgba(0,0,0,0.15)`,
-          padding: "16px",
-        },
-      },
-    },
   },
 });
