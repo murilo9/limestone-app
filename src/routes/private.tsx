@@ -1,6 +1,7 @@
 import { Typography, Button } from "@mui/material";
 import React, { useEffect, useLayoutEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
+import BoardPage from "../features/boards/routes/board";
 import BoardsPage from "../features/boards/routes/boards";
 import { fetchMe } from "../features/common/api/fetchMe";
 import { fetchCurrentUser } from "../features/common/commonSlice";
@@ -28,20 +29,34 @@ export default function PrivateRoutes() {
     <>
       <Routes>
         {currentUser ? (
-          <Route
-            path="/"
-            element={<SystemPage />}
-          >
+          <>
             <Route
-              path="*"
-              element={
-                <Navigate
-                  to="/"
-                  replace={true}
-                />
-              }
-            />
-          </Route>
+              path="/"
+              element={<SystemPage />}
+            >
+              <Route
+                path="/boards/:boardId"
+                element={<BoardPage />}
+              />
+              <Route
+                path="/boards"
+                element={<BoardsPage />}
+              />
+              <Route
+                path="/people"
+                element={<PeoplePage />}
+              />
+              <Route
+                path="*"
+                element={
+                  <Navigate
+                    to="/boards"
+                    replace={true}
+                  />
+                }
+              />
+            </Route>
+          </>
         ) : null}
       </Routes>
     </>

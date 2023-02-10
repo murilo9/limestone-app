@@ -6,47 +6,26 @@ import PeoplePage from "../../users/routes/people";
 import SystemHeader, {
   SYSTEM_HEADER_HEIGHTS,
 } from "../components/SystemHeader";
-
-enum TABS {
-  BOARDS = "boards",
-  PEOPLE = "people",
-}
+import { SystemTabs } from "../types/SystemTabs";
 
 const getSelectedTab = (value: string) => {
   switch (value) {
-    case "boards":
-    case "people":
+    case SystemTabs.BOARDS:
+    case SystemTabs.PEOPLE:
       return value;
     default:
-      return "boards";
+      return null;
   }
 };
 
 export default function SystemPage() {
   const params = useLocation();
   const pathName = params.pathname.split("/")[1];
-  const [selectedTab, setSelectedTab] = useState(getSelectedTab(pathName));
-
-  const handleTabChange = (newTab: string) => {
-    window.history.replaceState(null, "Liquid Pass", `/${newTab}`);
-    setSelectedTab(getSelectedTab(newTab));
-  };
-
-  const renderSelectedTab = () => {
-    switch (selectedTab) {
-      case "boards":
-        return <BoardsPage />;
-      case "people":
-        return <PeoplePage />;
-    }
-  };
+  const selectedTab = getSelectedTab(pathName);
 
   return (
     <>
-      <SystemHeader
-        selectedTab={selectedTab}
-        onTabChange={handleTabChange}
-      />
+      <SystemHeader selectedTab={selectedTab} />
       <Box
         className="lim-system-container"
         sx={{
@@ -59,7 +38,7 @@ export default function SystemPage() {
           pt: SYSTEM_HEADER_HEIGHTS,
         }}
       >
-        {renderSelectedTab()}
+        <Outlet />
       </Box>
     </>
   );

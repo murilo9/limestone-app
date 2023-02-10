@@ -1,11 +1,20 @@
-import { Avatar, Box, Button, Grid, Tab, Tabs } from "@mui/material";
-import React from "react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Grid,
+  selectClasses,
+  Tab,
+  Tabs,
+} from "@mui/material";
+import React, { useEffect } from "react";
 import { useAppSelector } from "../../../store";
 import { fetchMe } from "../api/fetchMe";
 import { useAuth } from "../hooks/useAuth";
 import Logo from "../assets/logo.svg";
 import LogoIcon from "../assets/logo-icon.svg";
-import { useLocation, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { SystemTabs } from "../types/SystemTabs";
 
 /**
  * This component is a view-width Box with the following heights
@@ -15,13 +24,16 @@ export const SYSTEM_HEADER_HEIGHTS = { xs: "56px", sm: "80px", md: "80px" };
 export const SYSTEM_HEADER_PADDINGS = { xs: 3, xl: 0 };
 
 type SystemHeaderProps = {
-  selectedTab: string;
-  onTabChange: (value: string) => void;
+  selectedTab: SystemTabs | null;
 };
 
-export default function SystemHeader(props: SystemHeaderProps) {
+export default function SystemHeader({ selectedTab }: SystemHeaderProps) {
   const { signOut } = useAuth();
   const currentUser = useAppSelector((state) => state.common.currentUser);
+
+  const navigate = useNavigate();
+
+  useEffect(() => console.log(selectedTab), [selectedTab]);
 
   return (
     <>
@@ -97,21 +109,22 @@ export default function SystemHeader(props: SystemHeaderProps) {
             }}
           >
             <Tabs
-              value={props.selectedTab}
+              value={selectedTab}
               sx={{
                 height: "100%",
                 mr: 2,
                 ".MuiTabs-scroller": { display: "flex", alignItems: "center" },
               }}
-              onChange={(event, newValue) => props.onTabChange(newValue)}
             >
               <Tab
                 label="Boards"
                 value="boards"
+                onClick={() => navigate("/boards")}
               />
               <Tab
                 label="People"
                 value="people"
+                onClick={() => navigate("/people")}
               />
             </Tabs>
             <Avatar>MH</Avatar>
