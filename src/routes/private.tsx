@@ -47,7 +47,7 @@ export default function PrivateRoutes() {
                 element={<PeoplePage />}
               />
               <Route
-                path="*"
+                path="/"
                 element={
                   <Navigate
                     to="/boards"
