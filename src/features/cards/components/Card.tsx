@@ -7,7 +7,7 @@ import { onFetchCardCommentsCount } from "../../boards/boardsSlice";
 import { CardEntity } from "../types/CardEntity";
 import { CardComment } from "../../boards/types/CardComment";
 
-type CardCardProps = {
+type CardProps = {
   card: CardEntity;
   cardIndex: number;
   boardId: string;
@@ -21,7 +21,7 @@ export default function Card({
   boardId,
   columnId,
   cardIndex,
-}: CardCardProps) {
+}: CardProps) {
   const users = useAppSelector((state) => state.users.entities);
   const cardAssignee = card.assignee ? users[card.assignee] : null;
 

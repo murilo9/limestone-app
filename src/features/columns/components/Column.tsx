@@ -14,7 +14,7 @@ import React, {
 } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import { ColumnEntity } from "../types/ColumnEntity";
-import CardCard from "../../cards/components/Card";
+import Card from "../../cards/components/Card";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { BoardsContext } from "../../boards/providers/BoardsProvider";
 import { UpdateColumnDto } from "../types/dto/UpdateColumnDto";
@@ -153,7 +153,7 @@ export default function CardsColumn({
             </Box>
             {cards.length ? (
               cards.map((card, cardIndex) => (
-                <CardCard
+                <Card
                   card={card}
                   cardIndex={cardIndex}
                   columnId={column._id}

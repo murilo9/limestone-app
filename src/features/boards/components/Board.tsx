@@ -23,7 +23,7 @@ import { useAppDispatch, useAppSelector } from "../../../store";
 import {
   onCreateColumn,
   onDeleteColumn,
-  onFetchColumns,
+  onLoadColumns,
   onUpdateColumn,
 } from "../../columns/columnsSlice";
 import NewColumnForm from "../../columns/components/NewColumnForm";
@@ -50,10 +50,10 @@ export default function Board({ board }: BoardProps) {
   // Loads this board's columns on start
   useLayoutEffect(() => {
     setLoadingColumns(true);
-    dispatch(onFetchColumns(board._id)).then(() => {});
+    dispatch(onLoadColumns(board._id)).then(() => {});
   }, []);
 
-  const createColumn = (columnTitle: string) => {
+  const handleCreateColumn = (columnTitle: string) => {
     setShowDetails(false);
     setAddingNewColumn(true);
     dispatch(
@@ -69,7 +69,7 @@ export default function Board({ board }: BoardProps) {
       });
   };
 
-  const deleteColumn = (columnId: string) => {
+  const handleDeleteColumnClick = (columnId: string) => {
     confirmationDialog.open({
       title: "Delete Column",
       message: "Are you sure you want to delete this column?",
@@ -85,7 +85,10 @@ export default function Board({ board }: BoardProps) {
     });
   };
 
-  const updateColumn = (updateColumnDto: UpdateColumnDto, columnId: string) => {
+  const handleUpdateColumn = (
+    updateColumnDto: UpdateColumnDto,
+    columnId: string
+  ) => {
     dispatch(onUpdateColumn({ boardId: board._id, columnId, updateColumnDto }));
   };
 
@@ -127,14 +130,16 @@ export default function Board({ board }: BoardProps) {
                 columnId={column._id}
                 showAddCardsButton={true}
                 editMode={editColumnsMode}
-                onDelete={() => deleteColumn(column._id)}
+                onDelete={() => handleDeleteColumnClick(column._id)}
                 onUpdate={(updateColumnDto) =>
-                  updateColumn(updateColumnDto, column._id)
+                  handleUpdateColumn(updateColumnDto, column._id)
                 }
               />
             ))}
             {addingNewColumn ? "Adding..." : null}
-            {editColumnsMode ? <NewColumnForm onSubmit={createColumn} /> : null}
+            {editColumnsMode ? (
+              <NewColumnForm onSubmit={handleCreateColumn} />
+            ) : null}
           </>
         ) : (
           "loading..."

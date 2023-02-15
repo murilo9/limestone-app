@@ -15,8 +15,8 @@ const initialState: ColumnsState = {
   entities: {},
 };
 
-export const onFetchColumns = createAsyncThunk(
-  "columns/onFetchColumns",
+export const onLoadColumns = createAsyncThunk(
+  "columns/onLoadColumns",
   async (boardId: string) => {
     const fetchColumnsRes = await fetchColumns(boardId);
     const columns = fetchColumnsRes.data;
@@ -77,7 +77,7 @@ export const columnsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) =>
     builder
-      .addCase(onFetchColumns.fulfilled, (state, action) => {
+      .addCase(onLoadColumns.fulfilled, (state, action) => {
         const columns = action.payload;
         columns.forEach((column) => (state.entities[column._id] = column));
       })

@@ -6,9 +6,15 @@ type ConfirmationDialogProviderProps = {
   children: ReactNode;
 };
 
-export const ConfirmationDialogContext = createContext({
-  open: (config: ConfirmationDialogConfig) => {},
-});
+export type ConfirmationDialogState = {
+  open: (config: ConfirmationDialogConfig) => void;
+};
+
+export const ConfirmationDialogContext = createContext<ConfirmationDialogState>(
+  {
+    open: (config: ConfirmationDialogConfig) => {},
+  }
+);
 
 export default function ConfirmationDialogProvider({
   children,

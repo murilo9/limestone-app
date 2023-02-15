@@ -1,7 +1,7 @@
 import { Typography, Button } from "@mui/material";
 import React, { useEffect, useLayoutEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import BoardPage from "../features/boards/routes/board";
+import BoardDetailsPage from "../features/boards/routes/board-details";
 import BoardsPage from "../features/boards/routes/boards";
 import { fetchMe } from "../features/common/api/fetchMe";
 import { fetchCurrentUser } from "../features/common/commonSlice";
@@ -36,7 +36,7 @@ export default function PrivateRoutes() {
             >
               <Route
                 path="/boards/:boardId"
-                element={<BoardPage />}
+                element={<BoardDetailsPage />}
               />
               <Route
                 path="/boards"
