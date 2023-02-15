@@ -169,8 +169,11 @@ export default function Board({ board }: BoardProps) {
             titleTypographyProps={{
               sx: {
                 color: "#000000",
+                textDecoration: "none",
               },
               variant: "subtitle1",
+              component: "a",
+              href: `/boards/${board._id}`,
             }}
             subheaderTypographyProps={{
               variant: "caption",
