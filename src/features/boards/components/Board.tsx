@@ -95,24 +95,6 @@ export default function Board({ board }: BoardProps) {
   const renderBoardDetails = () => (
     <>
       <Box
-        className="lim-column-toolbar"
-        sx={{ mb: 2 }}
-      >
-        <Box>
-          <Switch
-            size="small"
-            value={editColumnsMode}
-            onChange={(event) => setEditColumnsMode(event.target.checked)}
-          />
-          <Typography
-            variant="body2"
-            sx={{ display: "inline-block" }}
-          >
-            Edit columns
-          </Typography>
-        </Box>
-      </Box>
-      <Box
         className="lim-detailed-columns-list"
         sx={{
           width: "100%",

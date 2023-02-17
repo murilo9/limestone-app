@@ -13,6 +13,7 @@ export default function NewColumnForm({ onSubmit }: NewColumnFormProps) {
   const handleKeyPress: KeyboardEventHandler<HTMLDivElement> = (event) => {
     if (event.key === "Enter") {
       onSubmit(columnTitle);
+      setShowInput(false);
     }
   };
 
@@ -42,7 +43,7 @@ export default function NewColumnForm({ onSubmit }: NewColumnFormProps) {
             variant="contained"
             color="secondary"
             size="small"
-            sx={{ pr: 2, fontStyle: "italic", height: '34px' }}
+            sx={{ pr: 2, fontStyle: "italic", height: "34px" }}
             onClick={() => setShowInput(true)}
             fullWidth
           >
