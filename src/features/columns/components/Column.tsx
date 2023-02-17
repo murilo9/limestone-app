@@ -16,7 +16,7 @@ import { useAppDispatch, useAppSelector } from "../../../store";
 import { ColumnEntity } from "../types/ColumnEntity";
 import Card from "../../cards/components/Card";
 import { Droppable, Draggable } from "react-beautiful-dnd";
-import { BoardsContext } from "../../boards/providers/BoardsProvider";
+import { CardsContext } from "../../cards/providers/CardsProvider";
 import { UpdateColumnDto } from "../types/dto/UpdateColumnDto";
 
 const COLUMN_FIXED_HEIGHT = "34px";
@@ -48,7 +48,7 @@ export default function CardsColumn({
   const [editableColumnTitle, setEditableColumnTitle] = useState(column.title);
   const [showUpdatedColumnTitle, setShowUpdatedColumnTitle] = useState(false);
 
-  const { onOpenCreateCardModal } = useContext(BoardsContext);
+  const { onOpenCreateCardModal } = useContext(CardsContext);
 
   const handleColumnTitleInputBlur = () => {
     setEditableColumnTitle(column.title);

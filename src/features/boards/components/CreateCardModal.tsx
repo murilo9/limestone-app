@@ -13,7 +13,7 @@ import React, { useContext, useEffect, useState } from "react";
 import CardPrioritySelector from "./CardPrioritySelector";
 import { CardEntity } from "../../cards/types/CardEntity";
 import { useAppDispatch, useAppSelector } from "../../../store";
-import { BoardsContext } from "../providers/BoardsProvider";
+import { CardsContext } from "../../cards/providers/CardsProvider";
 import { onUpdateBoard } from "../boardsSlice";
 import { CreateCardDto } from "../../cards/types/dto/CreateCardDto";
 import { onCreateCard } from "../../cards/cardsSlice";
@@ -26,7 +26,7 @@ export default function CreateCardModal() {
     createCardForBoardId,
     createCardForColumnId,
     onCloseCreateCardModal,
-  } = useContext(BoardsContext);
+  } = useContext(CardsContext);
 
   const dispatch = useAppDispatch();
 
