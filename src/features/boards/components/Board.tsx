@@ -28,7 +28,7 @@ import {
 } from "../../columns/columnsSlice";
 import NewColumnForm from "../../columns/components/NewColumnForm";
 import { UpdateColumnDto } from "../../columns/types/dto/UpdateColumnDto";
-import { ConfirmationDialogContext } from "../../common/providers/ConfirmationDialogProvider";
+import { confirmationDialogOpened } from "../../common/commonSlice";
 
 type BoardProps = {
   board: BoardEntity;
@@ -45,7 +45,6 @@ export default function Board({ board }: BoardProps) {
       .filter((column) => column.boardId === board._id)
       .sort((columnA, columnB) => columnA.index - columnB.index)
   );
-  const confirmationDialog = useContext(ConfirmationDialogContext);
 
   // Loads this board's columns on start
   useLayoutEffect(() => {
@@ -70,19 +69,21 @@ export default function Board({ board }: BoardProps) {
   };
 
   const handleDeleteColumnClick = (columnId: string) => {
-    confirmationDialog.open({
-      title: "Delete Column",
-      message: "Are you sure you want to delete this column?",
-      actions: [
-        {
-          title: "Delete",
-          type: "error",
-          onClick: () => {
-            dispatch(onDeleteColumn({ boardId: board._id, columnId }));
+    dispatch(
+      confirmationDialogOpened({
+        title: "Delete Column",
+        message: "Are you sure you want to delete this column?",
+        actions: [
+          {
+            title: "Delete",
+            type: "error",
+            onClick: () => {
+              dispatch(onDeleteColumn({ boardId: board._id, columnId }));
+            },
           },
-        },
-      ],
-    });
+        ],
+      })
+    );
   };
 
   const handleUpdateColumn = (
