@@ -16,8 +16,8 @@ import { useAppDispatch, useAppSelector } from "../../../store";
 import { ColumnEntity } from "../types/ColumnEntity";
 import Card from "../../cards/components/Card";
 import { Droppable, Draggable } from "react-beautiful-dnd";
-import { CardsContext } from "../../cards/providers/CardsProvider";
 import { UpdateColumnDto } from "../types/dto/UpdateColumnDto";
+import { createCardModalOpened } from "../../cards/cardsSlice";
 
 const COLUMN_FIXED_HEIGHT = "34px";
 
@@ -44,11 +44,10 @@ export default function CardsColumn({
       (card) => card.columnId === column._id
     )
   );
+  const dispatch = useAppDispatch();
   const [showTitleInput, setShowTitleInput] = useState(false);
   const [editableColumnTitle, setEditableColumnTitle] = useState(column.title);
   const [showUpdatedColumnTitle, setShowUpdatedColumnTitle] = useState(false);
-
-  const { onOpenCreateCardModal } = useContext(CardsContext);
 
   const handleColumnTitleInputBlur = () => {
     setEditableColumnTitle(column.title);
@@ -145,7 +144,9 @@ export default function CardsColumn({
               ) : showAddCardsButton ? (
                 <IconButton
                   color="primary"
-                  onClick={() => onOpenCreateCardModal(boardId, columnId)}
+                  onClick={() =>
+                    dispatch(createCardModalOpened({ boardId, columnId }))
+                  }
                 >
                   <Add />
                 </IconButton>

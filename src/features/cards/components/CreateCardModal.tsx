@@ -13,28 +13,33 @@ import React, { useContext, useEffect, useState } from "react";
 import CardPrioritySelector from "../../boards/components/CardPrioritySelector";
 import { CardEntity } from "../types/CardEntity";
 import { useAppDispatch, useAppSelector } from "../../../store";
-import { CardsContext } from "../providers/CardsProvider";
 import { onUpdateBoard } from "../../boards/boardsSlice";
 import { CreateCardDto } from "../types/dto/CreateCardDto";
-import { onCreateCard } from "../cardsSlice";
+import { createCardModalClosed, onCreateCard } from "../cardsSlice";
 
 export default function CreateCardModal() {
   const [cardPriority, setCardPriority] = useState(0);
   const [cardTitle, setCardTitle] = useState("");
   const [cardDescription, setCardDescription] = useState("");
-  const {
-    createCardForBoardId,
-    createCardForColumnId,
-    onCloseCreateCardModal,
-  } = useContext(CardsContext);
+  const createCardForBoardId = useAppSelector(
+    (state) => state.cards.createCardForBoardId
+  );
+  const createCardForColumnId = useAppSelector(
+    (state) => state.cards.createCardForColumnId
+  );
 
   const dispatch = useAppDispatch();
 
-  const showModal = !!createCardForBoardId && createCardForColumnId !== null;
+  const showModal =
+    createCardForBoardId !== null && createCardForColumnId !== null;
 
   const board = useAppSelector((state) =>
     showModal ? state.boards.entities[createCardForBoardId] : null
   );
+
+  const onCloseModal = () => {
+    dispatch(createCardModalClosed());
+  };
 
   const handleCreateCardClick = () => {
     const createCardDto: CreateCardDto = {
@@ -50,14 +55,14 @@ export default function CreateCardModal() {
           columnId: createCardForColumnId,
           createCardDto,
         })
-      ).then(() => onCloseCreateCardModal());
+      ).then(() => onCloseModal());
     }
   };
 
   return (
     <>
       <Dialog
-        onClose={onCloseCreateCardModal}
+        onClose={onCloseModal}
         open={showModal}
         PaperProps={{
           sx: {

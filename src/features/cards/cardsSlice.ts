@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createCard } from "./api/createCard";
 import { fetchCards } from "./api/fetchCards";
 import { CardEntity } from "./types/CardEntity";
@@ -6,10 +6,14 @@ import { CreateCardDto } from "./types/dto/CreateCardDto";
 
 interface CardsState {
   entities: { [id: string]: CardEntity };
+  createCardForBoardId: string | null;
+  createCardForColumnId: string | null;
 }
 
 const initialState: CardsState = {
   entities: {},
+  createCardForBoardId: null,
+  createCardForColumnId: null,
 };
 
 export const onFetchCards = createAsyncThunk(
@@ -41,7 +45,20 @@ export const onCreateCard = createAsyncThunk(
 export const cardsSlice = createSlice({
   name: "cards",
   initialState,
-  reducers: {},
+  reducers: {
+    createCardModalClosed(state, action: PayloadAction<void>) {
+      state.createCardForBoardId = null;
+      state.createCardForColumnId = null;
+    },
+    createCardModalOpened(
+      state,
+      action: PayloadAction<{ boardId: string; columnId: string }>
+    ) {
+      const { boardId, columnId } = action.payload;
+      state.createCardForBoardId = boardId;
+      state.createCardForColumnId = columnId;
+    },
+  },
   extraReducers: (builder) =>
     builder
       .addCase(onFetchCards.fulfilled, (state, action) => {
@@ -53,5 +70,8 @@ export const cardsSlice = createSlice({
         state.entities[card._id] = card;
       }),
 });
+
+export const { createCardModalClosed, createCardModalOpened } =
+  cardsSlice.actions;
 
 export default cardsSlice.reducer;
