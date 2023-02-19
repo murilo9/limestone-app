@@ -6,7 +6,7 @@ import BoardCard from "../components/Board";
 import BoardsHeader, {
   BOARDS_HEADER_HEIGHTS,
 } from "../components/BoardsHeader";
-import CreateCardModal from "../components/CreateCardModal";
+import CreateCardModal from "../../cards/components/CreateCardModal";
 
 export default function BoardsPage() {
   const dispatch = useAppDispatch();

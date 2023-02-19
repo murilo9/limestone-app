@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useEffect, useState } from "react";
 import { useAppSelector } from "../../../store";
-import CreateCardModal from "../../boards/components/CreateCardModal";
+import CreateCardModal from "../components/CreateCardModal";
 
 type CardsProviderProps = {
   children?: ReactNode;

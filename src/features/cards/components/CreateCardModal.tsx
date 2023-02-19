@@ -10,13 +10,13 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
-import CardPrioritySelector from "./CardPrioritySelector";
-import { CardEntity } from "../../cards/types/CardEntity";
+import CardPrioritySelector from "../../boards/components/CardPrioritySelector";
+import { CardEntity } from "../types/CardEntity";
 import { useAppDispatch, useAppSelector } from "../../../store";
-import { CardsContext } from "../../cards/providers/CardsProvider";
-import { onUpdateBoard } from "../boardsSlice";
-import { CreateCardDto } from "../../cards/types/dto/CreateCardDto";
-import { onCreateCard } from "../../cards/cardsSlice";
+import { CardsContext } from "../providers/CardsProvider";
+import { onUpdateBoard } from "../../boards/boardsSlice";
+import { CreateCardDto } from "../types/dto/CreateCardDto";
+import { onCreateCard } from "../cardsSlice";
 
 export default function CreateCardModal() {
   const [cardPriority, setCardPriority] = useState(0);
