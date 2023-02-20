@@ -5,7 +5,9 @@ import { Draggable } from "react-beautiful-dnd";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import { onFetchCardCommentsCount } from "../../boards/boardsSlice";
 import { CardEntity } from "../types/CardEntity";
-import { CardComment } from "../../boards/types/CardComment";
+import { CardComment } from "../types/CardComment";
+import { cardSelected } from "../cardsSlice";
+import { cardPriorityColor } from "../types/CardPriorityColor";
 
 type CardProps = {
   card: CardEntity;
@@ -13,8 +15,6 @@ type CardProps = {
   boardId: string;
   columnId: string;
 };
-
-const priorityColor = ["#0085FF", "#00DC16", "#FF9900", "#FF0000"];
 
 export default function Card({
   card,
@@ -24,6 +24,11 @@ export default function Card({
 }: CardProps) {
   const users = useAppSelector((state) => state.users.entities);
   const cardAssignee = card.assignee ? users[card.assignee] : null;
+  const dispatch = useAppDispatch();
+
+  const onCardClick = () => {
+    dispatch(cardSelected(card._id));
+  };
 
   return (
     <>
@@ -45,6 +50,7 @@ export default function Card({
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
+            onClick={onCardClick}
           >
             <Typography
               variant="body2"
@@ -117,7 +123,7 @@ export default function Card({
                   icon={
                     <Circle
                       sx={{
-                        color: priorityColor[card.priority],
+                        color: cardPriorityColor[card.priority],
                         fontSize: "10px",
                       }}
                     />

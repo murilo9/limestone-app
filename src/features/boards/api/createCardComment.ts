@@ -1,5 +1,5 @@
 import { post } from "../../common/utils/http";
-import { CardComment } from "../types/CardComment";
+import { CardComment } from "../../cards/types/CardComment";
 import { CreateCardCommentDto } from "../types/dto/CreateCardCommentDto";
 
 export const createCardComment = (

@@ -8,12 +8,14 @@ interface CardsState {
   entities: { [id: string]: CardEntity };
   createCardForBoardId: string | null;
   createCardForColumnId: string | null;
+  selectedCardId: string | null;
 }
 
 const initialState: CardsState = {
   entities: {},
   createCardForBoardId: null,
   createCardForColumnId: null,
+  selectedCardId: null,
 };
 
 export const onFetchCards = createAsyncThunk(
@@ -58,6 +60,10 @@ export const cardsSlice = createSlice({
       state.createCardForBoardId = boardId;
       state.createCardForColumnId = columnId;
     },
+    cardSelected(state, action: PayloadAction<string | null>) {
+      const cardId = action.payload;
+      state.selectedCardId = cardId;
+    },
   },
   extraReducers: (builder) =>
     builder
@@ -71,7 +77,7 @@ export const cardsSlice = createSlice({
       }),
 });
 
-export const { createCardModalClosed, createCardModalOpened } =
+export const { createCardModalClosed, createCardModalOpened, cardSelected } =
   cardsSlice.actions;
 
 export default cardsSlice.reducer;
