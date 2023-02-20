@@ -1,5 +1,5 @@
 import { put } from "../../common/utils/http";
-import { CardComment } from "../../cards/types/CardComment";
+import { CardCommentEntity } from "../types/CardComment";
 import { CreateCardCommentDto } from "../types/dto/CreateCardCommentDto";
 
 export const updateCardComment = (
@@ -8,7 +8,7 @@ export const updateCardComment = (
   commentId: string,
   card: CreateCardCommentDto
 ) =>
-  put<CardComment>(
+  put<CardCommentEntity>(
     `/boards/${boardId}/cards/${cardId}/comments/${commentId}`,
     card
   );

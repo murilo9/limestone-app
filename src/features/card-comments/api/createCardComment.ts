@@ -1,5 +1,5 @@
 import { post } from "../../common/utils/http";
-import { CardComment } from "../../cards/types/CardComment";
+import { CardCommentEntity } from "../types/CardComment";
 import { CreateCardCommentDto } from "../types/dto/CreateCardCommentDto";
 
 export const createCardComment = (
@@ -7,7 +7,7 @@ export const createCardComment = (
   cardId: string,
   createCardForm: CreateCardCommentDto
 ) =>
-  post<CardComment>(
+  post<CardCommentEntity>(
     `/boards${boardId}/cards/${cardId}/comments`,
     createCardForm
   );

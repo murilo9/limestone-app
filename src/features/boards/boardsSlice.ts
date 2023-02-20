@@ -1,16 +1,12 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createBoard } from "./api/createBoard";
-import { createCardComment } from "./api/createCardComment";
+import { createCardComment } from "../card-comments/api/createCardComment";
 import { deleteBoard } from "./api/deleteBoard";
-import { deleteCardComment } from "./api/deleteCardComment";
 import { fetchBoards } from "./api/fetchBoards";
-import { fetchCardComments } from "./api/fetchCardComments";
-import { fetchCardCommentsCount } from "./api/fetchCardCommentsCount";
 import { updateBoard } from "./api/updateBoard";
-import { updateCardComment } from "./api/updateCardComment";
 import { BoardEntity } from "./types/BoardEntity";
 import { CreateBoardDto } from "./types/dto/CreateBoardDto";
-import { CreateCardCommentDto } from "./types/dto/CreateCardCommentDto";
+import { CreateCardCommentDto } from "../card-comments/types/dto/CreateCardCommentDto";
 
 interface BoardsState {
   entities: { [id: string]: BoardEntity };
@@ -51,127 +47,6 @@ export const onDeleteBoard = createAsyncThunk(
   async (boardId: string) => {
     await deleteBoard(boardId);
     return boardId;
-  }
-);
-
-// TODO: mover esta parte pro slice de card comments
-
-export const onFetchCardComments = createAsyncThunk(
-  "boards/onFetchCardComments",
-  async ({
-    boardId,
-    columnId,
-    cardId,
-  }: {
-    boardId: string;
-    columnId: string;
-    cardId: string;
-  }) => {
-    const fetchCardCommentsRes = await fetchCardComments(boardId, cardId);
-    const comments = fetchCardCommentsRes.data;
-    return { boardId, columnId, cardId, comments };
-  }
-);
-export const onCreateCardComment = createAsyncThunk(
-  "boards/onCreateCardComment",
-  async ({
-    boardId,
-    columnId,
-    cardId,
-    createCardCommentForm,
-  }: {
-    boardId: string;
-    columnId: string;
-    cardId: string;
-    createCardCommentForm: CreateCardCommentDto;
-  }) => {
-    const createCardCommentRes = await createCardComment(
-      boardId,
-      cardId,
-      createCardCommentForm
-    );
-    const createdCardComment = createCardCommentRes.data;
-    return {
-      boardId,
-      columnId,
-      cardId,
-      createdCardComment,
-    };
-  }
-);
-export const onUpdateCardComment = createAsyncThunk(
-  "boards/onUpdateCardComment",
-  async ({
-    boardId,
-    columnId,
-    cardId,
-    commentId,
-    updateCardCommentForm,
-  }: {
-    boardId: string;
-    columnId: string;
-    cardId: string;
-    commentId: string;
-    updateCardCommentForm: CreateCardCommentDto;
-  }) => {
-    const updateCardCommentRes = await updateCardComment(
-      boardId,
-      cardId,
-      commentId,
-      updateCardCommentForm
-    );
-    const updatedCardComment = updateCardCommentRes.data;
-    return {
-      boardId,
-      columnId,
-      cardId,
-      commentId,
-      updatedCardComment,
-    };
-  }
-);
-
-export const onDeleteCardComment = createAsyncThunk(
-  "boards/onDeleteCardComment",
-  async ({
-    boardId,
-    columnId,
-    cardId,
-    commentId,
-  }: {
-    boardId: string;
-    columnId: string;
-    cardId: string;
-    commentId: string;
-  }) => {
-    await deleteCardComment(boardId, cardId, commentId);
-    return {
-      boardId,
-      columnId,
-      cardId,
-      commentId,
-    };
-  }
-);
-
-export const onFetchCardCommentsCount = createAsyncThunk(
-  "boards/onFetchCardCommentsCount",
-  async ({
-    boardId,
-    columnId,
-    cardId,
-  }: {
-    boardId: string;
-    columnId: string;
-    cardId: string;
-  }) => {
-    const fetchCardCommentsCountRes = await fetchCardCommentsCount(
-      boardId,
-      columnId,
-      cardId
-    );
-    const count = fetchCardCommentsCountRes.data;
-    return { boardId, columnId, cardId, count };
   }
 );
 

@@ -3,9 +3,8 @@ import { Avatar, Box, Grid, Rating, Skeleton, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { useAppDispatch, useAppSelector } from "../../../store";
-import { onFetchCardCommentsCount } from "../../boards/boardsSlice";
 import { CardEntity } from "../types/CardEntity";
-import { CardComment } from "../types/CardComment";
+import { CardCommentEntity } from "../../card-comments/types/CardComment";
 import { cardSelected } from "../cardsSlice";
 import { cardPriorityColor } from "../types/CardPriorityColor";
 
