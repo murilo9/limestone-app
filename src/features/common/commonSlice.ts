@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { User } from "../users/types/User";
+import { UserEntity } from "../users/types/User";
 import { fetchMe } from "./api/fetchMe";
 import { ConfirmationDialogConfig } from "./types/ConfirmationDialogConfig";
 
 interface CommonState {
-  currentUser: User | null;
+  currentUser: UserEntity | null;
   // If a config exists, show the confirmation dialog
   confirmationDialogCurrentConfig: ConfirmationDialogConfig | null;
 }
@@ -47,7 +47,6 @@ const commonSlice = createSlice({
   },
   extraReducers: (builder) =>
     builder.addCase(fetchCurrentUser.fulfilled, (state, action) => {
-      console.log("action reduxer", action);
       state.currentUser = action.payload;
     }),
 });

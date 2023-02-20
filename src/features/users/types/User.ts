@@ -2,7 +2,7 @@ import { PersistentEntity } from "../../common/types/PersistentEntity";
 import { UserNotificationOptions } from "./UserNotificationOptions";
 import { UserRole } from "./UserRole";
 
-export interface User extends PersistentEntity {
+export interface UserEntity extends PersistentEntity {
   email: string;
   firstName: string;
   lastName: string;

@@ -5,10 +5,10 @@ import { fetchUsers } from "./api/fetchUsers";
 import { updateUser } from "./api/updateUser";
 import { CreateUserDto } from "./types/dto/CreateUserDto";
 import { UpdateUserDto } from "./types/dto/UpdateUserDto";
-import { User } from "./types/User";
+import { UserEntity } from "./types/User";
 
 interface UsersState {
-  entities: { [id: string]: User };
+  entities: { [id: string]: UserEntity };
 }
 
 const initialState: UsersState = {

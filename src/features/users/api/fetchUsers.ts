@@ -1,4 +1,4 @@
 import { get } from "../../common/utils/http";
-import { User } from "../types/User";
+import { UserEntity } from "../types/User";
 
-export const fetchUsers = () => get<User[]>("/users");
+export const fetchUsers = () => get<UserEntity[]>("/users");

@@ -2,10 +2,10 @@ import { Avatar, Box, Typography } from "@mui/material";
 import React from "react";
 import { useAppSelector } from "../../../store";
 import { BoardEntity } from "../../boards/types/BoardEntity";
-import { User } from "../types/User";
+import { UserEntity } from "../types/User";
 
 type UserCardProps = {
-  user: User;
+  user: UserEntity;
 };
 
 export default function UserCard({ user }: UserCardProps) {

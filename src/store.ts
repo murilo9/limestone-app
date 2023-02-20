@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
 import boardsSlice from "./features/boards/boardsSlice";
+import cardCommentsSlice from "./features/card-comments/cardCommentsSlice";
 import cardsSlice from "./features/cards/cardsSlice";
 import columnsSlice from "./features/columns/columnsSlice";
 import commonSlice from "./features/common/commonSlice";
@@ -13,6 +14,7 @@ const store = configureStore({
     columns: columnsSlice,
     cards: cardsSlice,
     users: usersSlice,
+    cardComments: cardCommentsSlice,
   },
 });
 

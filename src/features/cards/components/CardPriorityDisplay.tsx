@@ -15,7 +15,7 @@ export default function CardPriorityDisplay({
       <Typography
         variant="body2"
         color={cardPriorityColor[priority]}
-        sx={{ mt: 2 }}
+        sx={{ mt: 1 }}
       >
         {cardPriorityLabels[priority]}
       </Typography>

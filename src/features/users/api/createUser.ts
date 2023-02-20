@@ -1,6 +1,6 @@
 import { post } from "../../common/utils/http";
 import { CreateUserDto } from "../types/dto/CreateUserDto";
-import { User } from "../types/User";
+import { UserEntity } from "../types/User";
 
 export const createUser = (createUserForm: CreateUserDto) =>
-  post<User>("/users", createUserForm);
+  post<UserEntity>("/users", createUserForm);

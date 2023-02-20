@@ -8,6 +8,6 @@ export const createCardComment = (
   createCardForm: CreateCardCommentDto
 ) =>
   post<CardCommentEntity>(
-    `/boards${boardId}/cards/${cardId}/comments`,
+    `/boards/${boardId}/cards/${cardId}/comments`,
     createCardForm
   );
