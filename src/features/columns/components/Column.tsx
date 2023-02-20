@@ -9,6 +9,7 @@ import { Box, IconButton, TextField, Typography } from "@mui/material";
 import React, {
   KeyboardEventHandler,
   useContext,
+  useEffect,
   useLayoutEffect,
   useState,
 } from "react";
@@ -17,7 +18,7 @@ import { ColumnEntity } from "../types/ColumnEntity";
 import Card from "../../cards/components/Card";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { UpdateColumnDto } from "../types/dto/UpdateColumnDto";
-import { createCardModalOpened } from "../../cards/cardsSlice";
+import { createCardModalOpened, onFetchCards } from "../../cards/cardsSlice";
 
 const COLUMN_FIXED_HEIGHT = "34px";
 
@@ -48,6 +49,17 @@ export default function CardsColumn({
   const [showTitleInput, setShowTitleInput] = useState(false);
   const [editableColumnTitle, setEditableColumnTitle] = useState(column.title);
   const [showUpdatedColumnTitle, setShowUpdatedColumnTitle] = useState(false);
+  const [fetchingCards, setFetchingCards] = useState(true);
+
+  useLayoutEffect(() => {
+    dispatch(onFetchCards({ columnId, boardId }))
+      .catch((error) => {
+        // TODO: fetch cards error handling
+      })
+      .finally(() => {
+        setFetchingCards(false);
+      });
+  }, []);
 
   const handleColumnTitleInputBlur = () => {
     setEditableColumnTitle(column.title);
@@ -152,7 +164,9 @@ export default function CardsColumn({
                 </IconButton>
               ) : null}
             </Box>
-            {cards.length ? (
+            {fetchingCards ? (
+              "Loading cards..."
+            ) : cards.length ? (
               cards.map((card, cardIndex) => (
                 <Card
                   card={card}

@@ -4,6 +4,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  IconButton,
   Tab,
   Tabs,
   TextField,
@@ -16,6 +17,7 @@ import { useAppDispatch, useAppSelector } from "../../../store";
 import { onUpdateBoard } from "../../boards/boardsSlice";
 import { CreateCardDto } from "../types/dto/CreateCardDto";
 import { createCardModalClosed, onCreateCard } from "../cardsSlice";
+import { Close } from "@mui/icons-material";
 
 export default function CreateCardModal() {
   const [cardPriority, setCardPriority] = useState(0);
@@ -37,8 +39,15 @@ export default function CreateCardModal() {
     showModal ? state.boards.entities[createCardForBoardId] : null
   );
 
+  const resetState = () => {
+    setCardPriority(0);
+    setCardTitle("");
+    setCardDescription("");
+  };
+
   const onCloseModal = () => {
     dispatch(createCardModalClosed());
+    resetState();
   };
 
   const handleCreateCardClick = () => {
@@ -70,8 +79,19 @@ export default function CreateCardModal() {
           },
         }}
       >
-        <DialogTitle sx={{ borderBottom: `1px solid rgba(0,0,0,0.15)` }}>
-          New Card
+        <DialogTitle
+          sx={{
+            borderBottom: `1px solid rgba(0,0,0,0.15)`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            pr: 2,
+          }}
+        >
+          <span>New Card</span>
+          <IconButton onClick={onCloseModal}>
+            <Close />
+          </IconButton>
         </DialogTitle>
         <DialogContent>
           <Typography

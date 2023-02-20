@@ -46,7 +46,12 @@ export default function Card({
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <Typography variant="body2">{card.title}</Typography>
+            <Typography
+              variant="body2"
+              sx={{ whiteSpace: "break-spaces" }}
+            >
+              {card.title}
+            </Typography>
             <Grid
               container
               sx={{ mt: 1 }}
@@ -106,13 +111,13 @@ export default function Card({
               >
                 <Rating
                   readOnly
-                  defaultValue={card.priority}
+                  defaultValue={card.priority + 1}
                   max={4}
                   sx={{ transform: "rotate(180deg)" }}
                   icon={
                     <Circle
                       sx={{
-                        color: priorityColor[card.priority - 1],
+                        color: priorityColor[card.priority],
                         fontSize: "10px",
                       }}
                     />
