@@ -91,10 +91,10 @@ export default function CardDetailsModal() {
         open={showModal}
         PaperProps={{
           sx: {
-            width: "380px",
             maxHeight: "calc(100% - 48px)",
           },
         }}
+        maxWidth="sm"
       >
         {card ? (
           <>
