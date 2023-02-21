@@ -11,6 +11,8 @@ import {
   CardContent,
   CardHeader,
   IconButton,
+  Menu,
+  MenuItem,
   Switch,
   Typography,
   useTheme,
@@ -29,6 +31,7 @@ import {
 import NewColumnForm from "../../columns/components/NewColumnForm";
 import { UpdateColumnDto } from "../../columns/types/dto/UpdateColumnDto";
 import { confirmationDialogOpened } from "../../common/commonSlice";
+import { onDeleteBoard, onUpdateBoard } from "../boardsSlice";
 
 type BoardProps = {
   board: BoardEntity;
@@ -39,12 +42,16 @@ export default function Board({ board }: BoardProps) {
   const [loadingColumns, setLoadingColumns] = useState(false);
   const [addingNewColumn, setAddingNewColumn] = useState(false);
   const [editColumnsMode, setEditColumnsMode] = useState(false);
+  const [contextMenuAnchorEl, setContextMenuAnchorEl] =
+    React.useState<null | HTMLElement>(null);
+  const showContextMenu = Boolean(contextMenuAnchorEl);
   const dispatch = useAppDispatch();
   const columns = useAppSelector((state) =>
     Object.values(state.columns.entities)
       .filter((column) => column.boardId === board._id)
       .sort((columnA, columnB) => columnA.index - columnB.index)
   );
+  const theme = useTheme();
 
   // Loads this board's columns on start
   useLayoutEffect(() => {
@@ -91,6 +98,37 @@ export default function Board({ board }: BoardProps) {
     columnId: string
   ) => {
     dispatch(onUpdateColumn({ boardId: board._id, columnId, updateColumnDto }));
+  };
+
+  const onContextMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setContextMenuAnchorEl(event.currentTarget);
+  };
+
+  const onToggleBoardArchiveClick = () => {
+    dispatch(
+      onUpdateBoard({
+        ...board,
+        archived: !board.archived,
+      })
+    );
+  };
+
+  const onDeleteBoardClick = () => {
+    dispatch(
+      confirmationDialogOpened({
+        title: "Delete Board: " + board.title,
+        message: "Are you sure you want to delete this board?",
+        actions: [
+          {
+            title: "Delete",
+            type: "error",
+            onClick: () => {
+              dispatch(onDeleteBoard(board._id));
+            },
+          },
+        ],
+      })
+    );
   };
 
   const renderBoardDetails = () => (
@@ -144,15 +182,34 @@ export default function Board({ board }: BoardProps) {
         >
           <CardHeader
             action={
-              <IconButton>
-                <MoreHoriz />
-              </IconButton>
+              <>
+                <IconButton onClick={onContextMenuClick}>
+                  <MoreHoriz />
+                </IconButton>
+                <Menu
+                  anchorEl={contextMenuAnchorEl}
+                  open={showContextMenu}
+                  onClose={() => setContextMenuAnchorEl(null)}
+                >
+                  <MenuItem onClick={onToggleBoardArchiveClick}>
+                    {board.archived ? "Unarchive" : "Archive"}
+                  </MenuItem>
+                  <MenuItem
+                    onClick={onDeleteBoardClick}
+                    sx={{ color: theme.palette.error.main }}
+                    disabled={!board.archived}
+                  >
+                    Delete
+                  </MenuItem>
+                </Menu>
+              </>
             }
             title={board.title}
             titleTypographyProps={{
               sx: {
                 color: "#000000",
                 textDecoration: "none",
+                display: "inline",
               },
               variant: "subtitle1",
               component: "a",
