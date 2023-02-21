@@ -29,6 +29,9 @@ export default function CreateCardModal() {
   const createCardForColumnId = useAppSelector(
     (state) => state.cards.createCardForColumnId
   );
+  const createCardIndex = useAppSelector(
+    (state) => state.cards.createCardIndex
+  );
 
   const dispatch = useAppDispatch();
 
@@ -51,13 +54,14 @@ export default function CreateCardModal() {
   };
 
   const handleCreateCardClick = () => {
-    const createCardDto: CreateCardDto = {
-      title: cardTitle,
-      description: cardDescription,
-      priority: cardPriority,
-      assignee: null,
-    };
-    if (showModal && board) {
+    if (showModal && board && createCardIndex !== null) {
+      const createCardDto: CreateCardDto = {
+        title: cardTitle,
+        index: createCardIndex,
+        description: cardDescription,
+        priority: cardPriority,
+        assignee: null,
+      };
       dispatch(
         onCreateCard({
           boardId: createCardForBoardId,

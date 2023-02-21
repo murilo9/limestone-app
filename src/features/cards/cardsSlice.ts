@@ -9,6 +9,7 @@ interface CardsState {
   entities: { [id: string]: CardEntity };
   createCardForBoardId: string | null;
   createCardForColumnId: string | null;
+  createCardIndex: number | null;
   selectedCardId: string | null;
 }
 
@@ -16,6 +17,7 @@ const initialState: CardsState = {
   entities: {},
   createCardForBoardId: null,
   createCardForColumnId: null,
+  createCardIndex: null,
   selectedCardId: null,
 };
 
@@ -71,11 +73,16 @@ export const cardsSlice = createSlice({
     },
     createCardModalOpened(
       state,
-      action: PayloadAction<{ boardId: string; columnId: string }>
+      action: PayloadAction<{
+        boardId: string;
+        columnId: string;
+        index: number;
+      }>
     ) {
-      const { boardId, columnId } = action.payload;
+      const { boardId, columnId, index } = action.payload;
       state.createCardForBoardId = boardId;
       state.createCardForColumnId = columnId;
+      state.createCardIndex = index;
     },
     cardSelected(state, action: PayloadAction<string | null>) {
       const cardId = action.payload;

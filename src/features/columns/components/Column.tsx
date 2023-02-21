@@ -157,7 +157,13 @@ export default function CardsColumn({
                 <IconButton
                   color="primary"
                   onClick={() =>
-                    dispatch(createCardModalOpened({ boardId, columnId }))
+                    dispatch(
+                      createCardModalOpened({
+                        boardId,
+                        columnId,
+                        index: cards.length,
+                      })
+                    )
                   }
                 >
                   <Add />
