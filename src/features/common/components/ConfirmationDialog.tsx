@@ -28,6 +28,7 @@ export default function ConfirmationDialog() {
 
   const onActionClick = (index: number) => {
     currentConfig?.actions[index].onClick();
+    dispatch(confirmationDialogClosed());
   };
 
   return (
