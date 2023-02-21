@@ -19,7 +19,7 @@ import {
 } from "../../card-comments/cardCommentsSlice";
 import CardComment from "../../card-comments/components/CardComment";
 import { ColumnEntity } from "../../columns/types/ColumnEntity";
-import { cardSelected } from "../cardsSlice";
+import { cardSelected, onDeleteCard } from "../cardsSlice";
 import { CardEntity } from "../types/CardEntity";
 import CardPriorityDisplay from "./CardPriorityDisplay";
 
@@ -27,6 +27,7 @@ export default function CardDetailsModal() {
   const [fetchingComments, setFetchingComments] = useState(true);
   const [newComment, setNewComment] = useState("");
   const [addingNewComment, setAddingNewComment] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const dispatch = useAppDispatch();
   const selectedCardId = useAppSelector((state) => state.cards.selectedCardId);
   const card: CardEntity | undefined = useAppSelector(
@@ -61,6 +62,7 @@ export default function CardDetailsModal() {
 
   const onCloseModal = () => {
     dispatch(cardSelected(null));
+    setShowDeleteConfirmation(false);
   };
 
   const onCreateComment = () => {
@@ -82,6 +84,19 @@ export default function CardDetailsModal() {
         setAddingNewComment(false);
         setNewComment("");
       });
+  };
+
+  const onDeleteCardConfirm = () => {
+    if (card && cardColumn && cardBoard) {
+      dispatch(
+        onDeleteCard({
+          columnId: cardColumn._id,
+          boardId: cardBoard._id,
+          cardId: card._id,
+        })
+      );
+      onCloseModal();
+    }
   };
 
   return (
@@ -183,19 +198,61 @@ export default function CardDetailsModal() {
                 rows={3}
                 value={newComment}
                 onChange={(event) => setNewComment(event.target.value)}
-                sx={{ mt: 3, width: "100%" }}
+                sx={{ mt: 2, width: "100%" }}
               />
               {newComment ? (
-                <Button
-                  onClick={onCreateComment}
-                  disableElevation
-                  disabled={addingNewComment}
-                  variant="contained"
-                  sx={{ mt: 1 }}
-                >
-                  Save
-                </Button>
+                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                  <Button
+                    onClick={onCreateComment}
+                    disableElevation
+                    disabled={addingNewComment}
+                    variant="contained"
+                    sx={{ mt: 1 }}
+                  >
+                    Save
+                  </Button>
+                </Box>
               ) : null}
+              <Box sx={{ mt: 1 }}>
+                {showDeleteConfirmation ? (
+                  <>
+                    <Typography
+                      variant="subtitle2"
+                      sx={{ mt: 3 }}
+                      color="error"
+                    >
+                      Are you sure you wish to delete this card?
+                    </Typography>
+                    <Button
+                      disableElevation
+                      variant="outlined"
+                      sx={{ mt: 2, mr: 1 }}
+                      onClick={() => setShowDeleteConfirmation(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      disableElevation
+                      color="error"
+                      variant="outlined"
+                      sx={{ mt: 2 }}
+                      onClick={onDeleteCardConfirm}
+                    >
+                      Delete
+                    </Button>
+                  </>
+                ) : (
+                  <Button
+                    disableElevation
+                    color="error"
+                    variant="outlined"
+                    sx={{ mt: 2 }}
+                    onClick={() => setShowDeleteConfirmation(true)}
+                  >
+                    Delete Card
+                  </Button>
+                )}
+              </Box>
             </DialogContent>
           </>
         ) : (

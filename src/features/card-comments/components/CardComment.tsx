@@ -48,8 +48,20 @@ export default function CardComment({ cardCommentId }: CardCommentProps) {
               title={`${commentAuthor.firstName} ${commentAuthor.lastName}`}
               subheader={new Date(comment.updated).toLocaleString()}
             />
-            <CardContent>
-              <Typography variant="body2">{comment.body}</Typography>
+            <CardContent
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                pt: 0,
+                pr: { xs: 2, sm: 3 },
+              }}
+            >
+              <Typography
+                variant="body2"
+                sx={{ width: { xs: "100%", sm: "calc(100% - 56px)" } }}
+              >
+                {comment.body}
+              </Typography>
             </CardContent>
           </>
         ) : (

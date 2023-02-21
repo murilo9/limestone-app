@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createCard } from "./api/createCard";
+import { deleteCard } from "./api/deleteCard";
 import { fetchCards } from "./api/fetchCards";
 import { CardEntity } from "./types/CardEntity";
 import { CreateCardDto } from "./types/dto/CreateCardDto";
@@ -44,6 +45,22 @@ export const onCreateCard = createAsyncThunk(
   }
 );
 
+export const onDeleteCard = createAsyncThunk(
+  "cards/onDeleteCard",
+  async ({
+    columnId,
+    boardId,
+    cardId,
+  }: {
+    columnId: string;
+    boardId: string;
+    cardId: string;
+  }) => {
+    await deleteCard(boardId, columnId, cardId);
+    return cardId;
+  }
+);
+
 export const cardsSlice = createSlice({
   name: "cards",
   initialState,
@@ -74,6 +91,10 @@ export const cardsSlice = createSlice({
       .addCase(onCreateCard.fulfilled, (state, action) => {
         const card = action.payload;
         state.entities[card._id] = card;
+      })
+      .addCase(onDeleteCard.fulfilled, (state, action) => {
+        const deletedCardId = action.payload;
+        delete state.entities[deletedCardId];
       }),
 });
 
