@@ -10,6 +10,7 @@ import ConfirmationDialog from "../components/ConfirmationDialog";
 import SystemHeader, {
   SYSTEM_HEADER_HEIGHTS,
 } from "../components/SystemHeader";
+import ToastNotification from "../components/ToastNotification";
 import { SystemTabs } from "../types/SystemTabs";
 
 const getSelectedTab = (value: string) => {
@@ -50,6 +51,7 @@ export default function SystemPage() {
       <CreateCardModal />
       <ConfirmationDialog />
       <CardDetailsModal />
+      <ToastNotification />
       {/*-----------------------------------*/}
     </>
   );
