@@ -10,10 +10,14 @@ import { CreateCardCommentDto } from "../card-comments/types/dto/CreateCardComme
 
 interface BoardsState {
   entities: { [id: string]: BoardEntity };
+  showCreateBoardModal: boolean;
+  isCreatingBoard: boolean;
 }
 
 const initialState: BoardsState = {
   entities: {},
+  showCreateBoardModal: false,
+  isCreatingBoard: false,
 };
 
 /* Thunks */
@@ -55,7 +59,12 @@ export const onDeleteBoard = createAsyncThunk(
 export const boardsSlice = createSlice({
   name: "boards",
   initialState,
-  reducers: {},
+  reducers: {
+    createBoardModalChanged(state, action: PayloadAction<boolean>) {
+      const showModal = action.payload;
+      state.showCreateBoardModal = showModal;
+    },
+  },
   extraReducers: (builder) =>
     builder
       .addCase(onLoadAllBoards.fulfilled, (state, action) => {
@@ -64,9 +73,16 @@ export const boardsSlice = createSlice({
           state.entities[board._id] = board;
         });
       })
+      .addCase(onCreateBoard.pending, (state, action) => {
+        state.isCreatingBoard = true;
+      })
       .addCase(onCreateBoard.fulfilled, (state, action) => {
         const createdBoard = action.payload;
         state.entities[createdBoard._id] = createdBoard;
+        state.isCreatingBoard = false;
+      })
+      .addCase(onCreateBoard.rejected, (state, action) => {
+        state.isCreatingBoard = false;
       })
       .addCase(onUpdateBoard.fulfilled, (state, action) => {
         const updatedBoard = action.payload;
@@ -77,5 +93,7 @@ export const boardsSlice = createSlice({
         delete state.entities[boardId];
       }),
 });
+
+export const { createBoardModalChanged } = boardsSlice.actions;
 
 export default boardsSlice.reducer;

@@ -9,12 +9,20 @@ import {
   Box,
 } from "@mui/material";
 import React from "react";
+import { useAppDispatch } from "../../../store";
 import { SYSTEM_HEADER_PADDINGS } from "../../common/components/SystemHeader";
+import { createBoardModalChanged } from "../boardsSlice";
 
 export const BOARDS_HEADER_HEIGHTS = { xs: "120px", md: "56px" };
 
 export default function BoardsHeader() {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
+
+  const onCreatBoardButtonClick = () => {
+    console.log("dispatching");
+    dispatch(createBoardModalChanged(true));
+  };
 
   return (
     <>
@@ -67,6 +75,7 @@ export default function BoardsHeader() {
             <IconButton
               color="primary"
               sx={{ pr: 0 }}
+              onClick={onCreatBoardButtonClick}
             >
               <AddCircle sx={{ fontSize: "40px" }} />
             </IconButton>
@@ -118,6 +127,7 @@ export default function BoardsHeader() {
             <IconButton
               color="primary"
               sx={{ pr: 0 }}
+              onClick={onCreatBoardButtonClick}
             >
               <AddCircle sx={{ fontSize: "40px" }} />
             </IconButton>

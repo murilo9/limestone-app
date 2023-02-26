@@ -1,6 +1,7 @@
 import { ThemeProvider } from "@mui/material";
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
+import CreateBoardModal from "./features/boards/components/CreateBoardModal";
 import CardDetailsModal from "./features/cards/components/CardDetailsModal";
 import CreateCardModal from "./features/cards/components/CreateCardModal";
 import ConfirmationDialog from "./features/common/components/ConfirmationDialog";
@@ -15,6 +16,7 @@ function App() {
       </BrowserRouter>
 
       {/* Here lies all global-level modals */}
+      <CreateBoardModal />
       <CreateCardModal />
       <ConfirmationDialog />
       <CardDetailsModal />
