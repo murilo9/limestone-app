@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createUser } from "./api/createUser";
 import { deleteUser } from "./api/deleteUser";
+import { fetchMe } from "./api/fetchMe";
 import { fetchUsers } from "./api/fetchUsers";
 import { updateUser } from "./api/updateUser";
 import { CreateUserDto } from "./types/dto/CreateUserDto";
@@ -9,29 +10,31 @@ import { UserEntity } from "./types/User";
 
 interface UsersState {
   entities: { [id: string]: UserEntity };
+  currentUser: UserEntity | null;
   showCreateUserModal: boolean;
 }
 
 const initialState: UsersState = {
   entities: {},
+  currentUser: null,
   showCreateUserModal: false,
 };
 
 export const onCreateUser = createAsyncThunk(
-  "boards/addUser",
+  "users/addUser",
   async (createUserForm: CreateUserDto) => {
     const createUserRes = await createUser(createUserForm);
     const createdUser = createUserRes.data;
     return createdUser;
   }
 );
-export const onFetchUsers = createAsyncThunk("boards/fetchUsers", async () => {
+export const onFetchUsers = createAsyncThunk("users/fetchUsers", async () => {
   const fetchUsersRes = await fetchUsers();
   const users = fetchUsersRes.data;
   return users;
 });
 export const onUpdateUser = createAsyncThunk(
-  "boards/updateUser",
+  "users/updateUser",
   async ({
     userId,
     updateUserForm,
@@ -45,10 +48,19 @@ export const onUpdateUser = createAsyncThunk(
   }
 );
 export const deactivateUser = createAsyncThunk(
-  "boards/deactivateUser",
+  "users/deactivateUser",
   async (userId: string) => {
     await deleteUser(userId);
     return userId;
+  }
+);
+export const onFetchCurrentUserData = createAsyncThunk(
+  "users/onFetchCurrentUserData",
+  async () => {
+    console.log("dispatching");
+    const fetchCurrentUserRes = await fetchMe();
+    const currentUser = fetchCurrentUserRes.data;
+    return currentUser;
   }
 );
 
@@ -83,6 +95,10 @@ const usersSlice = createSlice({
       .addCase(deactivateUser.fulfilled, (state, action) => {
         const deletedUserId = action.payload;
         delete state.entities[deletedUserId];
+      })
+      .addCase(onFetchCurrentUserData.fulfilled, (state, action) => {
+        const currentUser = action.payload;
+        state.currentUser = currentUser;
       }),
 });
 
