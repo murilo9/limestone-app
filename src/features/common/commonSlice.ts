@@ -14,10 +14,7 @@ interface CommonState {
 const initialState: CommonState = {
   currentUser: null,
   confirmationDialogCurrentConfig: null,
-  currentToastNotification: {
-    message: "Lorem ipsum dolor sit amet",
-    type: "info",
-  },
+  currentToastNotification: null,
 };
 
 /* Thunks */

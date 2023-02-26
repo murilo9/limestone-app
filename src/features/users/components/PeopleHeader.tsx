@@ -9,12 +9,19 @@ import {
   Box,
 } from "@mui/material";
 import React from "react";
+import { useAppDispatch } from "../../../store";
 import { SYSTEM_HEADER_PADDINGS } from "../../common/components/SystemHeader";
+import { createUserModalChanged } from "../usersSlice";
 
 export const PEOPLE_HEADER_HEIGHTS = { xs: "120px", md: "56px" };
 
 export default function PeopleHeader() {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
+
+  const onAddUserClick = () => {
+    dispatch(createUserModalChanged(true));
+  };
 
   return (
     <>
@@ -67,6 +74,7 @@ export default function PeopleHeader() {
             <IconButton
               color="primary"
               sx={{ pr: 0 }}
+              onClick={onAddUserClick}
             >
               <AddCircle sx={{ fontSize: "40px" }} />
             </IconButton>
@@ -118,6 +126,7 @@ export default function PeopleHeader() {
             <IconButton
               color="primary"
               sx={{ pr: 0 }}
+              onClick={onAddUserClick}
             >
               <AddCircle sx={{ fontSize: "40px" }} />
             </IconButton>

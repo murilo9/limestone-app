@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createUser } from "./api/createUser";
 import { deleteUser } from "./api/deleteUser";
 import { fetchUsers } from "./api/fetchUsers";
@@ -9,10 +9,12 @@ import { UserEntity } from "./types/User";
 
 interface UsersState {
   entities: { [id: string]: UserEntity };
+  showCreateUserModal: boolean;
 }
 
 const initialState: UsersState = {
   entities: {},
+  showCreateUserModal: false,
 };
 
 export const onCreateUser = createAsyncThunk(
@@ -57,6 +59,10 @@ const usersSlice = createSlice({
     usersAdded(state, action) {},
     userUpdated(state, action) {},
     clearUsers(state, action) {},
+    createUserModalChanged(state, action: PayloadAction<boolean>) {
+      const showModal = action.payload;
+      state.showCreateUserModal = showModal;
+    },
   },
   extraReducers: (builder) =>
     builder
@@ -80,6 +86,6 @@ const usersSlice = createSlice({
       }),
 });
 
-/* todo: export actions */
+export const { createUserModalChanged } = usersSlice.actions;
 
 export default usersSlice.reducer;

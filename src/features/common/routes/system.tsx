@@ -5,6 +5,7 @@ import CreateBoardModal from "../../boards/components/CreateBoardModal";
 import BoardsPage from "../../boards/routes/boards";
 import CardDetailsModal from "../../cards/components/CardDetailsModal";
 import CreateCardModal from "../../cards/components/CreateCardModal";
+import CreateUserModal from "../../users/components/CreateUserModal";
 import PeoplePage from "../../users/routes/people";
 import ConfirmationDialog from "../components/ConfirmationDialog";
 import SystemHeader, {
@@ -47,6 +48,7 @@ export default function SystemPage() {
       </Box>
 
       {/* Here lies all global-level modals */}
+      <CreateUserModal />
       <CreateBoardModal />
       <CreateCardModal />
       <ConfirmationDialog />
