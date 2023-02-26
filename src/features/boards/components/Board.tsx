@@ -28,7 +28,7 @@ import {
   onLoadColumns,
   onUpdateColumn,
 } from "../../columns/columnsSlice";
-import NewColumnForm from "../../columns/components/NewColumnForm";
+import CreateColumnForm from "../../columns/components/CreateColumnForm";
 import { UpdateColumnDto } from "../../columns/types/dto/UpdateColumnDto";
 import { confirmationDialogOpened } from "../../common/commonSlice";
 import { onDeleteBoard, onUpdateBoard } from "../boardsSlice";
@@ -159,7 +159,7 @@ export default function Board({ board }: BoardProps) {
             ))}
             {addingNewColumn ? "Adding..." : null}
             {editColumnsMode ? (
-              <NewColumnForm onSubmit={handleCreateColumn} />
+              <CreateColumnForm onSubmit={handleCreateColumn} />
             ) : null}
           </>
         ) : (
