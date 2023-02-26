@@ -14,6 +14,7 @@ export default function NewColumnForm({ onSubmit }: NewColumnFormProps) {
     if (event.key === "Enter") {
       onSubmit(columnTitle);
       setShowInput(false);
+      setColumnTitle("");
     }
   };
 
