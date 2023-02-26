@@ -14,13 +14,6 @@ function App() {
       <BrowserRouter>
         <RoutesProvider></RoutesProvider>
       </BrowserRouter>
-
-      {/* Here lies all global-level modals */}
-      <CreateBoardModal />
-      <CreateCardModal />
-      <ConfirmationDialog />
-      <CardDetailsModal />
-      {/*-----------------------------------*/}
     </ThemeProvider>
   );
 }

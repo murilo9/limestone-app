@@ -1,8 +1,12 @@
 import { Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
+import CreateBoardModal from "../../boards/components/CreateBoardModal";
 import BoardsPage from "../../boards/routes/boards";
+import CardDetailsModal from "../../cards/components/CardDetailsModal";
+import CreateCardModal from "../../cards/components/CreateCardModal";
 import PeoplePage from "../../users/routes/people";
+import ConfirmationDialog from "../components/ConfirmationDialog";
 import SystemHeader, {
   SYSTEM_HEADER_HEIGHTS,
 } from "../components/SystemHeader";
@@ -40,6 +44,13 @@ export default function SystemPage() {
       >
         <Outlet />
       </Box>
+
+      {/* Here lies all global-level modals */}
+      <CreateBoardModal />
+      <CreateCardModal />
+      <ConfirmationDialog />
+      <CardDetailsModal />
+      {/*-----------------------------------*/}
     </>
   );
 }
