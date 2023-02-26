@@ -109,7 +109,8 @@ export default function CardDetailsModal() {
             maxHeight: "calc(100% - 48px)",
           },
         }}
-        maxWidth="sm"
+        maxWidth="md"
+        fullWidth
       >
         {card ? (
           <>
