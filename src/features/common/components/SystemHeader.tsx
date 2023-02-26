@@ -3,11 +3,14 @@ import {
   Box,
   Button,
   Grid,
+  IconButton,
+  Menu,
+  MenuItem,
   selectClasses,
   Tab,
   Tabs,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../../../store";
 import { fetchMe } from "../api/fetchMe";
 import { useAuth } from "../hooks/useAuth";
@@ -30,6 +33,13 @@ type SystemHeaderProps = {
 export default function SystemHeader({ selectedTab }: SystemHeaderProps) {
   const { signOut } = useAuth();
   const currentUser = useAppSelector((state) => state.common.currentUser);
+  const [contextMenuAnchorEl, setContextMenuAnchorEl] =
+    useState<HTMLElement | null>(null);
+  const showContextMenu = Boolean(contextMenuAnchorEl);
+
+  const onContextMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setContextMenuAnchorEl(event.currentTarget);
+  };
 
   const navigate = useNavigate();
 
@@ -127,7 +137,16 @@ export default function SystemHeader({ selectedTab }: SystemHeaderProps) {
                 onClick={() => navigate("/people")}
               />
             </Tabs>
-            <Avatar>MH</Avatar>
+            <IconButton onClick={onContextMenuClick}>
+              <Avatar>MH</Avatar>
+            </IconButton>
+            <Menu
+              anchorEl={contextMenuAnchorEl}
+              open={showContextMenu}
+              onClose={() => setContextMenuAnchorEl(null)}
+            >
+              <MenuItem onClick={signOut}>Sign Out</MenuItem>
+            </Menu>
           </Grid>
         </Grid>
       </Box>
