@@ -75,14 +75,14 @@ export const onDeleteCardComment = createAsyncThunk(
   async ({
     boardId,
     cardId,
-    commentId,
+    cardCommentId,
   }: {
     boardId: string;
     cardId: string;
-    commentId: string;
+    cardCommentId: string;
   }) => {
-    await deleteCardComment(boardId, cardId, commentId);
-    return commentId;
+    await deleteCardComment(boardId, cardId, cardCommentId);
+    return cardCommentId;
   }
 );
 
@@ -120,6 +120,10 @@ export const cardCommentsSlice = createSlice({
       .addCase(onCreateCardComment.fulfilled, (state, action) => {
         const card = action.payload;
         state.entities[card._id] = card;
+      })
+      .addCase(onDeleteCardComment.fulfilled, (state, action) => {
+        const deletedCommentId = action.payload;
+        delete state.entities[deletedCommentId];
       }),
 });
 

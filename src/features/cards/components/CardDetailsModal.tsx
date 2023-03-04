@@ -58,7 +58,7 @@ export default function CardDetailsModal() {
           setFetchingComments(false);
         });
     }
-  }, [card]);
+  }, [card, cardBoard?._id, dispatch]);
 
   const onCloseModal = () => {
     dispatch(cardSelected(null));
@@ -180,7 +180,11 @@ export default function CardDetailsModal() {
                     className="lim-card-comments-list"
                     sx={{ mt: 2 }}
                   >
-                    <CardComment cardCommentId={comment._id} />
+                    <CardComment
+                      cardCommentId={comment._id}
+                      boardId={cardBoard._id}
+                      cardId={card._id}
+                    />
                   </Box>
                 ))
               ) : (
@@ -201,19 +205,26 @@ export default function CardDetailsModal() {
                 onChange={(event) => setNewComment(event.target.value)}
                 sx={{ mt: 2, width: "100%" }}
               />
-              {newComment ? (
-                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                  <Button
-                    onClick={onCreateComment}
-                    disableElevation
-                    disabled={addingNewComment}
-                    variant="contained"
-                    sx={{ mt: 1 }}
-                  >
-                    Save
-                  </Button>
-                </Box>
-              ) : null}
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  height: "48px",
+                }}
+              >
+                <Button
+                  onClick={onCreateComment}
+                  disableElevation
+                  disabled={addingNewComment}
+                  variant="contained"
+                  sx={{
+                    mt: 1,
+                    display: newComment ? "block" : "none",
+                  }}
+                >
+                  Save
+                </Button>
+              </Box>
               <Box sx={{ mt: 1 }}>
                 {showDeleteConfirmation ? (
                   <>
