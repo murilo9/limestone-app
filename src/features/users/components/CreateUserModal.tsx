@@ -164,7 +164,7 @@ export default function CreateUserModal() {
             variant="contained"
             color="secondary"
             disableElevation
-            onClick={onCreateUserClick}
+            onClick={onCloseModal}
           >
             Cancel
           </Button>
