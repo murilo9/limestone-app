@@ -7,20 +7,12 @@ import BoardsHeader, {
   BOARDS_HEADER_HEIGHTS,
 } from "../components/BoardsHeader";
 import CreateCardModal from "../../cards/components/CreateCardModal";
+import { useOutletContext } from "react-router-dom";
+import { OutletContextProps } from "../../common/types/OutletContextProps";
 
 export default function BoardsPage() {
-  const dispatch = useAppDispatch();
   const boards = useAppSelector((state) => state.boards.entities);
-  const [loadingBoards, setLoadingBoards] = useState(false);
-
-  useEffect(() => {
-    if (!Object.entries(boards).length) {
-      setLoadingBoards(true);
-      dispatch(onLoadAllBoards()).then(() => {
-        setLoadingBoards(false);
-      });
-    }
-  }, []);
+  const { loadingBoards } = useOutletContext<OutletContextProps>();
 
   return (
     <>
