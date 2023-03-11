@@ -39,7 +39,7 @@ export default function CardComment({
     throw new Error("Comment author could not be found!");
   }
   const currentUser = useAppSelector(
-    (state) => state.users.currentUser
+    (state) => state.users.loggedUser
   ) as UserEntity;
   const currentUserIsAdmin = currentUser.createdBy === null;
   const currentUserIsAuthor = currentUser._id === commentAuthor._id;

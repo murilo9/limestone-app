@@ -1,18 +1,24 @@
 import { Avatar, Box, Typography } from "@mui/material";
 import React from "react";
-import { useAppSelector } from "../../../store";
+import { useAppDispatch, useAppSelector } from "../../../store";
 import { BoardEntity } from "../../boards/types/BoardEntity";
 import { UserEntity } from "../types/User";
+import { displayUserChanged } from "../usersSlice";
 
 type UserCardProps = {
   user: UserEntity;
 };
 
 export default function UserCard({ user }: UserCardProps) {
+  const dispatch = useAppDispatch();
   const boards = useAppSelector((state) => state.boards.entities);
   const userBoards = Object.values(boards).filter((board) =>
     Object.values(board.users).find((boardUserId) => boardUserId === user._id)
   );
+
+  const onCardClick = () => {
+    dispatch(displayUserChanged(user._id));
+  };
 
   return (
     <>
@@ -23,7 +29,9 @@ export default function UserCard({ user }: UserCardProps) {
           borderRadius: "8px",
           px: 5,
           py: 3,
+          cursor: "pointer",
         }}
+        onClick={onCardClick}
       >
         <Avatar sx={{ width: "72px", height: "72px", margin: "auto", mb: 2 }}>
           {user.firstName[0].toUpperCase() + user.lastName[0].toUpperCase()}

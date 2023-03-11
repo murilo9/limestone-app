@@ -4,6 +4,6 @@ export interface BoardEntity extends PersistentEntity {
   title: string;
   admin: string;
   owner: string;
-  users: { [id: string]: string };
+  users: string[];
   archived: boolean;
 }

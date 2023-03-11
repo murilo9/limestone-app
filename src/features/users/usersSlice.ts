@@ -10,13 +10,15 @@ import { UserEntity } from "./types/User";
 
 interface UsersState {
   entities: { [id: string]: UserEntity };
-  currentUser: UserEntity | null;
+  loggedUser: UserEntity | null;
+  displayUser: UserEntity | null;
   showCreateUserModal: boolean;
 }
 
 const initialState: UsersState = {
   entities: {},
-  currentUser: null,
+  loggedUser: null,
+  displayUser: null,
   showCreateUserModal: false,
 };
 
@@ -54,13 +56,13 @@ export const deactivateUser = createAsyncThunk(
     return userId;
   }
 );
-export const onFetchCurrentUserData = createAsyncThunk(
-  "users/onFetchCurrentUserData",
+export const onFetchLoggedUserData = createAsyncThunk(
+  "users/onFetchLoggedUserData",
   async () => {
     console.log("dispatching");
-    const fetchCurrentUserRes = await fetchMe();
-    const currentUser = fetchCurrentUserRes.data;
-    return currentUser;
+    const fetchLoggedUserRes = await fetchMe();
+    const loggedUser = fetchLoggedUserRes.data;
+    return loggedUser;
   }
 );
 
@@ -74,6 +76,14 @@ const usersSlice = createSlice({
     createUserModalChanged(state, action: PayloadAction<boolean>) {
       const showModal = action.payload;
       state.showCreateUserModal = showModal;
+    },
+    displayUserChanged(state, action: PayloadAction<string | null>) {
+      const userId = action.payload;
+      if (userId) {
+        state.displayUser = state.entities[userId];
+      } else {
+        state.displayUser = null;
+      }
     },
   },
   extraReducers: (builder) =>
@@ -96,12 +106,13 @@ const usersSlice = createSlice({
         const deletedUserId = action.payload;
         delete state.entities[deletedUserId];
       })
-      .addCase(onFetchCurrentUserData.fulfilled, (state, action) => {
-        const currentUser = action.payload;
-        state.currentUser = currentUser;
+      .addCase(onFetchLoggedUserData.fulfilled, (state, action) => {
+        const loggedUser = action.payload;
+        state.loggedUser = loggedUser;
       }),
 });
 
-export const { createUserModalChanged } = usersSlice.actions;
+export const { createUserModalChanged, displayUserChanged } =
+  usersSlice.actions;
 
 export default usersSlice.reducer;
