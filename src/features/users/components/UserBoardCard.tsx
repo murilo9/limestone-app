@@ -52,7 +52,7 @@ export default function UserBoardCard({
           </Button>
         ) : (
           <Button
-            color="success"
+            color="info"
             onClick={onAssignBoardClick}
           >
             Add
