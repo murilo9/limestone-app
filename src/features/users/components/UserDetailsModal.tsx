@@ -24,8 +24,9 @@ import { onUpdateBoard } from "../../boards/boardsSlice";
 import { BoardEntity } from "../../boards/types/BoardEntity";
 import { toastNotificationSent } from "../../common/commonSlice";
 import { UserEntity } from "../types/User";
-import { displayUserChanged } from "../usersSlice";
+import { displayUserChanged, onUpdateUser } from "../usersSlice";
 import UserBoardCard from "./UserBoardCard";
+import { UpdateUserDto } from "../types/dto/UpdateUserDto";
 
 const reduceBoards = (userBoards: BoardEntity[]) =>
   userBoards.reduce((acc, board) => {
@@ -34,12 +35,16 @@ const reduceBoards = (userBoards: BoardEntity[]) =>
 
 export default function UserDetailsModal() {
   const dispatch = useAppDispatch();
-  // TODO: text fields state
   const [isEditingBoards, setIsEditingBoards] = useState(false);
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [searchBoardsQuery, setSearchBoardsQuery] = useState("");
   const [showAllBoards, setShowAllBoards] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
   const selectedUser = useAppSelector((state) => state.users.displayUser);
+  const [firstName, setFirstName] = useState(selectedUser?.firstName || "");
+  const [lastName, setLastName] = useState(selectedUser?.lastName || "");
+  const [title, setTitle] = useState(selectedUser?.title || "");
   const boards = useAppSelector((state) => state.boards.entities);
   const userBoards = useMemo(
     () =>
@@ -59,8 +64,18 @@ export default function UserDetailsModal() {
   const loggedUserIsAdmin = loggedUser.createdBy === null;
 
   const [assignedBoardsChanged, setAssignedBoardsChanged] = useState(false);
+  const nameChanged = useMemo(
+    () =>
+      firstName !== selectedUser?.firstName ||
+      lastName !== selectedUser?.lastName,
+    [firstName, lastName, selectedUser]
+  );
+  const titleChanged = useMemo(
+    () => title !== selectedUser?.title,
+    [title, selectedUser]
+  );
 
-  const anythingChanged = assignedBoardsChanged;
+  const anythingChanged = assignedBoardsChanged || nameChanged || titleChanged;
 
   const onCloseModal = () => {
     dispatch(displayUserChanged(null));
@@ -131,40 +146,52 @@ export default function UserDetailsModal() {
         type: "success",
       })
     );
-    console.log("setIsFetching FALSE");
     setIsFetching(false);
     clearState();
   };
 
-  const onSaveChanges = () => {
+  const onSaveChanges = async () => {
     setIsFetching(true);
     let requestsToProcess = Object.values(boards).length;
-    for (const board of Object.values(boards)) {
-      const updatedBoardUsers = assignedBoards[board._id]
-        ? [...board.users, (selectedUser as UserEntity)._id]
-        : board.users.filter((userId) => userId !== selectedUser?._id);
-      const updatedBoard: BoardEntity = {
-        ...board,
-        users: updatedBoardUsers,
-      };
-      dispatch(onUpdateBoard(updatedBoard))
-        .then(() => {
-          requestsToProcess--;
-          console.log("remaining requests", requestsToProcess);
-          if (requestsToProcess === 0) {
-            onSaveChangesCompleted();
-          }
-        })
-        .catch(() => {
-          dispatch(
-            toastNotificationSent({
-              message:
-                "There was an error while updating some boards. Re-check your changes and try again.",
-              type: "error",
-            })
-          );
-          setIsFetching(false);
-        });
+    const updateUserForm: UpdateUserDto = {
+      firstName,
+      lastName,
+      title,
+      notificationOptions: (selectedUser as UserEntity).notificationOptions,
+    };
+    await dispatch(
+      onUpdateUser({ updateUserForm, userId: (selectedUser as UserEntity)._id })
+    );
+    if (assignedBoardsChanged) {
+      for (const board of Object.values(boards)) {
+        const updatedBoardUsers = assignedBoards[board._id]
+          ? [...board.users, (selectedUser as UserEntity)._id]
+          : board.users.filter((userId) => userId !== selectedUser?._id);
+        const updatedBoard: BoardEntity = {
+          ...board,
+          users: updatedBoardUsers,
+        };
+        dispatch(onUpdateBoard(updatedBoard))
+          .then(() => {
+            requestsToProcess--;
+            console.log("remaining requests", requestsToProcess);
+            if (requestsToProcess === 0) {
+              onSaveChangesCompleted();
+            }
+          })
+          .catch(() => {
+            dispatch(
+              toastNotificationSent({
+                message:
+                  "There was an error while updating some boards. Re-check your changes and try again.",
+                type: "error",
+              })
+            );
+            setIsFetching(false);
+          });
+      }
+    } else {
+      onSaveChangesCompleted();
     }
   };
 
@@ -172,11 +199,18 @@ export default function UserDetailsModal() {
     setIsEditingBoards(false);
     setSearchBoardsQuery("");
     setAssignedBoardsChanged(false);
+    setIsEditingName(false);
+    setIsEditingTitle(false);
+    setFirstName(selectedUser?.firstName || "");
+    setLastName(selectedUser?.lastName || "");
+    setTitle(selectedUser?.title || "");
   };
 
   useEffect(() => {
     clearState();
   }, [selectedUser]);
+
+  const loggedUserIsEditingSelf = loggedUser._id === selectedUser?._id;
 
   return (
     <>
@@ -202,40 +236,79 @@ export default function UserDetailsModal() {
                 justifyContent: "space-between",
               }}
             >
-              <Box>
-                <Typography
-                  variant="subtitle1"
-                  fontSize={20}
-                  color="#000000"
-                >{`${selectedUser?.firstName} ${selectedUser?.lastName}`}</Typography>
-                {loggedUser._id === selectedUser?._id ? (
+              {isEditingName ? (
+                <>
+                  <TextField
+                    variant="standard"
+                    label="First Name"
+                    value={firstName}
+                    onChange={(event) => setFirstName(event.target.value)}
+                    sx={{ mb: 2 }}
+                    autoFocus
+                  />
+                  <TextField
+                    variant="standard"
+                    label="Last Name"
+                    value={lastName}
+                    onChange={(event) => setLastName(event.target.value)}
+                    sx={{ mb: 1 }}
+                  />
+                </>
+              ) : (
+                <Box>
+                  <Typography
+                    variant="subtitle1"
+                    fontSize={20}
+                    color="#000000"
+                  >{`${selectedUser?.firstName} ${selectedUser?.lastName}`}</Typography>
+                  {loggedUserIsEditingSelf ? (
+                    <Link
+                      underline="none"
+                      component="button"
+                      variant="subtitle1"
+                      onClick={() => setIsEditingName(true)}
+                    >
+                      Edit
+                    </Link>
+                  ) : null}
+                </Box>
+              )}
+              {isEditingTitle ? (
+                <>
+                  <TextField
+                    variant="standard"
+                    label="Title"
+                    value={title}
+                    onChange={(event) => setTitle(event.target.value)}
+                    sx={{ mb: 1 }}
+                    autoFocus
+                  />
+                </>
+              ) : (
+                <Box>
+                  <Typography
+                    variant="subtitle1"
+                    color="#000000"
+                    fontStyle={selectedUser?.title ? undefined : "italic"}
+                  >
+                    {selectedUser?.title || "No title"}
+                  </Typography>
                   <Link
                     underline="none"
                     component="button"
                     variant="subtitle1"
+                    sx={{
+                      visibility:
+                        loggedUserIsAdmin || loggedUserIsEditingSelf
+                          ? "visible"
+                          : "hidden",
+                    }}
+                    onClick={() => setIsEditingTitle(true)}
                   >
                     Edit
                   </Link>
-                ) : null}
-              </Box>
-              <Box>
-                <Typography
-                  variant="subtitle1"
-                  color="#000000"
-                >
-                  todo-user-title
-                </Typography>
-                <Link
-                  underline="none"
-                  component="button"
-                  variant="subtitle1"
-                  sx={{
-                    visibility: loggedUserIsAdmin ? "visible" : "hidden",
-                  }}
-                >
-                  Edit
-                </Link>
-              </Box>
+                </Box>
+              )}
             </Box>
           </Box>
           <Box

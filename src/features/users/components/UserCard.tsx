@@ -44,12 +44,13 @@ export default function UserCard({ user }: UserCardProps) {
           {`${user.firstName} ${user.lastName}`}
         </Typography>
         <Typography
-          variant="caption"
+          variant="body1"
           color="text.secondary"
           textAlign="center"
+          fontStyle={user.title ? undefined : "italic"}
           sx={{ minHeight: "line-height" }}
         >
-          {/* TODO: add title attribute */}
+          {user.title || "No title"}
         </Typography>
         <Box
           sx={{
