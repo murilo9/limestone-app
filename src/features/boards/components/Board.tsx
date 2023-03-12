@@ -31,7 +31,12 @@ import {
 import CreateColumnForm from "../../columns/components/CreateColumnForm";
 import { UpdateColumnDto } from "../../columns/types/dto/UpdateColumnDto";
 import { confirmationDialogOpened } from "../../common/commonSlice";
-import { onDeleteBoard, onUpdateBoard } from "../boardsSlice";
+import {
+  manageBoardPeopleChanged,
+  onDeleteBoard,
+  onUpdateBoard,
+} from "../boardsSlice";
+import UsersAvatarsList from "./UsersAvatarsList";
 
 type BoardProps = {
   board: BoardEntity;
@@ -51,7 +56,15 @@ export default function Board({ board }: BoardProps) {
       .filter((column) => column.boardId === board._id)
       .sort((columnA, columnB) => columnA.index - columnB.index)
   );
+  const users = useAppSelector((state) => state.users.entities);
+  const boardUsers = Object.values(users).filter((user) =>
+    board.users.find((boardUserId) => boardUserId === user._id)
+  );
   const theme = useTheme();
+
+  const loggedUserIsAdmin = useAppSelector(
+    (state) => state.users.loggedUser?.createdBy === null
+  );
 
   // Loads this board's columns on start
   useLayoutEffect(() => {
@@ -131,6 +144,10 @@ export default function Board({ board }: BoardProps) {
     );
   };
 
+  const onManagePeopleClick = () => {
+    dispatch(manageBoardPeopleChanged(board._id));
+  };
+
   const renderBoardDetails = () => (
     <>
       <Box
@@ -182,7 +199,12 @@ export default function Board({ board }: BoardProps) {
         >
           <CardHeader
             action={
-              <>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <UsersAvatarsList
+                  boardId={board._id}
+                  users={boardUsers}
+                  sx={{ mr: 2 }}
+                />
                 <IconButton onClick={onContextMenuClick}>
                   <MoreHoriz />
                 </IconButton>
@@ -190,7 +212,20 @@ export default function Board({ board }: BoardProps) {
                   anchorEl={contextMenuAnchorEl}
                   open={showContextMenu}
                   onClose={() => setContextMenuAnchorEl(null)}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
                 >
+                  {loggedUserIsAdmin ? (
+                    <MenuItem onClick={onManagePeopleClick}>
+                      Manage People
+                    </MenuItem>
+                  ) : null}
                   <MenuItem onClick={onToggleBoardArchiveClick}>
                     {board.archived ? "Unarchive" : "Archive"}
                   </MenuItem>
@@ -199,10 +234,10 @@ export default function Board({ board }: BoardProps) {
                     sx={{ color: theme.palette.error.main }}
                     disabled={!board.archived}
                   >
-                    Delete
+                    Delete {!board.archived ? " (Must be archived)" : ""}
                   </MenuItem>
                 </Menu>
-              </>
+              </Box>
             }
             title={board.title}
             titleTypographyProps={{
@@ -223,7 +258,6 @@ export default function Board({ board }: BoardProps) {
               board.updated
             ).toDateString()}`}
           />
-          {/* USAR TABLE */}
           <CardContent sx={{ pt: 0 }}>
             {showDetails
               ? renderBoardDetails()

@@ -12,12 +12,14 @@ interface BoardsState {
   entities: { [id: string]: BoardEntity };
   showCreateBoardModal: boolean;
   isCreatingBoard: boolean;
+  manageBoardPeople: BoardEntity | null;
 }
 
 const initialState: BoardsState = {
   entities: {},
   showCreateBoardModal: false,
   isCreatingBoard: false,
+  manageBoardPeople: null,
 };
 
 /* Thunks */
@@ -64,6 +66,10 @@ export const boardsSlice = createSlice({
       const showModal = action.payload;
       state.showCreateBoardModal = showModal;
     },
+    manageBoardPeopleChanged(state, action: PayloadAction<string | null>) {
+      const boardId = action.payload;
+      state.manageBoardPeople = boardId ? state.entities[boardId] : null;
+    },
   },
   extraReducers: (builder) =>
     builder
@@ -94,6 +100,7 @@ export const boardsSlice = createSlice({
       }),
 });
 
-export const { createBoardModalChanged } = boardsSlice.actions;
+export const { createBoardModalChanged, manageBoardPeopleChanged } =
+  boardsSlice.actions;
 
 export default boardsSlice.reducer;

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import { onLoadAllBoards } from "../../boards/boardsSlice";
+import BoardPeopleModal from "../../boards/components/BoardPeopleModal";
 import CreateBoardModal from "../../boards/components/CreateBoardModal";
 import BoardsPage from "../../boards/routes/boards";
 import CardDetailsModal from "../../cards/components/CardDetailsModal";
@@ -79,6 +80,7 @@ export default function SystemPage() {
       <CardDetailsModal />
       <UserDetailsModal />
       <ToastNotification />
+      <BoardPeopleModal />
       {/*-----------------------------------*/}
     </>
   );

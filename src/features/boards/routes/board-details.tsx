@@ -142,7 +142,7 @@ export default function BoardDetailsPage() {
               </Breadcrumbs>
 
               <BoardDetailsHeader
-                boardTitle={board.title}
+                board={board}
                 editColumnsMode={editColumnsMode}
                 setEditColumnsMode={setEditColumnsMode}
               />

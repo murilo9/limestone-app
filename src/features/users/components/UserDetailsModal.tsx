@@ -183,7 +183,7 @@ export default function UserDetailsModal() {
             dispatch(
               toastNotificationSent({
                 message:
-                  "There was an error while updating some boards. Re-check your changes and try again.",
+                  "There was an error while updating some boards. Review your changes and try again.",
                 type: "error",
               })
             );

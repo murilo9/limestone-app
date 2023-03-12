@@ -79,11 +79,7 @@ const usersSlice = createSlice({
     },
     displayUserChanged(state, action: PayloadAction<string | null>) {
       const userId = action.payload;
-      if (userId) {
-        state.displayUser = state.entities[userId];
-      } else {
-        state.displayUser = null;
-      }
+      state.displayUser = userId ? state.entities[userId] : null;
     },
   },
   extraReducers: (builder) =>

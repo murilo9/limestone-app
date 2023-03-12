@@ -14,23 +14,29 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import { SYSTEM_HEADER_PADDINGS } from "../../common/components/SystemHeader";
+import { UserEntity } from "../../users/types/User";
 import { BoardEntity } from "../types/BoardEntity";
 import Board from "./Board";
+import UsersAvatarsList from "./UsersAvatarsList";
 
 export const BOARDS_HEADER_HEIGHTS = { xs: "120px", md: "56px" };
 
 type BoardDetailsHeaderProps = {
-  boardTitle: string;
+  board: BoardEntity;
   editColumnsMode: boolean;
   setEditColumnsMode: (value: boolean) => void;
 };
 
 export default function BoardDetailsHeader({
-  boardTitle,
+  board,
   editColumnsMode,
   setEditColumnsMode,
 }: BoardDetailsHeaderProps) {
   const theme = useTheme();
+  const users = useAppSelector((state) => state.users.entities);
+  const boardUsers = Object.values(users).filter((user) =>
+    board.users.find((boardUserId) => boardUserId === user._id)
+  );
 
   return (
     <>
@@ -53,7 +59,7 @@ export default function BoardDetailsHeader({
             fontWeight={300}
             display="inline"
           >
-            {boardTitle}
+            {board.title}
           </Typography>
         </Grid>
         <Grid
@@ -120,11 +126,11 @@ export default function BoardDetailsHeader({
               Edit columns
             </Typography>
           </Box>
-          <Box sx={{ ml: 4 }}>
-            {[0, 1, 2].map((user) => (
-              <Avatar sx={{ display: "inline-flex" }}>JD</Avatar>
-            ))}
-          </Box>
+          <UsersAvatarsList
+            boardId={board._id}
+            users={boardUsers}
+            sx={{ ml: 4 }}
+          />
         </Grid>
         {/* <Board /> */}
       </Grid>
