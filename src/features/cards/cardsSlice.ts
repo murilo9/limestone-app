@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createCard } from "./api/createCard";
 import { deleteCard } from "./api/deleteCard";
 import { fetchCards } from "./api/fetchCards";
+import { updateCard } from "./api/updateCard";
 import { CardEntity } from "./types/CardEntity";
 import { CreateCardDto } from "./types/dto/CreateCardDto";
 
@@ -47,6 +48,24 @@ export const onCreateCard = createAsyncThunk(
   }
 );
 
+export const onUpdateCard = createAsyncThunk(
+  "cards/onUpdateCard",
+  async ({
+    columnId,
+    boardId,
+    card,
+    updateLocal,
+  }: {
+    columnId: string;
+    boardId: string;
+    card: CardEntity;
+    updateLocal?: boolean;
+  }) => {
+    await updateCard(boardId, columnId, card._id, card);
+    return { card, updateLocal };
+  }
+);
+
 export const onDeleteCard = createAsyncThunk(
   "cards/onDeleteCard",
   async ({
@@ -88,6 +107,10 @@ export const cardsSlice = createSlice({
       const cardId = action.payload;
       state.selectedCardId = cardId;
     },
+    cardUpdated(state, action: PayloadAction<CardEntity>) {
+      const card = action.payload;
+      state.entities[card._id] = card;
+    },
   },
   extraReducers: (builder) =>
     builder
@@ -99,13 +122,23 @@ export const cardsSlice = createSlice({
         const card = action.payload;
         state.entities[card._id] = card;
       })
+      .addCase(onUpdateCard.fulfilled, (state, action) => {
+        const { card, updateLocal } = action.payload;
+        if (updateLocal) {
+          state.entities[card._id] = card;
+        }
+      })
       .addCase(onDeleteCard.fulfilled, (state, action) => {
         const deletedCardId = action.payload;
         delete state.entities[deletedCardId];
       }),
 });
 
-export const { createCardModalClosed, createCardModalOpened, cardSelected } =
-  cardsSlice.actions;
+export const {
+  createCardModalClosed,
+  createCardModalOpened,
+  cardSelected,
+  cardUpdated,
+} = cardsSlice.actions;
 
 export default cardsSlice.reducer;

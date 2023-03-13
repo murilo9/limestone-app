@@ -1,5 +1,4 @@
-- users management
-- add users to boards
-- drag and drop for columns and cards
+- drag and drop for cards must obey index
+- drag and drop for columns
 
 - handle throw errors inside components

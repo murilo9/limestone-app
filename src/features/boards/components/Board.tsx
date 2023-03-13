@@ -20,7 +20,7 @@ import {
 import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { BoardEntity } from "../types/BoardEntity";
 import Column from "../../columns/components/Column";
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext, OnDragEndResponder } from "react-beautiful-dnd";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import {
   onCreateColumn,
@@ -37,6 +37,9 @@ import {
   onUpdateBoard,
 } from "../boardsSlice";
 import UsersAvatarsList from "./UsersAvatarsList";
+import { cardUpdated, onUpdateCard } from "../../cards/cardsSlice";
+import { CardEntity } from "../../cards/types/CardEntity";
+import useOnDragEnd from "../hooks/useOnDragEnd";
 
 type BoardProps = {
   board: BoardEntity;
@@ -51,6 +54,7 @@ export default function Board({ board }: BoardProps) {
     React.useState<null | HTMLElement>(null);
   const showContextMenu = Boolean(contextMenuAnchorEl);
   const dispatch = useAppDispatch();
+
   const columns = useAppSelector((state) =>
     Object.values(state.columns.entities)
       .filter((column) => column.boardId === board._id)
@@ -148,6 +152,8 @@ export default function Board({ board }: BoardProps) {
     dispatch(manageBoardPeopleChanged(board._id));
   };
 
+  const onDragEnd = useOnDragEnd(board._id);
+
   const renderBoardDetails = () => (
     <>
       <Box
@@ -188,7 +194,7 @@ export default function Board({ board }: BoardProps) {
 
   return (
     <>
-      <DragDropContext onDragEnd={(par: any) => console.log("onDragEnd", par)}>
+      <DragDropContext onDragEnd={onDragEnd}>
         <Card
           elevation={0}
           sx={{
@@ -245,6 +251,9 @@ export default function Board({ board }: BoardProps) {
                 color: "#000000",
                 textDecoration: "none",
                 display: "inline",
+                ":hover": {
+                  textDecoration: "underline",
+                },
               },
               variant: "subtitle1",
               component: "a",

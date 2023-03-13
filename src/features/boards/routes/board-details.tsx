@@ -23,6 +23,7 @@ import { UpdateColumnDto } from "../../columns/types/dto/UpdateColumnDto";
 import { confirmationDialogOpened } from "../../common/commonSlice";
 import { onLoadAllBoards } from "../boardsSlice";
 import BoardDetailsHeader from "../components/BoardDetailsHeader";
+import useOnDragEnd from "../hooks/useOnDragEnd";
 import { BoardEntity } from "../types/BoardEntity";
 
 export default function BoardDetailsPage() {
@@ -42,6 +43,8 @@ export default function BoardDetailsPage() {
       (column) => column.boardId === boardId
     )
   );
+
+  const onDragEnd = useOnDragEnd(boardId || "no-id");
 
   useLayoutEffect(() => {
     const initialLoad = async () => {
@@ -97,16 +100,14 @@ export default function BoardDetailsPage() {
     dispatch(onUpdateColumn({ boardId: board._id, columnId, updateColumnDto }));
   };
 
-  /* TODO: tratar board não encontrada pelo id (redirecionar) */
+  /* TODO: deal with not found board (redirect to 404 page) */
 
   return (
     <>
       {loadingBoard ? (
         "loading..."
       ) : board ? (
-        <DragDropContext
-          onDragEnd={(par: any) => console.log("onDragEnd", par)}
-        >
+        <DragDropContext onDragEnd={onDragEnd}>
           <Box
             className="lim-board-page"
             sx={{
