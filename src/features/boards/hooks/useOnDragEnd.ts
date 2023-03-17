@@ -11,10 +11,12 @@ export default function useOnDragEnd(boardId: string) {
     const cardId = par.draggableId;
     // const sourceColumnId = par.source.droppableId;
     const targetColumnId = par.destination?.droppableId || "no-id";
+    const targetColumnIndex = par.destination?.index as number;
     const updatedCard: CardEntity = {
       ...allCards[cardId],
       columnId: targetColumnId,
       assignee: null,
+      index: targetColumnIndex,
     };
     dispatch(cardUpdated(updatedCard));
     dispatch(

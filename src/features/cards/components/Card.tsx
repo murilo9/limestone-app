@@ -5,7 +5,7 @@ import { Draggable } from "react-beautiful-dnd";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import { CardEntity } from "../types/CardEntity";
 import { CardCommentEntity } from "../../card-comments/types/CardComment";
-import { cardSelected } from "../cardsSlice";
+import { cardSelected, cardUpdated } from "../cardsSlice";
 import { cardPriorityColor } from "../types/CardPriorityColor";
 
 type CardProps = {
@@ -28,6 +28,17 @@ export default function Card({
   const onCardClick = () => {
     dispatch(cardSelected(card._id));
   };
+
+  useEffect(() => {
+    if (cardIndex !== card.index) {
+      dispatch(
+        cardUpdated({
+          ...card,
+          index: cardIndex,
+        })
+      );
+    }
+  }, [card.index, cardIndex]);
 
   return (
     <>

@@ -44,7 +44,7 @@ export default function CardsColumn({
     Object.values(state.cards.entities).filter(
       (card) => card.columnId === column._id
     )
-  );
+  ).sort((cardA, cardB) => cardA.index - cardB.index);
   const dispatch = useAppDispatch();
   const [showTitleInput, setShowTitleInput] = useState(false);
   const [editableColumnTitle, setEditableColumnTitle] = useState(column.title);
