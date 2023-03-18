@@ -19,6 +19,7 @@ import {
 } from "../../columns/columnsSlice";
 import Column from "../../columns/components/Column";
 import CreateColumnForm from "../../columns/components/CreateColumnForm";
+import { ColumnEntity } from "../../columns/types/ColumnEntity";
 import { UpdateColumnDto } from "../../columns/types/dto/UpdateColumnDto";
 import { confirmationDialogOpened } from "../../common/commonSlice";
 import { onLoadAllBoards } from "../boardsSlice";
@@ -98,11 +99,8 @@ export default function BoardDetailsPage() {
     );
   };
 
-  const handleUpdateColumn = (
-    updateColumnDto: UpdateColumnDto,
-    columnId: string
-  ) => {
-    dispatch(onUpdateColumn({ boardId: board._id, columnId, updateColumnDto }));
+  const handleUpdateColumn = (column: ColumnEntity) => {
+    dispatch(onUpdateColumn({ boardId: board._id, column }));
   };
 
   /* TODO: deal with not found board (redirect to 404 page) */
@@ -192,9 +190,7 @@ export default function BoardDetailsPage() {
                               onDelete={() =>
                                 handleDeleteColumnClick(column._id)
                               }
-                              onUpdate={(updateColumnDto) =>
-                                handleUpdateColumn(updateColumnDto, column._id)
-                              }
+                              onUpdate={handleUpdateColumn}
                             />
                           ))}
                         </Box>

@@ -44,6 +44,7 @@ import UsersAvatarsList from "./UsersAvatarsList";
 import { cardUpdated, onUpdateCard } from "../../cards/cardsSlice";
 import { CardEntity } from "../../cards/types/CardEntity";
 import useOnDragEnd from "../hooks/useOnDragEnd";
+import { ColumnEntity } from "../../columns/types/ColumnEntity";
 
 type BoardProps = {
   board: BoardEntity;
@@ -115,11 +116,8 @@ export default function Board({ board }: BoardProps) {
     );
   };
 
-  const handleUpdateColumn = (
-    updateColumnDto: UpdateColumnDto,
-    columnId: string
-  ) => {
-    dispatch(onUpdateColumn({ boardId: board._id, columnId, updateColumnDto }));
+  const handleUpdateColumn = (column: ColumnEntity) => {
+    dispatch(onUpdateColumn({ boardId: board._id, column }));
   };
 
   const onContextMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -194,9 +192,7 @@ export default function Board({ board }: BoardProps) {
                         showAddCardsButton={true}
                         editMode={editColumnsMode}
                         onDelete={() => handleDeleteColumnClick(column._id)}
-                        onUpdate={(updateColumnDto) =>
-                          handleUpdateColumn(updateColumnDto, column._id)
-                        }
+                        onUpdate={handleUpdateColumn}
                       />
                     ))}
                   </Box>

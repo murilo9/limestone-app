@@ -29,7 +29,7 @@ type BoardColumnProps = {
   showAddCardsButton: boolean;
   editMode: boolean;
   onDelete: () => void;
-  onUpdate: (updateColumnDto: UpdateColumnDto) => void;
+  onUpdate: (column: ColumnEntity) => void;
 };
 
 export default function CardsColumn({
@@ -73,6 +73,7 @@ export default function CardsColumn({
   ) => {
     if (event.key === "Enter") {
       onUpdate({
+        ...column,
         title: editableColumnTitle,
         index: column.index,
       });

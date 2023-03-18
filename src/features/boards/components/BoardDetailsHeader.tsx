@@ -121,7 +121,7 @@ export default function BoardDetailsHeader({
             />
             <Typography
               variant="body2"
-              sx={{ display: "inline-block" }}
+              sx={{ display: "inline-block", ml: 1 }}
             >
               Edit columns
             </Typography>
@@ -129,7 +129,7 @@ export default function BoardDetailsHeader({
           <UsersAvatarsList
             boardId={board._id}
             users={boardUsers}
-            sx={{ ml: 4 }}
+            sx={{ ml: 5 }}
           />
         </Grid>
         {/* <Board /> */}

@@ -44,20 +44,8 @@ export const onCreateColumn = createAsyncThunk(
 
 export const onUpdateColumn = createAsyncThunk(
   "columns/onUpdateColumn",
-  async ({
-    boardId,
-    columnId,
-    updateColumnDto,
-  }: {
-    boardId: string;
-    columnId: string;
-    updateColumnDto: UpdateColumnDto;
-  }) => {
-    const updateColumnRes = await updateColumn(
-      boardId,
-      columnId,
-      updateColumnDto
-    );
+  async ({ boardId, column }: { boardId: string; column: ColumnEntity }) => {
+    const updateColumnRes = await updateColumn(boardId, column._id, column);
     const updatedColumn = updateColumnRes.data;
     return updatedColumn;
   }
@@ -74,7 +62,12 @@ export const onDeleteColumn = createAsyncThunk(
 export const columnsSlice = createSlice({
   name: "columns",
   initialState,
-  reducers: {},
+  reducers: {
+    columnUpdated(state, action: PayloadAction<ColumnEntity[]>) {
+      const columns = action.payload;
+      columns.forEach((column) => (state.entities[column._id] = column));
+    },
+  },
   extraReducers: (builder) =>
     builder
       .addCase(onLoadColumns.fulfilled, (state, action) => {
@@ -94,5 +87,6 @@ export const columnsSlice = createSlice({
         delete state.entities[columnId];
       }),
 });
+export const { columnUpdated } = columnsSlice.actions;
 
 export default columnsSlice.reducer;

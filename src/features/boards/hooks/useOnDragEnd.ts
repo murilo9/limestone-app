@@ -2,13 +2,19 @@ import { DropResult, OnDragEndResponder } from "react-beautiful-dnd";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import { cardUpdated, onUpdateCard } from "../../cards/cardsSlice";
 import { CardEntity } from "../../cards/types/CardEntity";
+import { columnUpdated, onUpdateColumn } from "../../columns/columnsSlice";
 
 export default function useOnCardDragEnd(
   boardId: string,
   setIsDragging: (isDragging: boolean) => void
 ) {
   const dispatch = useAppDispatch();
+  const allColumns = useAppSelector((state) => state.columns.entities);
   const allCards = useAppSelector((state) => state.cards.entities);
+  const getBoardColumns = () =>
+    Object.values(allColumns)
+      .filter((column) => column.boardId === boardId)
+      .sort((columnA, columnB) => columnA.index - columnB.index);
   const getCardsByColumn = (columnId: string) =>
     Object.values(allCards)
       .filter((card) => card.columnId === columnId)
@@ -85,7 +91,23 @@ export default function useOnCardDragEnd(
   };
 
   const handleColumnDrag = (par: DropResult) => {
-    // TODO
+    if (!par.destination) {
+      return;
+    }
+    const sourceIndex = par.source.index;
+    const targetIndex = par.destination.index;
+    const boardColumns = getBoardColumns();
+    // Sort columns
+    let updatedColumns = reorder(boardColumns, sourceIndex, targetIndex);
+    // Update columns indexes
+    updatedColumns = updatedColumns.map((column, index) => ({
+      ...column,
+      index,
+    }));
+    dispatch(columnUpdated(updatedColumns));
+    updatedColumns.forEach((column) =>
+      dispatch(onUpdateColumn({ boardId, column }))
+    );
   };
 
   const onDragEnd: OnDragEndResponder = (par) => {
@@ -93,7 +115,6 @@ export default function useOnCardDragEnd(
       return;
     }
     setIsDragging(false);
-    console.log(par);
     const droppablePrefix = par.destination.droppableId.split("_")[0];
     if (droppablePrefix === "column") {
       handleCardDrag(par);
