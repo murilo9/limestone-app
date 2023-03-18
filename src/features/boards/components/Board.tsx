@@ -20,7 +20,11 @@ import {
 import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { BoardEntity } from "../types/BoardEntity";
 import Column from "../../columns/components/Column";
-import { DragDropContext, OnDragEndResponder } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Droppable,
+  OnDragEndResponder,
+} from "react-beautiful-dnd";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import {
   onCreateColumn,
@@ -50,6 +54,7 @@ export default function Board({ board }: BoardProps) {
   const [loadingColumns, setLoadingColumns] = useState(false);
   const [addingNewColumn, setAddingNewColumn] = useState(false);
   const [editColumnsMode, setEditColumnsMode] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const [contextMenuAnchorEl, setContextMenuAnchorEl] =
     React.useState<null | HTMLElement>(null);
   const showContextMenu = Boolean(contextMenuAnchorEl);
@@ -152,12 +157,12 @@ export default function Board({ board }: BoardProps) {
     dispatch(manageBoardPeopleChanged(board._id));
   };
 
-  const onDragEnd = useOnDragEnd(board._id);
+  const onDragEnd = useOnDragEnd(board._id, setIsDragging);
 
   const renderBoardDetails = () => (
     <>
       <Box
-        className="lim-detailed-columns-list"
+        className="lim-columns-list"
         sx={{
           width: "100%",
           whiteSpace: "nowrap",
@@ -167,21 +172,39 @@ export default function Board({ board }: BoardProps) {
       >
         {loadingColumns ? (
           <>
-            {columns.map((column) => (
-              <Column
-                key={column._id}
-                boardId={board._id}
-                columnId={column._id}
-                showAddCardsButton={true}
-                editMode={editColumnsMode}
-                onDelete={() => handleDeleteColumnClick(column._id)}
-                onUpdate={(updateColumnDto) =>
-                  handleUpdateColumn(updateColumnDto, column._id)
-                }
-              />
-            ))}
+            <Droppable
+              droppableId={"board_" + board._id}
+              direction="horizontal"
+              type="COLUMN"
+            >
+              {(provided) => (
+                <>
+                  <Box
+                    className="lim-droppable-columns-wrapper"
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    sx={{ display: "flex" }}
+                  >
+                    {columns.map((column, columnIndex) => (
+                      <Column
+                        key={column._id}
+                        boardId={board._id}
+                        columnId={column._id}
+                        columnIndex={columnIndex}
+                        showAddCardsButton={true}
+                        editMode={editColumnsMode}
+                        onDelete={() => handleDeleteColumnClick(column._id)}
+                        onUpdate={(updateColumnDto) =>
+                          handleUpdateColumn(updateColumnDto, column._id)
+                        }
+                      />
+                    ))}
+                  </Box>
+                </>
+              )}
+            </Droppable>
             {addingNewColumn ? "Adding..." : null}
-            {editColumnsMode ? (
+            {editColumnsMode && !isDragging ? (
               <CreateColumnForm onSubmit={handleCreateColumn} />
             ) : null}
           </>

@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import { createColumn } from "../../columns/api/createColumn";
@@ -34,17 +34,22 @@ export default function BoardDetailsPage() {
   const [editColumnsMode, setEditColumnsMode] = useState(false);
   // TODO: mover esta flag para a store, tanto aqui quanto no component Board
   const [addingNewColumn, setAddingNewColumn] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const board: BoardEntity | undefined = useAppSelector(
     (state) => state.boards.entities[boardId || ""]
   );
   const columns = useAppSelector((state) =>
-    Object.values(state.columns.entities).filter(
-      (column) => column.boardId === boardId
-    )
+    Object.values(state.columns.entities)
+      .filter((column) => column.boardId === boardId)
+      .sort((columnA, columnB) => columnA.index - columnB.index)
   );
 
-  const onDragEnd = useOnDragEnd(boardId || "no-id");
+  const onDragEnd = useOnDragEnd(boardId || "no-id", setIsDragging);
+
+  const onDragStart = () => {
+    setIsDragging(true);
+  };
 
   useLayoutEffect(() => {
     const initialLoad = async () => {
@@ -107,7 +112,10 @@ export default function BoardDetailsPage() {
       {loadingBoard ? (
         "loading..."
       ) : board ? (
-        <DragDropContext onDragEnd={onDragEnd}>
+        <DragDropContext
+          onDragEnd={onDragEnd}
+          onDragStart={onDragStart}
+        >
           <Box
             className="lim-board-page"
             sx={{
@@ -159,21 +167,41 @@ export default function BoardDetailsPage() {
               >
                 {!loadingColumns ? (
                   <>
-                    {columns.map((column) => (
-                      <Column
-                        key={column._id}
-                        boardId={board._id}
-                        columnId={column._id}
-                        showAddCardsButton={true}
-                        editMode={editColumnsMode}
-                        onDelete={() => handleDeleteColumnClick(column._id)}
-                        onUpdate={(updateColumnDto) =>
-                          handleUpdateColumn(updateColumnDto, column._id)
-                        }
-                      />
-                    ))}
+                    <Droppable
+                      droppableId={"board_" + board._id}
+                      direction="horizontal"
+                      type="COLUMN"
+                    >
+                      {(provided) => (
+                        <Box
+                          className="lim-droppable-columns-wrapper"
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          sx={{
+                            display: "flex",
+                          }}
+                        >
+                          {columns.map((column, columnIndex) => (
+                            <Column
+                              key={column._id}
+                              boardId={board._id}
+                              columnId={column._id}
+                              columnIndex={columnIndex}
+                              showAddCardsButton={true}
+                              editMode={editColumnsMode}
+                              onDelete={() =>
+                                handleDeleteColumnClick(column._id)
+                              }
+                              onUpdate={(updateColumnDto) =>
+                                handleUpdateColumn(updateColumnDto, column._id)
+                              }
+                            />
+                          ))}
+                        </Box>
+                      )}
+                    </Droppable>
                     {addingNewColumn ? "Adding..." : null}
-                    {editColumnsMode ? (
+                    {editColumnsMode && !isDragging ? (
                       <CreateColumnForm onSubmit={handleCreateColumn} />
                     ) : null}
                   </>

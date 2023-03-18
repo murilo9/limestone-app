@@ -5,7 +5,7 @@ import {
   DragHandle,
   DragIndicator,
 } from "@mui/icons-material";
-import { Box, IconButton, TextField, Typography } from "@mui/material";
+import { Box, IconButton, Paper, TextField, Typography } from "@mui/material";
 import React, {
   KeyboardEventHandler,
   useContext,
@@ -25,6 +25,7 @@ const COLUMN_FIXED_HEIGHT = "34px";
 type BoardColumnProps = {
   boardId: string;
   columnId: string;
+  columnIndex: number;
   showAddCardsButton: boolean;
   editMode: boolean;
   onDelete: () => void;
@@ -34,6 +35,7 @@ type BoardColumnProps = {
 export default function CardsColumn({
   boardId,
   columnId,
+  columnIndex,
   showAddCardsButton,
   editMode,
   onDelete,
@@ -81,120 +83,148 @@ export default function CardsColumn({
 
   return (
     <>
-      <Box
-        className="lim-cards-column"
-        sx={{
-          width: "240px",
-          display: "inline-block",
-          "&:not(:last-child)": { mr: 2 },
-          pb: 2,
-          flex: "none",
-        }}
+      <Draggable
+        key={column._id}
+        draggableId={column._id}
+        index={columnIndex}
       >
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            height: COLUMN_FIXED_HEIGHT,
-          }}
-        >
-          {showTitleInput ? (
-            <TextField
-              size="small"
-              variant="standard"
-              autoFocus
-              value={editableColumnTitle}
-              onChange={(event) => setEditableColumnTitle(event.target.value)}
-              onBlur={handleColumnTitleInputBlur}
-              onKeyUp={handleColumnTitleInputKeyPress}
-              InputProps={{
-                sx: { fontSize: "14px", fontWeight: 500 },
-              }}
-            />
-          ) : (
-            <Typography
-              variant="subtitle2"
-              onClick={() => setShowTitleInput(editMode)}
-              sx={{
-                flex: "1 1",
-                textOverflow: "ellipsis",
-                overflow: "hidden",
-              }}
-            >
-              {showUpdatedColumnTitle ? editableColumnTitle : column.title}
-            </Typography>
-          )}
-          {editMode ? (
-            <>
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <IconButton
-                  size="small"
-                  color="error"
-                  onClick={onDelete}
-                >
-                  <DeleteOutline />
-                </IconButton>
-                <Box
-                  sx={{
-                    display: "inline-flex",
-                    cursor: "pointer",
-                    ml: 1,
-                    px: "4px",
-                  }}
-                >
-                  <DragIndicator />
-                </Box>
-              </Box>
-            </>
-          ) : showAddCardsButton ? (
-            <IconButton
-              color="primary"
-              onClick={() =>
-                dispatch(
-                  createCardModalOpened({
-                    boardId,
-                    columnId,
-                    index: cards.length,
-                  })
-                )
-              }
-            >
-              <Add />
-            </IconButton>
-          ) : null}
-        </Box>
-        <Droppable droppableId={column._id}>
-          {(provided) => (
+        {(provided, snapshot) => (
+          <Paper
+            elevation={0}
+            className="lim-cards-column"
+            sx={{
+              width: "240px",
+              display: "inline-block",
+              mr: 2,
+              pt: 0.5,
+              boxSizing: "border-box",
+              flex: "none",
+              height: "100%",
+              ":active":
+                editMode && snapshot.isDragging
+                  ? {
+                      boxShadow:
+                        "0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%)",
+                    }
+                  : null,
+            }}
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+          >
             <Box
-              className="lim-drag-container"
-              {...provided.droppableProps}
-              ref={provided.innerRef}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                height: COLUMN_FIXED_HEIGHT,
+                mb: 1,
+              }}
             >
-              {fetchingCards ? (
-                "Loading cards..."
-              ) : cards.length ? (
-                cards.map((card, cardIndex) => (
-                  <Card
-                    card={card}
-                    cardIndex={cardIndex}
-                    columnId={column._id}
-                    boardId={boardId}
-                  />
-                ))
+              {showTitleInput ? (
+                <TextField
+                  size="small"
+                  variant="standard"
+                  autoFocus
+                  value={editableColumnTitle}
+                  onChange={(event) =>
+                    setEditableColumnTitle(event.target.value)
+                  }
+                  onBlur={handleColumnTitleInputBlur}
+                  onKeyUp={handleColumnTitleInputKeyPress}
+                  InputProps={{
+                    sx: { fontSize: "14px", fontWeight: 500 },
+                  }}
+                />
               ) : (
                 <Typography
-                  variant="caption"
-                  textAlign="center"
-                  sx={{ fontStyle: "italic" }}
+                  variant="subtitle2"
+                  onClick={() => setShowTitleInput(editMode)}
+                  sx={{
+                    flex: "1 1",
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
+                  }}
                 >
-                  Empty
+                  {showUpdatedColumnTitle ? editableColumnTitle : column.title}
                 </Typography>
               )}
+              {editMode ? (
+                <>
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <IconButton
+                      size="small"
+                      color="error"
+                      onClick={onDelete}
+                    >
+                      <DeleteOutline />
+                    </IconButton>
+                    <Box
+                      sx={{
+                        display: "inline-flex",
+                        cursor: "pointer",
+                        ml: 1,
+                        px: "4px",
+                      }}
+                      {...provided.dragHandleProps}
+                    >
+                      <DragIndicator />
+                    </Box>
+                  </Box>
+                </>
+              ) : showAddCardsButton ? (
+                <IconButton
+                  sx={{ mr: -1 }}
+                  color="primary"
+                  onClick={() =>
+                    dispatch(
+                      createCardModalOpened({
+                        boardId,
+                        columnId,
+                        index: cards.length,
+                      })
+                    )
+                  }
+                >
+                  <Add />
+                </IconButton>
+              ) : null}
             </Box>
-          )}
-        </Droppable>
-      </Box>
+            <Droppable
+              droppableId={"column_" + column._id}
+              type="CARD"
+            >
+              {(provided) => (
+                <Box
+                  className="lim-drag-container"
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {fetchingCards ? (
+                    "Loading cards..."
+                  ) : cards.length ? (
+                    cards.map((card, cardIndex) => (
+                      <Card
+                        card={card}
+                        cardIndex={cardIndex}
+                        columnId={column._id}
+                        boardId={boardId}
+                      />
+                    ))
+                  ) : (
+                    <Typography
+                      variant="caption"
+                      textAlign="center"
+                      sx={{ fontStyle: "italic" }}
+                    >
+                      Empty
+                    </Typography>
+                  )}
+                </Box>
+              )}
+            </Droppable>
+          </Paper>
+        )}
+      </Draggable>
     </>
   );
 }

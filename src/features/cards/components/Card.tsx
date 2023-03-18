@@ -1,11 +1,11 @@
 import { Circle, Comment } from "@mui/icons-material";
 import { Avatar, Box, Grid, Rating, Skeleton, Typography } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import { CardEntity } from "../types/CardEntity";
 import { CardCommentEntity } from "../../card-comments/types/CardComment";
-import { cardSelected, cardUpdated } from "../cardsSlice";
+import { cardSelected, cardUpdated, onUpdateCard } from "../cardsSlice";
 import { cardPriorityColor } from "../types/CardPriorityColor";
 
 type CardProps = {
@@ -24,21 +24,11 @@ export default function Card({
   const users = useAppSelector((state) => state.users.entities);
   const cardAssignee = card.assignee ? users[card.assignee] : null;
   const dispatch = useAppDispatch();
+  const [lastIndex, setLastIndex] = useState(card.index);
 
   const onCardClick = () => {
     dispatch(cardSelected(card._id));
   };
-
-  useEffect(() => {
-    if (cardIndex !== card.index) {
-      dispatch(
-        cardUpdated({
-          ...card,
-          index: cardIndex,
-        })
-      );
-    }
-  }, [card.index, cardIndex]);
 
   return (
     <>

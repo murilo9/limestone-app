@@ -107,9 +107,9 @@ export const cardsSlice = createSlice({
       const cardId = action.payload;
       state.selectedCardId = cardId;
     },
-    cardUpdated(state, action: PayloadAction<CardEntity>) {
-      const card = action.payload;
-      state.entities[card._id] = card;
+    cardUpdated(state, action: PayloadAction<CardEntity[]>) {
+      const cards = action.payload;
+      cards.forEach((card) => (state.entities[card._id] = card));
     },
   },
   extraReducers: (builder) =>
