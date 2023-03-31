@@ -3,6 +3,7 @@ import { Box, Button, Container, Grid, MenuItem, Select } from "@mui/material";
 import React, { useState } from "react";
 import Logo from "../assets/logo.svg";
 import { useAuth } from "../hooks/useAuth";
+import SignDialog from "./SignDialog";
 
 const localeDictionary: { [key: string]: string } = {
   en: "English",
@@ -11,7 +12,15 @@ const localeDictionary: { [key: string]: string } = {
 
 export default function LandingHeader() {
   const [locale, setLocale] = useState("en");
-  const { signIn } = useAuth();
+  const [showSignDialog, setShowSignDialog] = useState(false);
+
+  const onCloseSignDialog = () => {
+    setShowSignDialog(false);
+  };
+
+  const onOpenSignDialog = () => {
+    setShowSignDialog(true);
+  };
 
   return (
     <>
@@ -91,17 +100,16 @@ export default function LandingHeader() {
             <Button
               disableElevation
               variant="contained"
-              onClick={() =>
-                signIn({
-                  email: "murilohenriquematias@gmail.com",
-                  password: "Murilo#321",
-                })
-              }
+              onClick={onOpenSignDialog}
             >
               Sign In
             </Button>
           </Grid>
         </Grid>
+        <SignDialog
+          show={showSignDialog}
+          onClose={onCloseSignDialog}
+        />
       </Box>
     </>
   );
