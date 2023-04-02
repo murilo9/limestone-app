@@ -36,6 +36,7 @@ export default function BoardDetailsPage() {
   // TODO: mover esta flag para a store, tanto aqui quanto no component Board
   const [addingNewColumn, setAddingNewColumn] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [query, setQuery] = useState("");
 
   const board: BoardEntity | undefined = useAppSelector(
     (state) => state.boards.entities[boardId || ""]
@@ -153,6 +154,8 @@ export default function BoardDetailsPage() {
                 board={board}
                 editColumnsMode={editColumnsMode}
                 setEditColumnsMode={setEditColumnsMode}
+                query={query}
+                setQuery={setQuery}
               />
               <Box
                 className="lim-columns-list"
@@ -192,6 +195,7 @@ export default function BoardDetailsPage() {
                                 handleDeleteColumnClick(column._id)
                               }
                               onUpdate={handleUpdateColumn}
+                              query={query}
                             />
                           ))}
                         </Box>

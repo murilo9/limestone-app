@@ -1,4 +1,9 @@
-import { FilterAltOutlined, AddCircle, Search } from "@mui/icons-material";
+import {
+  FilterAltOutlined,
+  AddCircle,
+  Search,
+  Close,
+} from "@mui/icons-material";
 import {
   Grid,
   Typography,
@@ -15,12 +20,21 @@ import { createUserModalChanged } from "../usersSlice";
 
 export const PEOPLE_HEADER_HEIGHTS = { xs: "120px", md: "56px" };
 
-export default function PeopleHeader() {
+type PeopleHeaderProps = {
+  query: string;
+  setQuery: (value: string) => void;
+};
+
+export default function PeopleHeader({ query, setQuery }: PeopleHeaderProps) {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
   const onAddUserClick = () => {
     dispatch(createUserModalChanged(true));
+  };
+
+  const onClearQuery = () => {
+    setQuery("");
   };
 
   return (
@@ -92,9 +106,20 @@ export default function PeopleHeader() {
               placeholder="Search"
               variant="standard"
               sx={{ width: { xs: "100%", md: "auto" } }}
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
               InputProps={{
-                endAdornment: (
-                  <Search sx={{ color: theme.palette.text.disabled }} />
+                endAdornment: query ? (
+                  <IconButton
+                    onClick={onClearQuery}
+                    size="small"
+                  >
+                    <Close />
+                  </IconButton>
+                ) : (
+                  <Search
+                    sx={{ color: theme.palette.text.disabled, p: "5px" }}
+                  />
                 ),
                 sx: {
                   px: 2,

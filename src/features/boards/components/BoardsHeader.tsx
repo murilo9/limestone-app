@@ -1,4 +1,9 @@
-import { FilterAltOutlined, AddCircle, Search } from "@mui/icons-material";
+import {
+  FilterAltOutlined,
+  AddCircle,
+  Search,
+  Close,
+} from "@mui/icons-material";
 import {
   Grid,
   Typography,
@@ -15,12 +20,21 @@ import { createBoardModalChanged } from "../boardsSlice";
 
 export const BOARDS_HEADER_HEIGHTS = { xs: "120px", md: "56px" };
 
-export default function BoardsHeader() {
+type BoardsHeaderProps = {
+  query: string;
+  setQuery: (value: string) => void;
+};
+
+export default function BoardsHeader({ query, setQuery }: BoardsHeaderProps) {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
   const onCreatBoardButtonClick = () => {
     dispatch(createBoardModalChanged(true));
+  };
+
+  const onClearQuery = () => {
+    setQuery("");
   };
 
   return (
@@ -93,13 +107,24 @@ export default function BoardsHeader() {
               variant="standard"
               sx={{ width: { xs: "100%", md: "auto" } }}
               InputProps={{
-                endAdornment: (
-                  <Search sx={{ color: theme.palette.text.disabled }} />
+                endAdornment: query ? (
+                  <IconButton
+                    onClick={onClearQuery}
+                    size="small"
+                  >
+                    <Close />
+                  </IconButton>
+                ) : (
+                  <Search
+                    sx={{ color: theme.palette.text.disabled, p: "5px" }}
+                  />
                 ),
                 sx: {
                   px: 2,
                 },
               }}
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
             />
             <Button
               disableElevation

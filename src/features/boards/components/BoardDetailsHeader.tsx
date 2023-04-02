@@ -1,4 +1,9 @@
-import { FilterAltOutlined, AddCircle, Search } from "@mui/icons-material";
+import {
+  FilterAltOutlined,
+  AddCircle,
+  Search,
+  Close,
+} from "@mui/icons-material";
 import {
   Grid,
   Typography,
@@ -25,18 +30,26 @@ type BoardDetailsHeaderProps = {
   board: BoardEntity;
   editColumnsMode: boolean;
   setEditColumnsMode: (value: boolean) => void;
+  query: string;
+  setQuery: (value: string) => void;
 };
 
 export default function BoardDetailsHeader({
   board,
   editColumnsMode,
   setEditColumnsMode,
+  query,
+  setQuery,
 }: BoardDetailsHeaderProps) {
   const theme = useTheme();
   const users = useAppSelector((state) => state.users.entities);
   const boardUsers = Object.values(users).filter((user) =>
     board.users.find((boardUserId) => boardUserId === user._id)
   );
+
+  const onClearQuery = () => {
+    setQuery("");
+  };
 
   return (
     <>
@@ -81,13 +94,27 @@ export default function BoardDetailsHeader({
             variant="standard"
             sx={{ width: { xs: "100%", md: "auto" } }}
             InputProps={{
-              endAdornment: (
-                <Search sx={{ color: theme.palette.text.disabled }} />
+              endAdornment: query ? (
+                <IconButton
+                  onClick={onClearQuery}
+                  size="small"
+                >
+                  <Close />
+                </IconButton>
+              ) : (
+                <Search
+                  sx={{
+                    color: theme.palette.text.disabled,
+                    p: "5px",
+                  }}
+                />
               ),
               sx: {
                 px: 2,
               },
             }}
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
           />
         </Grid>
 

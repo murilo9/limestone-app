@@ -19,6 +19,7 @@ import Card from "../../cards/components/Card";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { UpdateColumnDto } from "../types/dto/UpdateColumnDto";
 import { createCardModalOpened, onFetchCards } from "../../cards/cardsSlice";
+import { CardEntity } from "../../cards/types/CardEntity";
 
 const COLUMN_FIXED_HEIGHT = "34px";
 
@@ -30,7 +31,11 @@ type BoardColumnProps = {
   editMode: boolean;
   onDelete: () => void;
   onUpdate: (column: ColumnEntity) => void;
+  query: string;
 };
+
+const filterCardByQuery = (query: string, card: CardEntity) =>
+  card.title.toLowerCase().includes(query.toLowerCase());
 
 export default function CardsColumn({
   boardId,
@@ -40,6 +45,7 @@ export default function CardsColumn({
   editMode,
   onDelete,
   onUpdate,
+  query,
 }: BoardColumnProps) {
   const column = useAppSelector((state) => state.columns.entities[columnId]);
   const cards = useAppSelector((state) =>
@@ -204,14 +210,20 @@ export default function CardsColumn({
                   {fetchingCards ? (
                     "Loading cards..."
                   ) : cards.length ? (
-                    cards.map((card, cardIndex) => (
-                      <Card
-                        card={card}
-                        cardIndex={cardIndex}
-                        columnId={column._id}
-                        boardId={boardId}
-                      />
-                    ))
+                    cards
+                      .filter((card) =>
+                        query.trim()
+                          ? filterCardByQuery(query.trim(), card)
+                          : true
+                      )
+                      .map((card, cardIndex) => (
+                        <Card
+                          card={card}
+                          cardIndex={cardIndex}
+                          columnId={column._id}
+                          boardId={boardId}
+                        />
+                      ))
                   ) : (
                     <Typography
                       variant="caption"

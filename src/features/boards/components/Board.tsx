@@ -194,6 +194,7 @@ export default function Board({ board }: BoardProps) {
                         editMode={editColumnsMode}
                         onDelete={() => handleDeleteColumnClick(column._id)}
                         onUpdate={handleUpdateColumn}
+                        query={""}
                       />
                     ))}
                   </Box>
