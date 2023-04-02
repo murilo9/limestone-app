@@ -166,6 +166,7 @@ export default function Board({ board }: BoardProps) {
           whiteSpace: "nowrap",
           display: "flex",
           overflowX: "auto",
+          pb: 1,
         }}
       >
         {loadingColumns ? (

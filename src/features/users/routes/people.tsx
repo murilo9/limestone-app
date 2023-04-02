@@ -16,9 +16,10 @@ export default function PeoplePage() {
         sx={{
           px: "0 !important",
           margin: "auto",
-          position: "relative",
           width: "100%",
           height: "100%",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <PeopleHeader />
@@ -26,10 +27,9 @@ export default function PeoplePage() {
           className="lim-people-list"
           sx={{
             width: "100%",
-            height: "100%",
+            flex: "1 1",
             overflowY: "auto",
             boxSizing: "border-box",
-            pt: PEOPLE_HEADER_HEIGHTS,
             display: "flex",
             justifyContent: "center",
           }}
@@ -38,10 +38,40 @@ export default function PeoplePage() {
             container
             maxWidth="xl"
             spacing={2}
-            sx={{ px: { xs: 3, xl: 0 }, py: 6 }}
+            sx={{ px: { xs: 3, xl: 0 }, py: 4 }}
           >
             {Object.entries(people).map(([userId, user]) => (
               <>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={3}
+                  key={userId}
+                >
+                  <UserCard user={user} />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={3}
+                  key={userId}
+                >
+                  <UserCard user={user} />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={3}
+                  key={userId}
+                >
+                  <UserCard user={user} />
+                </Grid>
                 <Grid
                   item
                   xs={12}

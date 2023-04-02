@@ -20,7 +20,6 @@ export default function BoardsHeader() {
   const dispatch = useAppDispatch();
 
   const onCreatBoardButtonClick = () => {
-    console.log("dispatching");
     dispatch(createBoardModalChanged(true));
   };
 
@@ -29,11 +28,8 @@ export default function BoardsHeader() {
       <Box
         sx={{
           width: "100%",
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
           backdropFilter: "blur(14px)",
+          py: 4,
         }}
       >
         <Grid

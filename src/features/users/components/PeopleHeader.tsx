@@ -28,11 +28,8 @@ export default function PeopleHeader() {
       <Box
         sx={{
           width: "100%",
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
           backdropFilter: "blur(14px)",
+          py: { xs: 2, md: 4 },
         }}
       >
         <Grid

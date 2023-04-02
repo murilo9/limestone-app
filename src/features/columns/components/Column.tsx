@@ -94,6 +94,7 @@ export default function CardsColumn({
             elevation={0}
             className="lim-cards-column"
             sx={{
+              bgcolor: "transparent",
               width: "240px",
               display: "inline-block",
               mr: 2,

@@ -1,6 +1,6 @@
-import { createTheme } from "@mui/material";
+import { createTheme, responsiveFontSizes } from "@mui/material";
 
-export const limestoneTheme = createTheme({
+const theme = createTheme({
   palette: {
     primary: {
       light: "#7297A9",
@@ -64,3 +64,5 @@ export const limestoneTheme = createTheme({
     },
   },
 });
+
+export const limestoneTheme = responsiveFontSizes(theme);

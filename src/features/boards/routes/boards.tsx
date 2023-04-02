@@ -21,9 +21,10 @@ export default function BoardsPage() {
         sx={{
           px: "0 !important",
           margin: "auto",
-          position: "relative",
           width: "100%",
           height: "100%",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <BoardsHeader />
@@ -31,16 +32,15 @@ export default function BoardsPage() {
           className="lim-boards-list"
           sx={{
             width: "100%",
-            height: "100%",
+            flex: "1 1",
             overflowY: "auto",
             boxSizing: "border-box",
-            pt: BOARDS_HEADER_HEIGHTS,
           }}
         >
           <Grid
             container
             maxWidth="xl"
-            sx={{ px: { xs: 3, xl: 0 }, margin: "auto", py: 6 }}
+            sx={{ px: { xs: 3, xl: 0 }, margin: "auto", py: 4 }}
           >
             {Object.entries(boards).map(([boardId, board]) => (
               <Grid

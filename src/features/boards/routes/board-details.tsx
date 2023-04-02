@@ -129,7 +129,8 @@ export default function BoardDetailsPage() {
               maxWidth="xl"
               sx={{
                 px: { xs: 3, xl: 0 },
-                py: 6,
+                pt: 6,
+                pb: { xs: 0, sm: 6 },
                 display: "flex",
                 flexDirection: "column",
               }}

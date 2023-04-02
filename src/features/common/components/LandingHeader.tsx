@@ -30,7 +30,7 @@ export default function LandingHeader() {
           top: 0,
           left: 0,
           width: "100vw",
-          height: { xs: "56px", sm: "80px", md: "80px" },
+          height: { xs: "64px", sm: "80px", md: "80px" },
           borderBottom: "1px solid rgba(0,0,0,0.2)",
           px: { xs: 3, md: 8 },
           boxSizing: "border-box",
