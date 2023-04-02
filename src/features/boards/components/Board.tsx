@@ -229,7 +229,6 @@ export default function Board({ board }: BoardProps) {
                 <UsersAvatarsList
                   boardId={board._id}
                   users={boardUsers}
-                  sx={{ mr: 2 }}
                 />
                 <IconButton onClick={onContextMenuClick}>
                   <MoreHoriz />

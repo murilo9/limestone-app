@@ -1,4 +1,13 @@
-import { Avatar, Box, Tooltip, Typography, useTheme } from "@mui/material";
+import { PersonAddAlt } from "@mui/icons-material";
+import {
+  Avatar,
+  Box,
+  Button,
+  IconButton,
+  Tooltip,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import React from "react";
 import { useAppDispatch } from "../../../store";
 import { firstLetters } from "../../common/utils/firstLetters";
@@ -69,12 +78,27 @@ export default function UsersAvatarsList({
       </Box>
     </Tooltip>
   ) : (
-    <Typography
-      variant="body1"
-      fontStyle="italic"
-      sx={{ ...sx }}
-    >
-      Nobody in this board
-    </Typography>
+    <>
+      <Button
+        disableElevation
+        color="secondary"
+        sx={{
+          ...sx,
+          display: { xs: "none", sm: "block" },
+          mr: 2,
+        }}
+        onClick={onClick}
+        variant="contained"
+      >
+        Add People
+      </Button>
+      <IconButton
+        sx={{ ...sx, display: { xs: "flex", sm: "none" } }}
+        onClick={onClick}
+        color="primary"
+      >
+        <PersonAddAlt />
+      </IconButton>
+    </>
   );
 }

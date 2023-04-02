@@ -137,7 +137,7 @@ export default function BoardDetailsPage() {
             >
               <Breadcrumbs
                 aria-label="breadcrumb"
-                sx={{ mb: 4 }}
+                sx={{ mb: { xs: 0, md: 4 } }}
               >
                 <Link
                   underline="hover"

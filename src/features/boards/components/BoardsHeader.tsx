@@ -29,7 +29,7 @@ export default function BoardsHeader() {
         sx={{
           width: "100%",
           backdropFilter: "blur(14px)",
-          py: 4,
+          py: { xs: 2, sm: 4 },
         }}
       >
         <Grid

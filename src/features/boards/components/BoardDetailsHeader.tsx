@@ -41,17 +41,20 @@ export default function BoardDetailsHeader({
   return (
     <>
       <Grid
+        className="lim-board-details-header"
         container
         maxWidth="xl"
         sx={{
           mx: 0,
           mb: 6,
+          mt: { xs: 3, md: 0 },
         }}
       >
         <Grid
           item
           xs={0}
           md={4}
+          sx={{ display: { xs: "none", md: "block" } }}
         >
           <Typography
             variant="h5"
@@ -62,31 +65,15 @@ export default function BoardDetailsHeader({
             {board.title}
           </Typography>
         </Grid>
-        <Grid
-          item
-          xs={6}
-          md={4}
-          sx={{
-            display: { xs: "flex", md: "none" },
-            justifyContent: "flex-end",
-          }}
-        >
-          <IconButton
-            color="primary"
-            sx={{ pr: 0 }}
-          >
-            <AddCircle sx={{ fontSize: "40px" }} />
-          </IconButton>
-        </Grid>
 
         <Grid
           item
-          xs={6}
+          xs={12}
+          sm={6}
           md={4}
           sx={{
             display: "flex",
             alignItems: "center",
-            mt: { xs: 3, md: 0 },
           }}
         >
           <TextField
@@ -106,14 +93,17 @@ export default function BoardDetailsHeader({
 
         <Grid
           item
-          xs={4}
+          xs={12}
+          sm={6}
+          md={4}
           sx={{
-            display: { xs: "none", md: "flex" },
-            justifyContent: "flex-end",
+            justifyContent: { xs: "space-between", sm: "flex-end" },
             alignItems: "center",
+            display: "flex",
+            mt: { xs: 2, sm: 0 },
           }}
         >
-          <Box>
+          <Box sx={{ mr: { xs: 0, sm: 3 } }}>
             <Switch
               size="small"
               value={editColumnsMode}
@@ -129,10 +119,8 @@ export default function BoardDetailsHeader({
           <UsersAvatarsList
             boardId={board._id}
             users={boardUsers}
-            sx={{ ml: 5 }}
           />
         </Grid>
-        {/* <Board /> */}
       </Grid>
     </>
   );
