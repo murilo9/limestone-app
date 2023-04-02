@@ -3,15 +3,10 @@ import { Box, Button, Container, Grid, MenuItem, Select } from "@mui/material";
 import React, { useState } from "react";
 import Logo from "../assets/logo.svg";
 import { useAuth } from "../hooks/useAuth";
+import LocaleSelect from "./LocaleSelect";
 import SignDialog from "./SignDialog";
 
-const localeDictionary: { [key: string]: string } = {
-  en: "English",
-  "pt-BR": "Português",
-};
-
 export default function LandingHeader() {
-  const [locale, setLocale] = useState("en");
   const [showSignDialog, setShowSignDialog] = useState(false);
 
   const onCloseSignDialog = () => {
@@ -72,25 +67,7 @@ export default function LandingHeader() {
               justifyContent: { xs: "flex-end", md: "space-between" },
             }}
           >
-            <Select
-              size="small"
-              value={locale}
-              onChange={(event) => setLocale(event.target.value)}
-              renderValue={(value) => (
-                <>
-                  <Box sx={{ display: "flex" }}>
-                    <Language />
-                    <Box sx={{ ml: 1, display: { xs: "none", sm: "inline" } }}>
-                      {localeDictionary[value]}
-                    </Box>
-                  </Box>
-                </>
-              )}
-              sx={{ mr: 2, width: { xs: "auto", sm: "170px" } }}
-            >
-              <MenuItem value="en">English</MenuItem>
-              <MenuItem value="pt-BR">Portugês</MenuItem>
-            </Select>
+            <LocaleSelect sx={{ mr: 2, width: { xs: "auto", sm: "170px" } }} />
             <Button sx={{ display: { xs: "none", md: "block" } }}>
               Learn more
             </Button>

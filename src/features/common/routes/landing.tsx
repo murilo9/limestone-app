@@ -5,6 +5,10 @@ import { signIn } from "../api/signIn";
 import LandingHeader from "../components/LandingHeader";
 import landingBkg from "../assets/landing-bkg.png";
 import LandingStart from "../components/LandingStart";
+import LandingTutorial from "../components/LandingTutorial";
+import LandingFeatured from "../components/LandingFeatured";
+import LandingUpcomingFeatures from "../components/LandingUpcomingFeatures";
+import LandingFooter from "../components/LandingFooter";
 
 const PHONE_HEADER_HEIGHT = "56px";
 const TABLET_HEADER_HEIGHT = "80px";
@@ -72,6 +76,10 @@ export default function LandingPage() {
         >
           <LandingStart />
         </Grid>
+        <LandingTutorial />
+        <LandingFeatured />
+        <LandingUpcomingFeatures />
+        <LandingFooter />
       </Box>
     </>
   );
