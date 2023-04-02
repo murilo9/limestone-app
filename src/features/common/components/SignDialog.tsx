@@ -1,17 +1,21 @@
 import {
   Alert,
   Box,
+  Button,
   Dialog,
   DialogContent,
   DialogTitle,
+  Divider,
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import React, { useEffect, useState } from "react";
 import { signUp } from "../api/signUp";
 import { useAuth } from "../hooks/useAuth";
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
+import gLogo from "../assets/g-logo.png";
 
 type SignDialogProps = {
   show: boolean;
@@ -22,7 +26,7 @@ export default function SignDialog({ show, onClose }: SignDialogProps) {
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [signUpDone, setSignUpDone] = useState(false);
   const [fetching, setFetching] = useState(false);
-  const { signIn } = useAuth();
+  const { signIn, googleSign } = useAuth();
 
   const closeDialog = () => {
     setMode("signin");
@@ -77,6 +81,14 @@ export default function SignDialog({ show, onClose }: SignDialogProps) {
       .finally(() => setFetching(false));
   };
 
+  const onGoogleLoginClick = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      const { access_token } = tokenResponse;
+      googleSign(access_token);
+      // TODO: catch Google sign error
+    },
+  });
+
   return (
     <>
       <Dialog
@@ -111,6 +123,19 @@ export default function SignDialog({ show, onClose }: SignDialogProps) {
               />
             )}
           </Box>
+          <Divider sx={{ my: 3 }}>OR</Divider>
+          <Button
+            variant="outlined"
+            fullWidth
+            onClick={() => onGoogleLoginClick()}
+          >
+            <img
+              src={gLogo}
+              alt="google-signin-logo"
+              style={{ height: "80%", marginRight: "8px" }}
+            />
+            Sign In with Google
+          </Button>
         </DialogContent>
       </Dialog>
     </>

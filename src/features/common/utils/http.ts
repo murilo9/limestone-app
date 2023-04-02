@@ -1,8 +1,11 @@
 import axios, { AxiosPromise } from "axios";
 
-const baseUrl = "http://localhost:8080";
-
 const env = process.env.REACT_APP_ENV || "development";
+
+const baseUrl =
+  env === "production"
+    ? "http://api.limestone.app.br"
+    : "http://localhost:8080";
 
 export function get<T = any>(
   route: string,
