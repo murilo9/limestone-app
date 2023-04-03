@@ -20,7 +20,7 @@ export function get<T = any>(
     url: (options?.customBaseUrl || baseUrl) + route,
     params: options?.params || {},
     headers: {
-      access_token: localStorage.getItem("access_token") || "",
+      Authorization: localStorage.getItem("access_token") || "",
       ...options?.headers,
     },
   }) as AxiosPromise<T>;
@@ -41,7 +41,7 @@ export function post<T = any>(
     url: (options?.customBaseUrl || baseUrl) + route,
     data,
     headers: {
-      access_token: localStorage.getItem("access_token") || "",
+      Authorization: localStorage.getItem("access_token") || "",
       ...options?.headers,
     },
     ...options,
@@ -62,7 +62,7 @@ export function put<T>(
     url: (options?.customBaseUrl || baseUrl) + route,
     data,
     headers: {
-      access_token: localStorage.getItem("access_token") || "",
+      Authorization: localStorage.getItem("access_token") || "",
       ...options?.headers,
     },
     ...options,
@@ -82,7 +82,7 @@ export function delette<T = any>(
     url: (options?.customBaseUrl || baseUrl) + route,
     params: options?.params || {},
     headers: {
-      access_token: localStorage.getItem("access_token") || "",
+      Authorization: localStorage.getItem("access_token") || "",
       ...options?.headers,
     },
   });
