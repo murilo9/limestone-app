@@ -28,7 +28,7 @@ export default function LandingTutorial() {
           fontSize="22px"
           sx={{ mb: 8 }}
         >
-          Make the presernce of people who you're going to work with.
+          Make people who you're going to work with be present.
         </Typography>
         <img
           className="lim-landing-tutorial-image"
@@ -95,7 +95,7 @@ export default function LandingTutorial() {
           fontWeight={600}
           sx={{ mb: 2 }}
         >
-          Step 4. Manage
+          Step 4. Manage with ease
         </Typography>
         <Typography
           variant="subtitle1"
@@ -104,7 +104,7 @@ export default function LandingTutorial() {
           fontSize="22px"
           sx={{ mb: 8 }}
         >
-          Keep everything in order by moving card between columns and adding
+          Keep everything in order by moving cards between columns and adding
           comments on them.
         </Typography>
         <img
