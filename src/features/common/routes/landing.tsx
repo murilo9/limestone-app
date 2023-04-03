@@ -1,6 +1,6 @@
 import { Typography, Button, Box, Grid } from "@mui/material";
 import { Container } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
 import { signIn } from "../api/signIn";
 import LandingHeader from "../components/LandingHeader";
 import landingBkg from "../assets/landing-bkg.png";
@@ -9,15 +9,25 @@ import LandingTutorial from "../components/LandingTutorial";
 import LandingFeatured from "../components/LandingFeatured";
 import LandingUpcomingFeatures from "../components/LandingUpcomingFeatures";
 import LandingFooter from "../components/LandingFooter";
+import SignDialog from "../components/SignDialog";
 
 const PHONE_HEADER_HEIGHT = "56px";
 const TABLET_HEADER_HEIGHT = "80px";
 const DESKTOP_HEADER_HEIGHT = "80px";
 
 export default function LandingPage() {
+  const [showSignDialog, setShowSignDialog] = useState(false);
+
+  const onOpenSignDialog = () => {
+    setShowSignDialog(true);
+  };
+
+  const onCloseSignDialog = () => {
+    setShowSignDialog(false);
+  };
   return (
     <>
-      <LandingHeader />
+      <LandingHeader onOpenSignDialog={onOpenSignDialog} />
       <Box
         sx={{
           position: "relative",
@@ -74,13 +84,18 @@ export default function LandingPage() {
             px: { xs: 4, md: 0 },
           }}
         >
-          <LandingStart />
+          <LandingStart onOpenSignDialog={onOpenSignDialog} />
         </Grid>
         <LandingTutorial />
         <LandingFeatured />
         <LandingUpcomingFeatures />
         <LandingFooter />
       </Box>
+
+      <SignDialog
+        show={showSignDialog}
+        onClose={onCloseSignDialog}
+      />
     </>
   );
 }

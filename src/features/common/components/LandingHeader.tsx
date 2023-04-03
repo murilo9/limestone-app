@@ -6,17 +6,13 @@ import { useAuth } from "../hooks/useAuth";
 import LocaleSelect from "./LocaleSelect";
 import SignDialog from "./SignDialog";
 
-export default function LandingHeader() {
-  const [showSignDialog, setShowSignDialog] = useState(false);
+type LandingHeaderProps = {
+  onOpenSignDialog: () => void;
+};
 
-  const onCloseSignDialog = () => {
-    setShowSignDialog(false);
-  };
-
-  const onOpenSignDialog = () => {
-    setShowSignDialog(true);
-  };
-
+export default function LandingHeader({
+  onOpenSignDialog,
+}: LandingHeaderProps) {
   return (
     <>
       <Box
@@ -68,10 +64,16 @@ export default function LandingHeader() {
             }}
           >
             <LocaleSelect sx={{ mr: 2, width: { xs: "auto", sm: "170px" } }} />
-            <Button sx={{ display: { xs: "none", md: "block" } }}>
+            <Button
+              sx={{ display: { xs: "none", md: "block" } }}
+              href="#learn"
+            >
               Learn more
             </Button>
-            <Button sx={{ display: { xs: "none", md: "block" } }}>
+            <Button
+              sx={{ display: { xs: "none", md: "block" } }}
+              href="https://github.com/murilo9/limestone-app"
+            >
               Github
             </Button>
             <Button
@@ -83,10 +85,6 @@ export default function LandingHeader() {
             </Button>
           </Grid>
         </Grid>
-        <SignDialog
-          show={showSignDialog}
-          onClose={onCloseSignDialog}
-        />
       </Box>
     </>
   );

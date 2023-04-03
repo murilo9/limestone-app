@@ -9,6 +9,7 @@ export default function LandingTutorial() {
   return (
     <>
       <Container
+        id="learn"
         maxWidth="md"
         sx={{ py: "96px" }}
       >

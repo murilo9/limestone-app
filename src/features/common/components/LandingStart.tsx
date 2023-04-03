@@ -3,7 +3,11 @@ import printPhone from "../assets/print-phone.png";
 import printDesktop from "../assets/print-desktop.png";
 import React from "react";
 
-export default function LandingStart() {
+type LandingStartProps = {
+  onOpenSignDialog: () => void;
+};
+
+export default function LandingStart({ onOpenSignDialog }: LandingStartProps) {
   return (
     <>
       {/* DESKTOP HEADING */}
@@ -29,12 +33,14 @@ export default function LandingStart() {
           <Button
             variant="contained"
             disableElevation
+            onClick={onOpenSignDialog}
           >
             Start Now
           </Button>
           <Button
-            variant="outlined"
             sx={{ ml: 2 }}
+            href="#featured"
+            variant="outlined"
           >
             Get Insights
           </Button>
@@ -101,12 +107,14 @@ export default function LandingStart() {
           <Button
             variant="contained"
             disableElevation
+            onClick={onOpenSignDialog}
           >
             Start Now
           </Button>
           <Button
             variant="outlined"
             sx={{ ml: { xs: 0, sm: 2 }, mt: { xs: 3, sm: 0 } }}
+            href="#featured"
           >
             Get Insights
           </Button>

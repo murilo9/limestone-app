@@ -8,6 +8,7 @@ export default function LandingFeatured() {
   return (
     <>
       <Box
+        id="featured"
         sx={{
           bgcolor: "#F5F8F7",
           mx: { xs: -3, md: -8 },
