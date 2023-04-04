@@ -16,6 +16,7 @@ import { useAuth } from "../hooks/useAuth";
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
 import gLogo from "../assets/g-logo.png";
+import { AxiosError } from "axios";
 
 type SignDialogProps = {
   show: boolean;
@@ -27,6 +28,7 @@ export default function SignDialog({ show, onClose }: SignDialogProps) {
   const [signUpDone, setSignUpDone] = useState(false);
   const [fetching, setFetching] = useState(false);
   const { signIn, googleSign } = useAuth();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const closeDialog = () => {
     setMode("signin");
@@ -71,12 +73,13 @@ export default function SignDialog({ show, onClose }: SignDialogProps) {
       password,
       passwordAgain,
     })
-      .catch((error) => {
-        // TODO: error feedback
-      })
       .then(() => {
         setMode("signin");
         setSignUpDone(true);
+      })
+      .catch((error: AxiosError<{ message: string }>) => {
+        const message = error.response?.data.message || error.message;
+        setErrorMessage(message);
       })
       .finally(() => setFetching(false));
   };
@@ -101,9 +104,17 @@ export default function SignDialog({ show, onClose }: SignDialogProps) {
         </DialogTitle>
         <DialogContent>
           <Box sx={{ pt: 2 }}>
+            {errorMessage ? (
+              <Alert
+                severity="error"
+                sx={{ mb: 2 }}
+              >
+                {errorMessage}
+              </Alert>
+            ) : null}
             {mode === "signin" && signUpDone ? (
               <Alert
-                color="success"
+                severity="success"
                 sx={{ mb: 2 }}
               >
                 Your account has been created. Sign in to continue.
