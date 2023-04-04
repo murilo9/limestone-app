@@ -32,7 +32,7 @@ type SystemHeaderProps = {
 
 export default function SystemHeader({ selectedTab }: SystemHeaderProps) {
   const { signOut } = useAuth();
-  const currentUser = useAppSelector((state) => state.common.currentUser);
+  const currentUser = useAppSelector((state) => state.users.loggedUser);
   const [contextMenuAnchorEl, setContextMenuAnchorEl] =
     useState<HTMLElement | null>(null);
   const showContextMenu = Boolean(contextMenuAnchorEl);

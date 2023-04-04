@@ -4,21 +4,28 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import BoardDetailsPage from "../features/boards/routes/board-details";
 import BoardsPage from "../features/boards/routes/boards";
 import { fetchMe } from "../features/common/api/fetchMe";
-import { fetchCurrentUser } from "../features/common/commonSlice";
 import { useAuth } from "../features/common/hooks/useAuth";
 import SystemPage from "../features/common/routes/system";
 import PeoplePage from "../features/users/routes/people";
-import { onFetchUsers } from "../features/users/usersSlice";
+import {
+  onFetchLoggedUserData,
+  onFetchUsers,
+} from "../features/users/usersSlice";
 import { useAppDispatch, useAppSelector } from "../store";
 
 export default function PrivateRoutes() {
-  const currentUser = useAppSelector((state) => state.common.currentUser);
+  const currentUser = useAppSelector((state) => state.users.loggedUser);
   const dispatch = useAppDispatch();
+  const { signOut } = useAuth();
 
   useLayoutEffect(() => {
     const init = async () => {
       if (!currentUser) {
-        await dispatch(fetchCurrentUser());
+        await dispatch(onFetchLoggedUserData()).catch((error) => {
+          if (error.code === "ERR_BAD_REQUEST") {
+            signOut();
+          }
+        });
         await dispatch(onFetchUsers());
       }
     };

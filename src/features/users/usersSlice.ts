@@ -59,7 +59,6 @@ export const deactivateUser = createAsyncThunk(
 export const onFetchLoggedUserData = createAsyncThunk(
   "users/onFetchLoggedUserData",
   async () => {
-    console.log("dispatching");
     const fetchLoggedUserRes = await fetchMe();
     const loggedUser = fetchLoggedUserRes.data;
     return loggedUser;
@@ -105,6 +104,10 @@ const usersSlice = createSlice({
       .addCase(onFetchLoggedUserData.fulfilled, (state, action) => {
         const loggedUser = action.payload;
         state.loggedUser = loggedUser;
+      })
+      .addCase(onFetchLoggedUserData.rejected, (state, action) => {
+        const { error } = action;
+        throw error;
       }),
 });
 
