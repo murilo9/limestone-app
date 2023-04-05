@@ -18,6 +18,8 @@ import Logo from "../assets/logo.svg";
 import LogoIcon from "../assets/logo-icon.svg";
 import { useNavigate } from "react-router-dom";
 import { SystemTabs } from "../types/SystemTabs";
+import { firstLetters } from "../utils/firstLetters";
+import { UserEntity } from "../../users/types/User";
 
 /**
  * This component is a view-width Box with the following heights
@@ -32,7 +34,9 @@ type SystemHeaderProps = {
 
 export default function SystemHeader({ selectedTab }: SystemHeaderProps) {
   const { signOut } = useAuth();
-  const currentUser = useAppSelector((state) => state.users.loggedUser);
+  const currentUser = useAppSelector(
+    (state) => state.users.loggedUser
+  ) as UserEntity;
   const [contextMenuAnchorEl, setContextMenuAnchorEl] =
     useState<HTMLElement | null>(null);
   const showContextMenu = Boolean(contextMenuAnchorEl);
@@ -138,7 +142,9 @@ export default function SystemHeader({ selectedTab }: SystemHeaderProps) {
               />
             </Tabs>
             <IconButton onClick={onContextMenuClick}>
-              <Avatar>MH</Avatar>
+              <Avatar>
+                {firstLetters(currentUser.firstName, currentUser.lastName)}
+              </Avatar>
             </IconButton>
             <Menu
               anchorEl={contextMenuAnchorEl}
