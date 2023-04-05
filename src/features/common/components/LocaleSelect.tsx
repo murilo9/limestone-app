@@ -34,8 +34,9 @@ export default function LocaleSelect({ sx, inputProps }: LocaleSelectProps) {
         sx={{ ...sx }}
         inputProps={{ ...inputProps }}
       >
-        <MenuItem value="en">English</MenuItem>
-        <MenuItem value="pt-BR">Portugês</MenuItem>
+        {Object.entries(localeDictionary).map(([key, value]) => (
+          <MenuItem value={key}>{value}</MenuItem>
+        ))}
       </Select>
     </>
   );
