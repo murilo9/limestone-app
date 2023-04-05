@@ -31,8 +31,7 @@ import { BoardEntity } from "../types/BoardEntity";
 export default function BoardDetailsPage() {
   const dispatch = useAppDispatch();
   const { boardId } = useParams();
-  const [loadingBoard, setLoadingBoard] = useState(false);
-  const [loadingColumns, setLoadingColumns] = useState(false);
+  const [loadingColumns, setLoadingColumns] = useState(true);
   const [editColumnsMode, setEditColumnsMode] = useState(false);
   // TODO: mover esta flag para a store, tanto aqui quanto no component Board
   const [addingNewColumn, setAddingNewColumn] = useState(false);
@@ -47,17 +46,7 @@ export default function BoardDetailsPage() {
       .filter((column) => column.boardId === boardId)
       .sort((columnA, columnB) => columnA.index - columnB.index)
   );
-  const notification = useContext(ToastNotificationContext);
 
-  useEffect(() => {
-    notification.send(
-      {
-        severity: "success",
-        message: "Welcome to your board!",
-      },
-      { horizontal: "center" }
-    );
-  }, []);
   const onDragEnd = useOnDragEnd(boardId || "no-id", setIsDragging);
 
   const onDragStart = () => {
@@ -66,11 +55,7 @@ export default function BoardDetailsPage() {
 
   useLayoutEffect(() => {
     const initialLoad = async () => {
-      if (!board && boardId) {
-        setLoadingBoard(true);
-        setLoadingColumns(true);
-        await dispatch(onLoadAllBoards());
-        setLoadingBoard(false);
+      if (boardId) {
         await dispatch(onLoadColumns(boardId));
         setLoadingColumns(false);
       }
@@ -119,7 +104,7 @@ export default function BoardDetailsPage() {
 
   return (
     <>
-      {loadingBoard ? (
+      {loadingColumns ? (
         "loading..."
       ) : board ? (
         <DragDropContext

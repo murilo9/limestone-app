@@ -8,6 +8,7 @@ import CreateBoardModal from "../../boards/components/CreateBoardModal";
 import BoardsPage from "../../boards/routes/boards";
 import CardDetailsModal from "../../cards/components/CardDetailsModal";
 import CreateCardModal from "../../cards/components/CreateCardModal";
+import { onLoadColumns } from "../../columns/columnsSlice";
 import CreateUserModal from "../../users/components/CreateUserModal";
 import UserDetailsModal from "../../users/components/UserDetailsModal";
 import PeoplePage from "../../users/routes/people";
@@ -36,52 +37,59 @@ export default function SystemPage() {
   const dispatch = useAppDispatch();
   const boards = useAppSelector((state) => state.boards.entities);
   const users = useAppSelector((state) => state.users.entities);
-  const [loadingBoards, setLoadingBoards] = useState(false);
-  const [loadingUsers, setLoadingUsers] = useState(false);
+  const [loadingAppData, setLoadingAppData] = useState(true);
+  const [loadAppDataError, setLoadAppDatError] = useState(false);
 
   useEffect(() => {
-    if (!Object.entries(boards).length) {
-      setLoadingBoards(true);
-      dispatch(onLoadAllBoards()).then(() => {
-        setLoadingBoards(false);
-      });
-    }
-    if (!Object.entries(users)) {
-      setLoadingUsers(true);
-      dispatch(onFetchUsers()).then(() => {
-        setLoadingUsers(false);
-      });
-    }
+    const loadAppData = async () => {
+      try {
+        await dispatch(onLoadAllBoards());
+        await dispatch(onFetchUsers());
+      } catch (error) {
+        console.log(error);
+        setLoadAppDatError(true);
+        // TODO: show error on load app data view
+      } finally {
+        setLoadingAppData(false);
+      }
+    };
+    loadAppData();
   }, []);
 
   return (
     <>
-      <SystemHeader selectedTab={selectedTab} />
-      <Box
-        className="lim-system-container"
-        sx={{
-          position: "relative",
-          boxSizing: "border-box",
-          height: "100vh",
-          width: "100vw",
-          overflowY: "hidden",
-          overflowX: "hidden",
-          pt: SYSTEM_HEADER_HEIGHTS,
-        }}
-      >
-        <Outlet context={{ loadingBoards, loadingUsers }} />
-      </Box>
+      {loadingAppData ? null : loadAppDataError ? (
+        "Error loading app data"
+      ) : (
+        <>
+          <SystemHeader selectedTab={selectedTab} />
+          <Box
+            className="lim-system-container"
+            sx={{
+              position: "relative",
+              boxSizing: "border-box",
+              height: "100vh",
+              width: "100vw",
+              overflowY: "hidden",
+              overflowX: "hidden",
+              pt: SYSTEM_HEADER_HEIGHTS,
+            }}
+          >
+            <Outlet />
+          </Box>
 
-      {/* Here lies all global-level modals */}
-      <CreateUserModal />
-      <CreateBoardModal />
-      <CreateCardModal />
-      <ConfirmationDialog />
-      <CardDetailsModal />
-      <UserDetailsModal />
-      <ToastNotification />
-      <BoardPeopleModal />
-      {/*-----------------------------------*/}
+          {/* Here lies all global-level modals */}
+          <CreateUserModal />
+          <CreateBoardModal />
+          <CreateCardModal />
+          <ConfirmationDialog />
+          <CardDetailsModal />
+          <UserDetailsModal />
+          <ToastNotification />
+          <BoardPeopleModal />
+          {/*-----------------------------------*/}
+        </>
+      )}
     </>
   );
 }

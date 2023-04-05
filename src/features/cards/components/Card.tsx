@@ -7,6 +7,7 @@ import { CardEntity } from "../types/CardEntity";
 import { CardCommentEntity } from "../../card-comments/types/CardComment";
 import { cardSelected, cardUpdated, onUpdateCard } from "../cardsSlice";
 import { cardPriorityColor } from "../types/CardPriorityColor";
+import { fetchCardCommentsCount } from "../../card-comments/api/fetchCardCommentsCount";
 
 type CardProps = {
   card: CardEntity;
@@ -23,16 +24,27 @@ export default function Card({
 }: CardProps) {
   const users = useAppSelector((state) => state.users.entities);
   const cardAssignee = card.assignee ? users[card.assignee] : null;
+  const allComments = useAppSelector((state) => state.cardComments.entities);
   const dispatch = useAppDispatch();
+  const [commentsCount, setCommentsCount] = useState<number | null>(null);
+
+  const loadCardCommentsCount = async () => {
+    const commentsCountRes = await fetchCardCommentsCount(
+      boardId,
+      columnId,
+      card._id
+    );
+    setCommentsCount(commentsCountRes.data);
+  };
+
+  // Load comments amount on first render, as well as every time comments change
+  useEffect(() => {
+    loadCardCommentsCount();
+  }, [allComments]);
 
   const onCardClick = () => {
     dispatch(cardSelected(card._id));
   };
-  const comments = useAppSelector((state) =>
-    Object.values(state.cardComments.entities).filter(
-      (comment) => comment.cardId === card._id
-    )
-  );
 
   return (
     <>
@@ -86,24 +98,32 @@ export default function Card({
                     </Avatar>
                   </>
                 ) : null}
-                <Comment
-                  fontSize="small"
-                  sx={{ mr: 0.5 }}
-                  color={Number(comments.length) > 0 ? "primary" : "disabled"}
-                />
-                {Number(comments.length) === undefined ? (
-                  <Skeleton
-                    variant="text"
-                    width="1em"
-                  />
+                {commentsCount === null ? (
+                  <>
+                    <Skeleton width="2em" />
+                  </>
                 ) : (
-                  <Typography
-                    variant="body2"
-                    fontWeight={500}
-                    color={Number(comments.length) > 0 ? "primary" : "disabled"}
-                  >
-                    {comments.length}
-                  </Typography>
+                  <>
+                    <Comment
+                      fontSize="small"
+                      sx={{ mr: 0.5 }}
+                      color={commentsCount > 0 ? "primary" : "disabled"}
+                    />
+                    {commentsCount === undefined ? (
+                      <Skeleton
+                        variant="text"
+                        width="1em"
+                      />
+                    ) : (
+                      <Typography
+                        variant="body2"
+                        fontWeight={500}
+                        color={commentsCount > 0 ? "primary" : "disabled"}
+                      >
+                        {commentsCount}
+                      </Typography>
+                    )}
+                  </>
                 )}
               </Grid>
               <Grid

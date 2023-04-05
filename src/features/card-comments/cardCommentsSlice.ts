@@ -29,7 +29,6 @@ export const onCreateCardComment = createAsyncThunk(
   "boards/onCreateCardComment",
   async ({
     boardId,
-    columnId,
     cardId,
     createCardCommentForm,
   }: {
@@ -83,27 +82,6 @@ export const onDeleteCardComment = createAsyncThunk(
   }) => {
     await deleteCardComment(boardId, cardId, cardCommentId);
     return cardCommentId;
-  }
-);
-
-export const onFetchCardCommentsCount = createAsyncThunk(
-  "boards/onFetchCardCommentsCount",
-  async ({
-    boardId,
-    columnId,
-    cardId,
-  }: {
-    boardId: string;
-    columnId: string;
-    cardId: string;
-  }) => {
-    const fetchCardCommentsCountRes = await fetchCardCommentsCount(
-      boardId,
-      columnId,
-      cardId
-    );
-    const count = fetchCardCommentsCountRes.data;
-    return { boardId, columnId, cardId, count };
   }
 );
 
