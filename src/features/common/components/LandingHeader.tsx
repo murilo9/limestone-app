@@ -5,6 +5,7 @@ import Logo from "../assets/logo.svg";
 import { useAuth } from "../hooks/useAuth";
 import LocaleSelect from "./LocaleSelect";
 import SignDialog from "./SignDialog";
+import LogoIcon from "../assets/logo-icon.svg";
 
 type LandingHeaderProps = {
   onOpenSignDialog: () => void;
@@ -47,10 +48,19 @@ export default function LandingHeader({
               justifyContent: "flex-start",
             }}
           >
-            <img
-              src={Logo}
-              alt="Limestone"
-            />
+            <Box sx={{ display: { xs: "contents", sm: "none" } }}>
+              <img
+                src={LogoIcon}
+                alt="Limestone"
+                style={{ height: "40px" }}
+              />
+            </Box>
+            <Box sx={{ display: { xs: "none", sm: "contents" } }}>
+              <img
+                src={Logo}
+                alt="Limestone"
+              />
+            </Box>
           </Grid>
           <Grid
             item

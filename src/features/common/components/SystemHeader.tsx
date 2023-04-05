@@ -77,7 +77,7 @@ export default function SystemHeader({ selectedTab }: SystemHeaderProps) {
           {/* TABLET/DESKTOP LOGO */}
           <Grid
             item
-            xs={4}
+            xs={2}
             md={6}
             lg={7}
             sx={{
@@ -95,7 +95,7 @@ export default function SystemHeader({ selectedTab }: SystemHeaderProps) {
           {/* PHONE LOGO */}
           <Grid
             item
-            xs={4}
+            xs={2}
             md={6}
             lg={7}
             sx={{
@@ -113,7 +113,7 @@ export default function SystemHeader({ selectedTab }: SystemHeaderProps) {
           {/* END PHONE LOGO */}
           <Grid
             item
-            xs={8}
+            xs={10}
             md={6}
             lg={5}
             sx={{
@@ -127,7 +127,10 @@ export default function SystemHeader({ selectedTab }: SystemHeaderProps) {
               sx={{
                 height: "100%",
                 mr: 2,
-                ".MuiTabs-scroller": { display: "flex", alignItems: "center" },
+                ".MuiTabs-scroller": {
+                  display: "flex",
+                  alignItems: "center",
+                },
               }}
             >
               <Tab
@@ -141,7 +144,10 @@ export default function SystemHeader({ selectedTab }: SystemHeaderProps) {
                 onClick={() => navigate("/people")}
               />
             </Tabs>
-            <IconButton onClick={onContextMenuClick}>
+            <IconButton
+              onClick={onContextMenuClick}
+              sx={{ px: { xs: 0, sm: null } }}
+            >
               <Avatar>
                 {firstLetters(currentUser.firstName, currentUser.lastName)}
               </Avatar>
