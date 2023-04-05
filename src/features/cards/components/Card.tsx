@@ -24,11 +24,15 @@ export default function Card({
   const users = useAppSelector((state) => state.users.entities);
   const cardAssignee = card.assignee ? users[card.assignee] : null;
   const dispatch = useAppDispatch();
-  const [lastIndex, setLastIndex] = useState(card.index);
 
   const onCardClick = () => {
     dispatch(cardSelected(card._id));
   };
+  const comments = useAppSelector((state) =>
+    Object.values(state.cardComments.entities).filter(
+      (comment) => comment.cardId === card._id
+    )
+  );
 
   return (
     <>
@@ -85,11 +89,9 @@ export default function Card({
                 <Comment
                   fontSize="small"
                   sx={{ mr: 0.5 }}
-                  color={
-                    Number("todo-comments-count") > 0 ? "primary" : "disabled"
-                  }
+                  color={Number(comments.length) > 0 ? "primary" : "disabled"}
                 />
-                {Number("todo-comments-count") === undefined ? (
+                {Number(comments.length) === undefined ? (
                   <Skeleton
                     variant="text"
                     width="1em"
@@ -98,11 +100,9 @@ export default function Card({
                   <Typography
                     variant="body2"
                     fontWeight={500}
-                    color={
-                      Number("todo-comments-count") > 0 ? "primary" : "disabled"
-                    }
+                    color={Number(comments.length) > 0 ? "primary" : "disabled"}
                   >
-                    {"0" /* todo-comments-count */}
+                    {comments.length}
                   </Typography>
                 )}
               </Grid>

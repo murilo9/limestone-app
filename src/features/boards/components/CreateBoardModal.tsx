@@ -146,6 +146,7 @@ export default function CreateBoardModal() {
               placeholder="Column name (ex: To-do)"
               fullWidth
               sx={{ mt: 3, mb: 3 }}
+              helperText={newColumnName.trim() ? "Press Enter to add" : null}
               value={newColumnName}
               onChange={(event) => setNewColumnName(event.target.value)}
               onKeyUp={handleColumnNameInputKeyPress}
