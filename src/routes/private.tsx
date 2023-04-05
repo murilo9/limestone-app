@@ -5,6 +5,7 @@ import BoardDetailsPage from "../features/boards/routes/board-details";
 import BoardsPage from "../features/boards/routes/boards";
 import { fetchMe } from "../features/common/api/fetchMe";
 import { useAuth } from "../features/common/hooks/useAuth";
+import ToastNotificationProvider from "../features/common/providers/toastNotification";
 import SystemPage from "../features/common/routes/system";
 import PeoplePage from "../features/users/routes/people";
 import {
@@ -34,38 +35,40 @@ export default function PrivateRoutes() {
 
   return (
     <>
-      <Routes>
-        {currentUser ? (
-          <>
-            <Route
-              path="/"
-              element={<SystemPage />}
-            >
-              <Route
-                path="/boards/:boardId"
-                element={<BoardDetailsPage />}
-              />
-              <Route
-                path="/boards"
-                element={<BoardsPage />}
-              />
-              <Route
-                path="/people"
-                element={<PeoplePage />}
-              />
+      <ToastNotificationProvider>
+        <Routes>
+          {currentUser ? (
+            <>
               <Route
                 path="/"
-                element={
-                  <Navigate
-                    to="/boards"
-                    replace={true}
-                  />
-                }
-              />
-            </Route>
-          </>
-        ) : null}
-      </Routes>
+                element={<SystemPage />}
+              >
+                <Route
+                  path="/boards/:boardId"
+                  element={<BoardDetailsPage />}
+                />
+                <Route
+                  path="/boards"
+                  element={<BoardsPage />}
+                />
+                <Route
+                  path="/people"
+                  element={<PeoplePage />}
+                />
+                <Route
+                  path="/"
+                  element={
+                    <Navigate
+                      to="/boards"
+                      replace={true}
+                    />
+                  }
+                />
+              </Route>
+            </>
+          ) : null}
+        </Routes>
+      </ToastNotificationProvider>
     </>
   );
 }

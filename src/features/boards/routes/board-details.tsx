@@ -22,6 +22,7 @@ import CreateColumnForm from "../../columns/components/CreateColumnForm";
 import { ColumnEntity } from "../../columns/types/ColumnEntity";
 import { UpdateColumnDto } from "../../columns/types/dto/UpdateColumnDto";
 import { confirmationDialogOpened } from "../../common/commonSlice";
+import { ToastNotificationContext } from "../../common/providers/toastNotification";
 import { onLoadAllBoards } from "../boardsSlice";
 import BoardDetailsHeader from "../components/BoardDetailsHeader";
 import useOnDragEnd from "../hooks/useOnDragEnd";
@@ -46,7 +47,17 @@ export default function BoardDetailsPage() {
       .filter((column) => column.boardId === boardId)
       .sort((columnA, columnB) => columnA.index - columnB.index)
   );
+  const notification = useContext(ToastNotificationContext);
 
+  useEffect(() => {
+    notification.send(
+      {
+        severity: "success",
+        message: "Welcome to your board!",
+      },
+      { horizontal: "center" }
+    );
+  }, []);
   const onDragEnd = useOnDragEnd(boardId || "no-id", setIsDragging);
 
   const onDragStart = () => {
