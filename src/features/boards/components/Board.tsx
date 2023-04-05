@@ -66,6 +66,9 @@ export default function Board({ board }: BoardProps) {
       .filter((column) => column.boardId === board._id)
       .sort((columnA, columnB) => columnA.index - columnB.index)
   );
+  const allCards = useAppSelector((state) =>
+    Object.values(state.cards.entities)
+  );
   const users = useAppSelector((state) => state.users.entities);
   const boardUsers = Object.values(users).filter((user) =>
     board.users.find((boardUserId) => boardUserId === user._id)
@@ -75,6 +78,9 @@ export default function Board({ board }: BoardProps) {
   const loggedUserIsAdmin = useAppSelector(
     (state) => state.users.loggedUser?.createdBy === null
   );
+
+  const getColumnCardsLength = (columnId: string) =>
+    allCards.filter((card) => card.columnId === columnId).length;
 
   // Loads this board's columns on start
   useLayoutEffect(() => {
@@ -302,7 +308,7 @@ export default function Board({ board }: BoardProps) {
                       variant="h6"
                       textAlign="right"
                     >
-                      todo-cards-length
+                      {getColumnCardsLength(column._id)} cards
                     </Typography>
                     <Typography
                       variant="subtitle1"
