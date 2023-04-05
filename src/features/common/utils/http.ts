@@ -28,7 +28,7 @@ export function get<T = any>(
 
 export function post<T = any>(
   route: string,
-  data: { [key: string]: any },
+  data?: { [key: string]: any },
   presetUrl?: string,
   options?: {
     params?: { [key: string]: any };

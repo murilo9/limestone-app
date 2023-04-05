@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
+  Link,
   TextField,
   Typography,
 } from "@mui/material";
@@ -17,6 +18,8 @@ import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
 import gLogo from "../assets/g-logo.png";
 import { AxiosError } from "axios";
+import RecoverPasswordForm from "./RecoverPasswordForm";
+import { passwordRecovery } from "../api/passwordRecovery";
 
 type SignDialogProps = {
   show: boolean;
@@ -24,16 +27,25 @@ type SignDialogProps = {
 };
 
 export default function SignDialog({ show, onClose }: SignDialogProps) {
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
-  const [signUpDone, setSignUpDone] = useState(false);
+  const [mode, setMode] = useState<"signin" | "signup" | "forgot-password">(
+    "signin"
+  );
+  const [successMessage, setSuccessMessage] = useState("");
   const [fetching, setFetching] = useState(false);
   const { signIn, googleSign } = useAuth();
   const [errorMessage, setErrorMessage] = useState("");
 
   const closeDialog = () => {
     setMode("signin");
-    setSignUpDone(false);
+    setSuccessMessage("");
     onClose();
+  };
+
+  const onForgotPasswordClick = (
+    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+    setMode("forgot-password");
   };
 
   const onSignIn = (email: string, password: string) => {
@@ -75,7 +87,9 @@ export default function SignDialog({ show, onClose }: SignDialogProps) {
     })
       .then(() => {
         setMode("signin");
-        setSignUpDone(true);
+        setSuccessMessage(
+          "Your account has been created. Sign in to continue."
+        );
       })
       .catch((error: AxiosError<{ message: string }>) => {
         const message = error.response?.data.message || error.message;
@@ -92,6 +106,12 @@ export default function SignDialog({ show, onClose }: SignDialogProps) {
     },
   });
 
+  const onPasswordRecovery = (email: string) => {
+    passwordRecovery(email).then(() => {
+      setSuccessMessage("Check your e-mail for the password recovery link.");
+    });
+  };
+
   return (
     <>
       <Dialog
@@ -100,7 +120,11 @@ export default function SignDialog({ show, onClose }: SignDialogProps) {
         maxWidth="xs"
       >
         <DialogTitle textAlign="center">
-          {mode === "signin" ? "Sign In" : "Sign Up"}
+          {mode === "signin"
+            ? "Sign In"
+            : mode === "signup"
+            ? "Sign Up"
+            : "Recover Password"}
         </DialogTitle>
         <DialogContent>
           <Box sx={{ pt: 2 }}>
@@ -112,12 +136,12 @@ export default function SignDialog({ show, onClose }: SignDialogProps) {
                 {errorMessage}
               </Alert>
             ) : null}
-            {mode === "signin" && signUpDone ? (
+            {mode === "signin" && successMessage ? (
               <Alert
                 severity="success"
                 sx={{ mb: 2 }}
               >
-                Your account has been created. Sign in to continue.
+                {successMessage}
               </Alert>
             ) : null}
             {mode === "signin" ? (
@@ -126,27 +150,47 @@ export default function SignDialog({ show, onClose }: SignDialogProps) {
                 onToggleMode={onGoToSignUp}
                 fetching={fetching}
               />
-            ) : (
+            ) : mode === "signup" ? (
               <SignUpForm
                 onSubmit={onSignUp}
                 onToggleMode={onGoToSignIn}
                 fetching={fetching}
               />
+            ) : (
+              <RecoverPasswordForm
+                onSubmit={onPasswordRecovery}
+                onGoBack={onGoToSignIn}
+              />
             )}
           </Box>
-          <Divider sx={{ my: 3 }}>OR</Divider>
-          <Button
-            variant="outlined"
-            fullWidth
-            onClick={() => onGoogleLoginClick()}
-          >
-            <img
-              src={gLogo}
-              alt="google-signin-logo"
-              style={{ height: "80%", marginRight: "8px" }}
-            />
-            Sign In with Google
-          </Button>
+
+          {mode !== "forgot-password" ? (
+            <>
+              <Divider sx={{ my: 3 }}>OR</Divider>
+              <Button
+                variant="outlined"
+                fullWidth
+                onClick={() => onGoogleLoginClick()}
+              >
+                <img
+                  src={gLogo}
+                  alt="google-signin-logo"
+                  style={{ height: "80%", marginRight: "8px" }}
+                />
+                Sign In with Google
+              </Button>
+              <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+                <Link
+                  onClick={onForgotPasswordClick}
+                  href="#"
+                  underline="hover"
+                  textAlign="center"
+                >
+                  Forgot password?
+                </Link>
+              </Box>
+            </>
+          ) : null}
         </DialogContent>
       </Dialog>
     </>
