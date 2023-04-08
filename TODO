@@ -1,2 +1,3 @@
 - edit card attributes (description, priority)
+- FAB with hints
 - handle throw errors inside components

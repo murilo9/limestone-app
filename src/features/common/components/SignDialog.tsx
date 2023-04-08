@@ -101,7 +101,10 @@ export default function SignDialog({ show, onClose }: SignDialogProps) {
   const onGoogleLoginClick = useGoogleLogin({
     onSuccess: (tokenResponse) => {
       const { access_token } = tokenResponse;
-      googleSign(access_token);
+      setFetching(true);
+      googleSign(access_token).finally(() => {
+        setFetching(false);
+      });
       // TODO: catch Google sign error
     },
   });
@@ -171,6 +174,7 @@ export default function SignDialog({ show, onClose }: SignDialogProps) {
                 variant="outlined"
                 fullWidth
                 onClick={() => onGoogleLoginClick()}
+                disabled={fetching}
               >
                 <img
                   src={gLogo}

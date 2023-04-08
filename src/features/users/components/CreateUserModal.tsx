@@ -82,10 +82,14 @@ export default function CreateUserModal() {
         lastName: userLastName,
         email: userEmail,
       };
+      setIsCreatingUser(true);
       dispatch(onCreateUser(createUserDto))
         .unwrap()
         .catch(onCreateUserFailure)
-        .then(onCreateUserSuccess);
+        .then(onCreateUserSuccess)
+        .finally(() => {
+          setIsCreatingUser(false);
+        });
     }
   };
 
