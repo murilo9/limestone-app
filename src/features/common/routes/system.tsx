@@ -14,6 +14,7 @@ import UserDetailsModal from "../../users/components/UserDetailsModal";
 import PeoplePage from "../../users/routes/people";
 import { onFetchUsers } from "../../users/usersSlice";
 import ConfirmationDialog from "../components/ConfirmationDialog";
+import HelpFloatingButton from "../components/HelpFloatingButton";
 import SystemHeader, {
   SYSTEM_HEADER_HEIGHTS,
 } from "../components/SystemHeader";
@@ -58,6 +59,7 @@ export default function SystemPage() {
 
   return (
     <>
+      {/* TODO: add loading bar */}
       {loadingAppData ? null : loadAppDataError ? (
         "Error loading app data"
       ) : (
@@ -87,6 +89,7 @@ export default function SystemPage() {
           <UserDetailsModal />
           <ToastNotification />
           <BoardPeopleModal />
+          <HelpFloatingButton />
           {/*-----------------------------------*/}
         </>
       )}
