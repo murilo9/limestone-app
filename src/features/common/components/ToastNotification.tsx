@@ -32,7 +32,10 @@ export default function ToastNotification() {
             severity={currentToastNotification.type}
             onClose={onToastClose}
             action={
-              <IconButton size="small">
+              <IconButton
+                size="small"
+                onClick={onToastClose}
+              >
                 <Close />
               </IconButton>
             }

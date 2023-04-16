@@ -1,4 +1,5 @@
 import { PersistentEntity } from "../../common/types/PersistentEntity";
+import { SignProvider } from "../../common/types/SignProvider";
 import { UserNotificationOptions } from "./UserNotificationOptions";
 
 export interface UserEntity extends PersistentEntity {
@@ -11,4 +12,5 @@ export interface UserEntity extends PersistentEntity {
   verifyId: string;
   active: boolean;
   notificationOptions: UserNotificationOptions;
+  signProvider: SignProvider;
 }

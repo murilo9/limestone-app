@@ -40,12 +40,15 @@ export default function SystemHeader({ selectedTab }: SystemHeaderProps) {
   const [contextMenuAnchorEl, setContextMenuAnchorEl] =
     useState<HTMLElement | null>(null);
   const showContextMenu = Boolean(contextMenuAnchorEl);
+  const navigate = useNavigate();
 
   const onContextMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setContextMenuAnchorEl(event.currentTarget);
   };
 
-  const navigate = useNavigate();
+  const onSettingsClick = () => {
+    navigate("/settings");
+  };
 
   useEffect(() => console.log(selectedTab), [selectedTab]);
 
@@ -146,7 +149,7 @@ export default function SystemHeader({ selectedTab }: SystemHeaderProps) {
             </Tabs>
             <IconButton
               onClick={onContextMenuClick}
-              sx={{ px: { xs: 0, sm: null } }}
+              sx={{ px: { xs: 0, sm: 1 } }}
             >
               <Avatar>
                 {firstLetters(currentUser.firstName, currentUser.lastName)}
@@ -157,6 +160,7 @@ export default function SystemHeader({ selectedTab }: SystemHeaderProps) {
               open={showContextMenu}
               onClose={() => setContextMenuAnchorEl(null)}
             >
+              <MenuItem onClick={onSettingsClick}>Settings</MenuItem>
               <MenuItem onClick={signOut}>Sign Out</MenuItem>
             </Menu>
           </Grid>

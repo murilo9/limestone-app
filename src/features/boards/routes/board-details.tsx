@@ -22,7 +22,6 @@ import CreateColumnForm from "../../columns/components/CreateColumnForm";
 import { ColumnEntity } from "../../columns/types/ColumnEntity";
 import { UpdateColumnDto } from "../../columns/types/dto/UpdateColumnDto";
 import { confirmationDialogOpened } from "../../common/commonSlice";
-import { ToastNotificationContext } from "../../common/providers/toastNotification";
 import { onLoadAllBoards } from "../boardsSlice";
 import BoardDetailsHeader from "../components/BoardDetailsHeader";
 import useOnDragEnd from "../hooks/useOnDragEnd";

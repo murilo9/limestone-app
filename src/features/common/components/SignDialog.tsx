@@ -55,7 +55,7 @@ export default function SignDialog({ show, onClose }: SignDialogProps) {
       password,
     })
       .catch((error) => {
-        // TODO: error feedback
+        setErrorMessage("Incorrect e-mail or password.");
       })
       .finally(() => setFetching(false));
   };

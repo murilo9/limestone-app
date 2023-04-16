@@ -18,7 +18,8 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useContext, useState } from "react";
-import { ToastNotificationContext } from "../providers/toastNotification";
+import { useAppDispatch } from "../../../store";
+import { toastNotificationSent } from "../commonSlice";
 
 const content = [
   {
@@ -42,7 +43,7 @@ const content = [
 
 export default function HelpFloatingButton() {
   const [open, setOpen] = useState<HTMLElement | null>(null);
-  const notification = useContext(ToastNotificationContext);
+  const dispatch = useAppDispatch();
 
   const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setOpen(event.currentTarget);
@@ -56,13 +57,12 @@ export default function HelpFloatingButton() {
     setShowHelpButton(false);
     setOpen(null);
     window.localStorage.removeItem("hide_help_button");
-    notification.send(
-      {
+    dispatch(
+      toastNotificationSent({
         message:
           "Help button hidden. You may activate it again at user settings.",
-        severity: "info",
-      },
-      { horizontal: "center" }
+        type: "info",
+      })
     );
   };
 
