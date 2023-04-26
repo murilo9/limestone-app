@@ -13,15 +13,10 @@ type CardProps = {
   card: CardEntity;
   cardIndex: number;
   boardId: string;
-  columnId: string;
 };
 
-export default function Card({
-  card,
-  boardId,
-  columnId,
-  cardIndex,
-}: CardProps) {
+export default function Card({ card, boardId, cardIndex }: CardProps) {
+  const { columnId } = card;
   const users = useAppSelector((state) => state.users.entities);
   const cardAssignee = card.assignee ? users[card.assignee] : null;
   const allComments = useAppSelector((state) => state.cardComments.entities);

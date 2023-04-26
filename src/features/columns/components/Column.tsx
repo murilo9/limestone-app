@@ -220,7 +220,6 @@ export default function CardsColumn({
                         <Card
                           card={card}
                           cardIndex={cardIndex}
-                          columnId={column._id}
                           boardId={boardId}
                         />
                       ))
