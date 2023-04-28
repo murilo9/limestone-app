@@ -23,9 +23,7 @@ export default function PrivateRoutes() {
     const init = async () => {
       if (!currentUser) {
         await dispatch(onFetchLoggedUserData()).catch((error) => {
-          if (error.code === "ERR_BAD_REQUEST") {
-            signOut();
-          }
+          signOut();
         });
         await dispatch(onFetchUsers());
       }
